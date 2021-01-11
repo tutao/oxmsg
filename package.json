@@ -1,0 +1,48 @@
+{
+  "name": "oxmsg",
+  "version": "0.0.1",
+  "description": "js library for Microsoft Outlook Item files (.msg)",
+  "main": "build/oxmsg.min.js",
+  "scripts": {
+    "build": "rollup --config rollup.config.js",
+    "exec:nodejs": "node examples/node.js",
+    "clean": "rm -rf ./build",
+    "flow": "flow; test $? -eq 0 -o $? -eq 2",
+    "test": "ospec '**/*.spec.js' --preload node_modules/@babel/register/lib/index.js --preload node_modules/esm/esm.js"
+  },
+  "types": "types/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ganthern/oxmsg.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ganthern/oxmsg/issues"
+  },
+  "author": "tutao GmbH",
+  "license": "MIT",
+  "homepage": "https://github.com/ganthern/oxmsg#readme",
+  "dependencies": {
+    "address-rfc2822": "^2.0.6",
+    "buffer": "^6.0.3",
+    "bytebuffer": "^5.0.1",
+    "cfb": "^1.2.0",
+    "uuid": "^8.3.1",
+    "iconv-lite": "^0.6.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.7",
+    "@babel/plugin-transform-flow-strip-types": "^7.12.1",
+    "@babel/plugin-proposal-class-properties": "^7.12.1",
+    "@babel/register": "^7.12.1",
+    "@rollup/plugin-alias": "^3.1.1",
+    "@rollup/plugin-babel": "^5.2.2",
+    "@rollup/plugin-commonjs": "^17.0.0",
+    "@rollup/plugin-json": "^4.1.0",
+    "@rollup/plugin-node-resolve": "^11.0.1",
+    "esm": "^3.2.25",
+    "flow-bin": "0.137.0",
+    "ospec": "^4.1.1",
+    "rollup": "^2.35.1",
+    "rollup-plugin-terser": "^7.0.2"
+  }
+}
