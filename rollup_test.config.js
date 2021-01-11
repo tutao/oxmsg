@@ -3,7 +3,6 @@ import nodeResolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import json from '@rollup/plugin-json'
 import alias from '@rollup/plugin-alias'
-import {terser} from "rollup-plugin-terser"
 import path from 'path'
 
 const inspector = {
@@ -14,7 +13,7 @@ const inspector = {
 }
 
 export default {
-	input: 'lib/index.js',
+	input: 'test/index.js',
 	plugins: [
 		babel({babelHelpers: 'bundled'}),
 		alias({
@@ -35,15 +34,12 @@ export default {
 	],
 	output: [
 		{
-			file: 'build/oxmsg.js',
+			dir: 'build/test',
 			format: 'cjs',
 			sourcemap: true,
+			preserveModules: true,
+			exports: "named"
 		},
-		{
-			file: 'build/oxmsg.min.js',
-			format: 'cjs',
-			plugins: [terser()],
-			sourcemap: true
-		}
-	]
+	],
+	treeshake: false,
 }

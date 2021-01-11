@@ -8,7 +8,7 @@
     "exec:nodejs": "node examples/node.js",
     "clean": "rm -rf ./build",
     "flow": "flow; test $? -eq 0 -o $? -eq 2",
-    "test": "ospec '**/*.spec.js' --preload node_modules/@babel/register/lib/index.js --preload node_modules/esm/esm.js"
+    "test": "rollup --config rollup_test.config.js && node 'build/test/test/index.js'"
   },
   "types": "types/index.d.ts",
   "repository": {
@@ -26,8 +26,9 @@
     "buffer": "^6.0.3",
     "bytebuffer": "^5.0.1",
     "cfb": "^1.2.0",
-    "uuid": "^8.3.1",
-    "iconv-lite": "^0.6.2"
+    "iconv-lite": "^0.6.2",
+    "text-encoding": "^0.7.0",
+    "uuid": "^8.3.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.7",
@@ -44,5 +45,6 @@
     "ospec": "^4.1.1",
     "rollup": "^2.35.1",
     "rollup-plugin-terser": "^7.0.2"
-  }
+  },
+  "type": "module"
 }
