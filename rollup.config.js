@@ -36,12 +36,12 @@ export default {
 	output: [
 		{
 			file: 'build/oxmsg.js',
-			format: 'cjs',
+			format: 'es',
 			sourcemap: true,
 		},
 		{
 			file: 'build/oxmsg.min.js',
-			format: 'cjs',
+			format: 'es',
 			plugins: [terser()],
 			sourcemap: true
 		}
