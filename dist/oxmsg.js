@@ -1,9 +1,21 @@
-import require$$0$1 from 'fs';
-import buffer from 'buffer';
-import { TextEncoder } from 'util';
-import crypto from 'crypto';
-import require$$1$1 from 'string_decoder';
-import require$$3$1 from 'stream';
+'use strict';
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+var require$$0$1 = require('fs');
+var buffer = require('buffer');
+var util = require('util');
+var crypto = require('crypto');
+var require$$1$1 = require('string_decoder');
+var require$$3$1 = require('stream');
+
+function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+var require$$0__default = /*#__PURE__*/_interopDefaultLegacy(require$$0$1);
+var buffer__default = /*#__PURE__*/_interopDefaultLegacy(buffer);
+var crypto__default = /*#__PURE__*/_interopDefaultLegacy(crypto);
+var require$$1__default = /*#__PURE__*/_interopDefaultLegacy(require$$1$1);
+var require$$3__default = /*#__PURE__*/_interopDefaultLegacy(require$$3$1);
 
 function _defineProperty(obj, key, value) {
   if (key in obj) {
@@ -614,7 +626,7 @@ var CFB = function _CFB() {
   var fs;
 
   function get_fs() {
-    return fs || (fs = require$$0$1);
+    return fs || (fs = require$$0__default['default']);
   }
 
   function parse(file, options) {
@@ -7271,8 +7283,8 @@ var long = createCommonjsModule(function (module) {
  */
 var bytebufferNode = function () {
 
-  var buffer$1 = buffer,
-      Buffer = buffer$1["Buffer"],
+  var buffer = buffer__default['default'],
+      Buffer = buffer["Buffer"],
       Long = long,
       memcpy = null;
 
@@ -11098,7 +11110,7 @@ function utf8ArrayToString(array) {
  */
 
 function stringToUtf8Array(str) {
-  return new TextEncoder().encode(str);
+  return new util.TextEncoder().encode(str);
 }
 /**
  * convert string to UTF-16LE Uint8Array
@@ -11197,7 +11209,7 @@ const rnds8Pool = new Uint8Array(256); // # of random values to pre-allocate
 let poolPtr = rnds8Pool.length;
 function rng() {
   if (poolPtr > rnds8Pool.length - 16) {
-    crypto.randomFillSync(rnds8Pool);
+    crypto__default['default'].randomFillSync(rnds8Pool);
     poolPtr = 0;
   }
 
@@ -13732,14 +13744,14 @@ function _extract_name(name) {
 
 
 
-var Buffer$1 = buffer.Buffer;
+var Buffer$1 = buffer__default['default'].Buffer;
 var safer = {};
 var key;
 
-for (key in buffer) {
-  if (!buffer.hasOwnProperty(key)) continue;
+for (key in buffer__default['default']) {
+  if (!buffer__default['default'].hasOwnProperty(key)) continue;
   if (key === 'SlowBuffer' || key === 'Buffer') continue;
-  safer[key] = buffer[key];
+  safer[key] = buffer__default['default'][key];
 }
 
 var Safer = safer.Buffer = {};
@@ -13913,7 +13925,7 @@ InternalCodec.prototype.encoder = InternalEncoder;
 InternalCodec.prototype.decoder = InternalDecoder; //------------------------------------------------------------------------------
 // We use node.js internal decoder. Its signature is the same as ours.
 
-var StringDecoder = require$$1$1.StringDecoder;
+var StringDecoder = require$$1__default['default'].StringDecoder;
 
 if (!StringDecoder.prototype.end) // Node v0.8 doesn't have this method.
   StringDecoder.prototype.end = function () {};
@@ -24795,7 +24807,7 @@ iconv.enableStreamingAPI = function enableStreamingAPI(stream_module) {
 var stream_module;
 
 try {
-  stream_module = require$$3$1;
+  stream_module = require$$3__default['default'];
 } catch (e) {}
 
 if (stream_module && stream_module.Transform) {
@@ -26514,5 +26526,6 @@ class Email extends Message {
 
 }
 
-export { cfb$1 as CFB, Email };
+exports.CFB = cfb$1;
+exports.Email = Email;
 //# sourceMappingURL=oxmsg.js.map
