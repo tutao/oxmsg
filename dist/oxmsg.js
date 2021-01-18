@@ -12,6 +12,28 @@
   var require$$1__default = /*#__PURE__*/_interopDefaultLegacy(require$$1$1);
   var require$$3__default = /*#__PURE__*/_interopDefaultLegacy(require$$3$1);
 
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+
+  function _defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor) descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
+
+  function _createClass(Constructor, protoProps, staticProps) {
+    if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+    if (staticProps) _defineProperties(Constructor, staticProps);
+    return Constructor;
+  }
+
   function _defineProperty(obj, key, value) {
     if (key in obj) {
       Object.defineProperty(obj, key, {
@@ -25,6 +47,170 @@
     }
 
     return obj;
+  }
+
+  function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+      throw new TypeError("Super expression must either be null or a function");
+    }
+
+    subClass.prototype = Object.create(superClass && superClass.prototype, {
+      constructor: {
+        value: subClass,
+        writable: true,
+        configurable: true
+      }
+    });
+    if (superClass) _setPrototypeOf(subClass, superClass);
+  }
+
+  function _getPrototypeOf(o) {
+    _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
+      return o.__proto__ || Object.getPrototypeOf(o);
+    };
+    return _getPrototypeOf(o);
+  }
+
+  function _setPrototypeOf(o, p) {
+    _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
+      o.__proto__ = p;
+      return o;
+    };
+
+    return _setPrototypeOf(o, p);
+  }
+
+  function _isNativeReflectConstruct() {
+    if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+    if (Reflect.construct.sham) return false;
+    if (typeof Proxy === "function") return true;
+
+    try {
+      Date.prototype.toString.call(Reflect.construct(Date, [], function () {}));
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function _construct(Parent, args, Class) {
+    if (_isNativeReflectConstruct()) {
+      _construct = Reflect.construct;
+    } else {
+      _construct = function _construct(Parent, args, Class) {
+        var a = [null];
+        a.push.apply(a, args);
+        var Constructor = Function.bind.apply(Parent, a);
+        var instance = new Constructor();
+        if (Class) _setPrototypeOf(instance, Class.prototype);
+        return instance;
+      };
+    }
+
+    return _construct.apply(null, arguments);
+  }
+
+  function _isNativeFunction(fn) {
+    return Function.toString.call(fn).indexOf("[native code]") !== -1;
+  }
+
+  function _wrapNativeSuper(Class) {
+    var _cache = typeof Map === "function" ? new Map() : undefined;
+
+    _wrapNativeSuper = function _wrapNativeSuper(Class) {
+      if (Class === null || !_isNativeFunction(Class)) return Class;
+
+      if (typeof Class !== "function") {
+        throw new TypeError("Super expression must either be null or a function");
+      }
+
+      if (typeof _cache !== "undefined") {
+        if (_cache.has(Class)) return _cache.get(Class);
+
+        _cache.set(Class, Wrapper);
+      }
+
+      function Wrapper() {
+        return _construct(Class, arguments, _getPrototypeOf(this).constructor);
+      }
+
+      Wrapper.prototype = Object.create(Class.prototype, {
+        constructor: {
+          value: Wrapper,
+          enumerable: false,
+          writable: true,
+          configurable: true
+        }
+      });
+      return _setPrototypeOf(Wrapper, Class);
+    };
+
+    return _wrapNativeSuper(Class);
+  }
+
+  function _assertThisInitialized(self) {
+    if (self === void 0) {
+      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }
+
+    return self;
+  }
+
+  function _possibleConstructorReturn(self, call) {
+    if (call && (typeof call === "object" || typeof call === "function")) {
+      return call;
+    }
+
+    return _assertThisInitialized(self);
+  }
+
+  function _createSuper(Derived) {
+    var hasNativeReflectConstruct = _isNativeReflectConstruct();
+
+    return function _createSuperInternal() {
+      var Super = _getPrototypeOf(Derived),
+          result;
+
+      if (hasNativeReflectConstruct) {
+        var NewTarget = _getPrototypeOf(this).constructor;
+
+        result = Reflect.construct(Super, arguments, NewTarget);
+      } else {
+        result = Super.apply(this, arguments);
+      }
+
+      return _possibleConstructorReturn(this, result);
+    };
+  }
+
+  function _superPropBase(object, property) {
+    while (!Object.prototype.hasOwnProperty.call(object, property)) {
+      object = _getPrototypeOf(object);
+      if (object === null) break;
+    }
+
+    return object;
+  }
+
+  function _get(target, property, receiver) {
+    if (typeof Reflect !== "undefined" && Reflect.get) {
+      _get = Reflect.get;
+    } else {
+      _get = function _get(target, property, receiver) {
+        var base = _superPropBase(target, property);
+
+        if (!base) return;
+        var desc = Object.getOwnPropertyDescriptor(base, property);
+
+        if (desc.get) {
+          return desc.get.call(receiver);
+        }
+
+        return desc.value;
+      };
+    }
+
+    return _get(target, property, receiver || target);
   }
 
   var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
@@ -2574,11 +2760,13 @@
    * 'storage': directory in the cfb
    * 'stream' : file in the cfb
    * */
-  class CFBStorage {
+  let CFBStorage = /*#__PURE__*/function () {
     /** underlying cfb container */
 
     /** the current path all new storages and streams will be added to*/
-    constructor(cfb$1) {
+    function CFBStorage(cfb$1) {
+      _classCallCheck(this, CFBStorage);
+
       _defineProperty(this, "_cfb", void 0);
 
       _defineProperty(this, "_path", void 0);
@@ -2593,63 +2781,72 @@
      * */
 
 
-    addStorage(name) {
-      const child = new CFBStorage(this._cfb);
-      child._path = this._path + '/' + name;
-      return child;
-    }
-    /**
-     *
-     */
-
-
-    getStorage(name) {
-      return this.addStorage(name);
-    }
-    /**
-     * add a stream (file) to the cfb at the current _path. creates all parent dirs if they don't exist yet
-     * should the stream already exist, this will replace the contents.
-     * @param name {string} the name of the new stream
-     * @param content {Uint8Array} the contents of the stream
-     * @return {void}
-     * */
-
-
-    addStream(name, content) {
-      const entryIndex = this._getEntryIndex(name);
-
-      if (entryIndex < 0) {
-        cfb.utils.cfb_add(this._cfb, this._path + '/' + name, content);
-      } else {
-        this._cfb.FileIndex[entryIndex].content = content;
+    _createClass(CFBStorage, [{
+      key: "addStorage",
+      value: function addStorage(name) {
+        const child = new CFBStorage(this._cfb);
+        child._path = this._path + '/' + name;
+        return child;
       }
-    }
-    /**
-     * get the contents of a stream or an empty array
-     * @param name {string} the name of the stream
-     * @return {Uint8Array} the contents of the named stream, empty if it wasn't found
-     * TODO: should this be absolute?
-     */
+      /**
+       *
+       */
 
+    }, {
+      key: "getStorage",
+      value: function getStorage(name) {
+        return this.addStorage(name);
+      }
+      /**
+       * add a stream (file) to the cfb at the current _path. creates all parent dirs if they don't exist yet
+       * should the stream already exist, this will replace the contents.
+       * @param name {string} the name of the new stream
+       * @param content {Uint8Array} the contents of the stream
+       * @return {void}
+       * */
 
-    getStream(name) {
-      const entryIndex = this._getEntryIndex(name);
+    }, {
+      key: "addStream",
+      value: function addStream(name, content) {
+        const entryIndex = this._getEntryIndex(name);
 
-      return entryIndex < 0 ? Uint8Array.of() : Uint8Array.from(this._cfb.FileIndex[entryIndex].content);
-    }
-    /** write the contents of the cfb container to a byte array */
+        if (entryIndex < 0) {
+          cfb.utils.cfb_add(this._cfb, this._path + '/' + name, content);
+        } else {
+          this._cfb.FileIndex[entryIndex].content = content;
+        }
+      }
+      /**
+       * get the contents of a stream or an empty array
+       * @param name {string} the name of the stream
+       * @return {Uint8Array} the contents of the named stream, empty if it wasn't found
+       * TODO: should this be absolute?
+       */
 
+    }, {
+      key: "getStream",
+      value: function getStream(name) {
+        const entryIndex = this._getEntryIndex(name);
 
-    toBytes() {
-      // TODO: CFB.write may return a string if the correct option is given
-      return Uint8Array.from(cfb.write(this._cfb));
-    }
+        return entryIndex < 0 ? Uint8Array.of() : Uint8Array.from(this._cfb.FileIndex[entryIndex].content);
+      }
+      /** write the contents of the cfb container to a byte array */
 
-    _getEntryIndex(name) {
-      return this._cfb.FullPaths.findIndex(p => p === this._path + "/" + name);
-    }
+    }, {
+      key: "toBytes",
+      value: function toBytes() {
+        // TODO: CFB.write may return a string if the correct option is given
+        return Uint8Array.from(cfb.write(this._cfb));
+      }
+    }, {
+      key: "_getEntryIndex",
+      value: function _getEntryIndex(name) {
+        return this._cfb.FullPaths.findIndex(p => p === this._path + "/" + name);
+      }
+    }]);
 
-  }
+    return CFBStorage;
+  }();
 
   const MessageImportance = Object.freeze({
     IMPORTANCE_LOW: 0,
@@ -11268,8 +11465,10 @@
    * A property inside the MSG file
    */
 
-  class Property {
-    constructor(obj) {
+  let Property = /*#__PURE__*/function () {
+    function Property(obj) {
+      _classCallCheck(this, Property);
+
       _defineProperty(this, "id", void 0);
 
       _defineProperty(this, "type", void 0);
@@ -11287,551 +11486,598 @@
       this._flags = obj.flags == null ? 0 : obj.flags;
     }
 
-    name() {
-      return name(this);
-    }
-
-    shortName() {
-      return X4(this.id);
-    }
-
-    flagsCollection() {
-      const result = [];
-      if ((this._flags & PropertyFlag.PROPATTR_MANDATORY) !== 0) result.push(PropertyFlag.PROPATTR_MANDATORY);
-      if ((this._flags & PropertyFlag.PROPATTR_READABLE) !== 0) result.push(PropertyFlag.PROPATTR_READABLE);
-      if ((this._flags & PropertyFlag.PROPATTR_WRITABLE) !== 0) result.push(PropertyFlag.PROPATTR_WRITABLE);
-      return result;
-    }
-
-    asInt() {
-      const view = new DataView(this._data.buffer, 0);
-
-      switch (this.type) {
-        case PropertyType.PT_SHORT:
-          return view.getInt16(0, false);
-
-        case PropertyType.PT_LONG:
-          return view.getInt32(0, false);
-
-        default:
-          throw new Error("type is not PT_SHORT or PT_LONG");
+    _createClass(Property, [{
+      key: "name",
+      value: function name$1() {
+        return name(this);
       }
-    }
-
-    asSingle() {
-      const view = new DataView(this._data.buffer, 0);
-
-      switch (this.type) {
-        case PropertyType.PT_FLOAT:
-          return view.getFloat32(0, false);
-
-        default:
-          throw new Error("type is not PT_FLOAT");
+    }, {
+      key: "shortName",
+      value: function shortName() {
+        return X4(this.id);
       }
-    }
-
-    asDouble() {
-      const view = new DataView(this._data.buffer, 0);
-
-      switch (this.type) {
-        case PropertyType.PT_FLOAT:
-          return view.getFloat64(0, false);
-
-        default:
-          throw new Error("type is not PT_DOUBLE");
+    }, {
+      key: "flagsCollection",
+      value: function flagsCollection() {
+        const result = [];
+        if ((this._flags & PropertyFlag.PROPATTR_MANDATORY) !== 0) result.push(PropertyFlag.PROPATTR_MANDATORY);
+        if ((this._flags & PropertyFlag.PROPATTR_READABLE) !== 0) result.push(PropertyFlag.PROPATTR_READABLE);
+        if ((this._flags & PropertyFlag.PROPATTR_WRITABLE) !== 0) result.push(PropertyFlag.PROPATTR_WRITABLE);
+        return result;
       }
-    }
+    }, {
+      key: "asInt",
+      value: function asInt() {
+        const view = new DataView(this._data.buffer, 0);
 
-    asDecimal() {
-      const view = new DataView(this._data.buffer, 0);
+        switch (this.type) {
+          case PropertyType.PT_SHORT:
+            return view.getInt16(0, false);
 
-      switch (this.type) {
-        case PropertyType.PT_FLOAT:
-          // TODO: is there a .Net decimal equivalent for js?
-          return view.getFloat32(0, false);
+          case PropertyType.PT_LONG:
+            return view.getInt32(0, false);
 
-        default:
-          throw new Error("type is not PT_FLOAT");
+          default:
+            throw new Error("type is not PT_SHORT or PT_LONG");
+        }
       }
-    }
+    }, {
+      key: "asSingle",
+      value: function asSingle() {
+        const view = new DataView(this._data.buffer, 0);
 
-    asDateTime() {
-      const view = new DataView(this._data.buffer, 0);
+        switch (this.type) {
+          case PropertyType.PT_FLOAT:
+            return view.getFloat32(0, false);
 
-      switch (this.type) {
-        case PropertyType.PT_APPTIME:
-          // msg stores .Net DateTime as OADate, number of days since 30 dec 1899 as a double value
-          const oaDate = view.getFloat64(0, false);
-          return oADateToDate(oaDate);
-
-        case PropertyType.PT_SYSTIME:
-          // https://docs.microsoft.com/de-de/office/client-developer/outlook/mapi/filetime
-          const fileTimeLower = view.getUint32(0, false);
-          const fileTimeUpper = view.getUint32(4, false);
-          return fileTimeToDate(fileTimeLower, fileTimeUpper);
-
-        default:
-          throw new Error("type is not PT_APPTIME or PT_SYSTIME");
+          default:
+            throw new Error("type is not PT_FLOAT");
+        }
       }
-    }
+    }, {
+      key: "asDouble",
+      value: function asDouble() {
+        const view = new DataView(this._data.buffer, 0);
 
-    asBool() {
-      const view = new DataView(this._data.buffer, 0);
+        switch (this.type) {
+          case PropertyType.PT_FLOAT:
+            return view.getFloat64(0, false);
 
-      switch (this.type) {
-        case PropertyType.PT_BOOLEAN:
-          return Boolean(this._data[0]);
-
-        default:
-          throw new Error("type is not PT_BOOLEAN");
+          default:
+            throw new Error("type is not PT_DOUBLE");
+        }
       }
-    } // TODO: this will fail for very large numbers
+    }, {
+      key: "asDecimal",
+      value: function asDecimal() {
+        const view = new DataView(this._data.buffer, 0);
 
+        switch (this.type) {
+          case PropertyType.PT_FLOAT:
+            // TODO: is there a .Net decimal equivalent for js?
+            return view.getFloat32(0, false);
 
-    asLong() {
-      const view = new DataView(this._data.buffer, 0);
-
-      switch (this.type) {
-        case PropertyType.PT_LONG:
-        case PropertyType.PT_LONGLONG:
-          const val = view.getFloat64(0, false);
-          if (val > Number.MAX_SAFE_INTEGER) throw new Error("implementation can't handle big longs yet");
-          return parseInt(val);
-
-        default:
-          throw new Error("type is not PT_LONG");
+          default:
+            throw new Error("type is not PT_FLOAT");
+        }
       }
-    }
+    }, {
+      key: "asDateTime",
+      value: function asDateTime() {
+        const view = new DataView(this._data.buffer, 0);
 
-    asString() {
-      switch (this.type) {
-        case PropertyType.PT_UNICODE:
-          return utf8ArrayToString(this._data);
-
-        case PropertyType.PT_STRING8:
-          return String.fromCharCode(...this._data);
-
-        default:
-          throw new Error("Type is not PT_UNICODE or PT_STRING8");
-      }
-    }
-
-    asGuid() {
-      switch (this.type) {
-        case PropertyType.PT_CLSID:
-          return v4({
-            random: this._data.slice(0, 16)
-          });
-
-        default:
-          throw new Error("Type is not PT_CLSID");
-      }
-    }
-
-    asBinary() {
-      switch (this.type) {
-        case PropertyType.PT_BINARY:
-          return this._data.slice();
-
-        default:
-          throw new Error("Type is not PT_BINARY");
-      }
-    }
-
-  }
-
-  class Properties extends Array {
-    /**
-     * add a prop it it doesn't exist, otherwise replace it
-     */
-    addOrReplaceProperty(tag, obj, flags = PropertyFlag.PROPATTR_READABLE | PropertyFlag.PROPATTR_WRITABLE) {
-      const index = this.findIndex(p => p.id === tag.id);
-      if (index >= 0) this.splice(index, 1);
-      this.addProperty(tag, obj, flags);
-    }
-
-    addProperty(tag, value, flags = PropertyFlag.PROPATTR_READABLE | PropertyFlag.PROPATTR_WRITABLE) {
-      if (value == null) return;
-      let data = new Uint8Array(0);
-      let view;
-
-      switch (tag.type) {
-        case PropertyType.PT_APPTIME:
-          data = new Uint8Array(8);
-          view = new DataView(data.buffer);
-          view.setFloat64(0, value, true);
-          break;
-
-        case PropertyType.PT_SYSTIME:
-          data = new Uint8Array(8);
-          view = new DataView(data.buffer);
-          view.setInt32(0, value.fileTimeLower, true);
-          view.setInt32(4, value.fileTimeUpper, true);
-          break;
-
-        case PropertyType.PT_SHORT:
-          data = new Uint8Array(2);
-          view = new DataView(data.buffer);
-          view.setInt16(0, value, true);
-          break;
-
-        case PropertyType.PT_ERROR:
-        case PropertyType.PT_LONG:
-          data = new Uint8Array(4);
-          view = new DataView(data.buffer);
-          view.setInt32(0, value, true);
-          break;
-
-        case PropertyType.PT_FLOAT:
-          data = new Uint8Array(4);
-          view = new DataView(data.buffer);
-          view.setFloat32(0, value, true);
-          break;
-
-        case PropertyType.PT_DOUBLE:
-          data = new Uint8Array(8);
-          view = new DataView(data.buffer);
-          view.setFloat64(0, value, true);
-          break;
-        //case PropertyType.PT_CURRENCY:
-        //    data = (byte[]) obj
-        //    break
-
-        case PropertyType.PT_BOOLEAN:
-          data = Uint8Array.from([value ? 1 : 0]);
-          break;
-
-        case PropertyType.PT_I8:
-          // TODO:
-          throw new Error("PT_I8 property type is not supported (64 bit ints)!");
-        // data = BitConverter.GetBytes((long)obj)
-
-        case PropertyType.PT_UNICODE:
-          data = stringToUtf16LeArray(value);
-          break;
-
-        case PropertyType.PT_STRING8:
-          data = stringToAnsiArray(value);
-          break;
-
-        case PropertyType.PT_CLSID:
-          // GUIDs should be Uint8Arrays already
-          data = value;
-          break;
-
-        case PropertyType.PT_BINARY:
-          // TODO: make user convert object to Uint8Array and just assign.
-          if (value instanceof Uint8Array) {
-            data = value;
-            break;
-          }
-
-          const objType = typeof value;
-
-          switch (objType) {
-            case "boolean":
-              data = Uint8Array.from(value);
-              break;
-
-            case "TypeCode.SByte":
-              //data = BitConverter.GetBytes((sbyte)obj)
-              break;
-
-            case "TypeCode.Byte":
-              //data = BitConverter.GetBytes((byte)obj)
-              break;
-
-            case "TypeCode.Int16":
-              //data = BitConverter.GetBytes((short)obj)
-              break;
-
-            case "TypeCode.UInt16":
-              // data = BitConverter.GetBytes((uint)obj)
-              break;
-
-            case "TypeCode.Int32":
-              //data = BitConverter.GetBytes((int)obj)
-              break;
-
-            case "TypeCode.UInt32":
-              // data = BitConverter.GetBytes((uint)obj)
-              break;
-
-            case "TypeCode.Int64":
-              // data = BitConverter.GetBytes((long)obj)
-              break;
-
-            case "TypeCode.UInt64":
-              // data = BitConverter.GetBytes((ulong)obj)
-              break;
-
-            case "TypeCode.Single":
-              // data = BitConverter.GetBytes((float)obj)
-              break;
-
-            case "TypeCode.Double":
-              // data = BitConverter.GetBytes((double)obj)
-              break;
-
-            case "TypeCode.DateTime":
-              // DateTime.Ticks is a long.
-              //  time elapsed time since 12:00:00 midnight, January 1, 0001 in 100-ns-intervals
-              // data = BitConverter.GetBytes(((DateTime)obj).Ticks)
-              break;
-
-            case "string":
-              data = stringToUtf8Array(value);
-              break;
-
-            default:
-              throw new Error("PT_BINARY property type value out of range!");
-          }
-
-          break;
-
-        case PropertyType.PT_NULL:
-          break;
-
-        case PropertyType.PT_ACTIONS:
-          throw new Error("PT_ACTIONS property type is not supported");
-
-        case PropertyType.PT_UNSPECIFIED:
-          throw new Error("PT_UNSPECIFIED property type is not supported");
-
-        case PropertyType.PT_OBJECT:
-          // TODO: Add support for MSG
-          break;
-
-        case PropertyType.PT_SVREID:
-          throw new Error("PT_SVREID property type is not supported");
-
-        case PropertyType.PT_SRESTRICT:
-          throw new Error("PT_SRESTRICT property type is not supported");
-
-        default:
-          throw new Error("type is out of range!");
-      }
-
-      this.push(new Property({
-        id: tag.id,
-        type: tag.type,
-        flags,
-        data
-      }));
-    }
-    /**
-     * writes the properties structure to a cfb stream in storage
-     * @param storage
-     * @param messageSize
-     * @param prefix a function that will be called with the buffer before the properties get written to it.
-     * @returns {number}
-     */
-
-
-    writeProperties(storage, prefix, messageSize) {
-      const buf = makeByteBuffer();
-      prefix(buf);
-      let size = 0; // The data inside the property stream (1) MUST be an array of 16-byte entries. The number of properties,
-      // each represented by one entry, can be determined by first measuring the size of the property stream (1),
-      // then subtracting the size of the header from it, and then dividing the result by the size of one entry.
-      // The structure of each entry, representing one property, depends on whether the property is a fixed length
-      // property or not.
-
-      this.forEach(property => {
-        // property tag: A 32-bit value that contains a property type and a property ID. The low-order 16 bits
-        // represent the property type. The high-order 16 bits represent the property ID.
-        buf.writeUint16(property.type); // 2 bytes
-
-        buf.writeUint16(property.id); // 2 bytes
-
-        buf.writeUint32(property._flags); // 4 bytes
-
-        switch (property.type) {
-          //case PropertyType.PT_ACTIONS:
-          //    break
-          case PropertyType.PT_I8:
+        switch (this.type) {
           case PropertyType.PT_APPTIME:
+            // msg stores .Net DateTime as OADate, number of days since 30 dec 1899 as a double value
+            const oaDate = view.getFloat64(0, false);
+            return oADateToDate(oaDate);
+
           case PropertyType.PT_SYSTIME:
-          case PropertyType.PT_DOUBLE:
-            buf.append(property._data);
+            // https://docs.microsoft.com/de-de/office/client-developer/outlook/mapi/filetime
+            const fileTimeLower = view.getUint32(0, false);
+            const fileTimeUpper = view.getUint32(4, false);
+            return fileTimeToDate(fileTimeLower, fileTimeUpper);
+
+          default:
+            throw new Error("type is not PT_APPTIME or PT_SYSTIME");
+        }
+      }
+    }, {
+      key: "asBool",
+      value: function asBool() {
+        const view = new DataView(this._data.buffer, 0);
+
+        switch (this.type) {
+          case PropertyType.PT_BOOLEAN:
+            return Boolean(this._data[0]);
+
+          default:
+            throw new Error("type is not PT_BOOLEAN");
+        }
+      } // TODO: this will fail for very large numbers
+
+    }, {
+      key: "asLong",
+      value: function asLong() {
+        const view = new DataView(this._data.buffer, 0);
+
+        switch (this.type) {
+          case PropertyType.PT_LONG:
+          case PropertyType.PT_LONGLONG:
+            const val = view.getFloat64(0, false);
+            if (val > Number.MAX_SAFE_INTEGER) throw new Error("implementation can't handle big longs yet");
+            return parseInt(val);
+
+          default:
+            throw new Error("type is not PT_LONG");
+        }
+      }
+    }, {
+      key: "asString",
+      value: function asString() {
+        switch (this.type) {
+          case PropertyType.PT_UNICODE:
+            return utf8ArrayToString(this._data);
+
+          case PropertyType.PT_STRING8:
+            return String.fromCharCode(...this._data);
+
+          default:
+            throw new Error("Type is not PT_UNICODE or PT_STRING8");
+        }
+      }
+    }, {
+      key: "asGuid",
+      value: function asGuid() {
+        switch (this.type) {
+          case PropertyType.PT_CLSID:
+            return v4({
+              random: this._data.slice(0, 16)
+            });
+
+          default:
+            throw new Error("Type is not PT_CLSID");
+        }
+      }
+    }, {
+      key: "asBinary",
+      value: function asBinary() {
+        switch (this.type) {
+          case PropertyType.PT_BINARY:
+            return this._data.slice();
+
+          default:
+            throw new Error("Type is not PT_BINARY");
+        }
+      }
+    }]);
+
+    return Property;
+  }();
+
+  let Properties = /*#__PURE__*/function (_Array) {
+    _inherits(Properties, _Array);
+
+    var _super = _createSuper(Properties);
+
+    function Properties() {
+      _classCallCheck(this, Properties);
+
+      return _super.apply(this, arguments);
+    }
+
+    _createClass(Properties, [{
+      key: "addOrReplaceProperty",
+
+      /**
+       * add a prop it it doesn't exist, otherwise replace it
+       */
+      value: function addOrReplaceProperty(tag, obj, flags = PropertyFlag.PROPATTR_READABLE | PropertyFlag.PROPATTR_WRITABLE) {
+        const index = this.findIndex(p => p.id === tag.id);
+        if (index >= 0) this.splice(index, 1);
+        this.addProperty(tag, obj, flags);
+      }
+    }, {
+      key: "addProperty",
+      value: function addProperty(tag, value, flags = PropertyFlag.PROPATTR_READABLE | PropertyFlag.PROPATTR_WRITABLE) {
+        if (value == null) return;
+        let data = new Uint8Array(0);
+        let view;
+
+        switch (tag.type) {
+          case PropertyType.PT_APPTIME:
+            data = new Uint8Array(8);
+            view = new DataView(data.buffer);
+            view.setFloat64(0, value, true);
+            break;
+
+          case PropertyType.PT_SYSTIME:
+            data = new Uint8Array(8);
+            view = new DataView(data.buffer);
+            view.setInt32(0, value.fileTimeLower, true);
+            view.setInt32(4, value.fileTimeUpper, true);
+            break;
+
+          case PropertyType.PT_SHORT:
+            data = new Uint8Array(2);
+            view = new DataView(data.buffer);
+            view.setInt16(0, value, true);
             break;
 
           case PropertyType.PT_ERROR:
           case PropertyType.PT_LONG:
+            data = new Uint8Array(4);
+            view = new DataView(data.buffer);
+            view.setInt32(0, value, true);
+            break;
+
           case PropertyType.PT_FLOAT:
-            buf.append(property._data);
-            buf.writeUint32(0);
+            data = new Uint8Array(4);
+            view = new DataView(data.buffer);
+            view.setFloat32(0, value, true);
             break;
 
-          case PropertyType.PT_SHORT:
-            buf.append(property._data);
-            buf.writeUint32(0);
-            buf.writeUint16(0);
-            break;
-
-          case PropertyType.PT_BOOLEAN:
-            buf.append(property._data);
-            buf.append(new Uint8Array(7));
+          case PropertyType.PT_DOUBLE:
+            data = new Uint8Array(8);
+            view = new DataView(data.buffer);
+            view.setFloat64(0, value, true);
             break;
           //case PropertyType.PT_CURRENCY:
-          //    binaryWriter.Write(property.Data)
+          //    data = (byte[]) obj
           //    break
 
+          case PropertyType.PT_BOOLEAN:
+            data = Uint8Array.from([value ? 1 : 0]);
+            break;
+
+          case PropertyType.PT_I8:
+            // TODO:
+            throw new Error("PT_I8 property type is not supported (64 bit ints)!");
+          // data = BitConverter.GetBytes((long)obj)
+
           case PropertyType.PT_UNICODE:
-            // Write the length of the property to the propertiesstream
-            buf.writeInt32(property._data.length + 2);
-            buf.writeUint32(0);
-            storage.addStream(property.name(), property._data);
-            size += property._data.length;
+            data = stringToUtf16LeArray(value);
             break;
 
           case PropertyType.PT_STRING8:
-            // Write the length of the property to the propertiesstream
-            buf.writeInt32(property._data.length + 1);
-            buf.writeUint32(0);
-            storage.addStream(property.name(), property._data);
-            size += property._data.length;
+            data = stringToAnsiArray(value);
             break;
 
           case PropertyType.PT_CLSID:
-            buf.append(property._data);
+            // GUIDs should be Uint8Arrays already
+            data = value;
             break;
-          //case PropertyType.PT_SVREID:
-          //    break
-          //case PropertyType.PT_SRESTRICT:
-          //    storage.AddStream(property.Name).SetData(property.Data)
-          //    break
 
           case PropertyType.PT_BINARY:
-            // Write the length of the property to the propertiesstream
-            buf.writeInt32(property._data.length);
-            buf.writeUint32(0);
-            storage.addStream(property.name(), property._data);
-            size += property._data.length;
-            break;
+            // TODO: make user convert object to Uint8Array and just assign.
+            if (value instanceof Uint8Array) {
+              data = value;
+              break;
+            }
 
-          case PropertyType.PT_MV_SHORT:
-            break;
+            const objType = typeof value;
 
-          case PropertyType.PT_MV_LONG:
-            break;
+            switch (objType) {
+              case "boolean":
+                data = Uint8Array.from(value);
+                break;
 
-          case PropertyType.PT_MV_FLOAT:
-            break;
+              case "TypeCode.SByte":
+                //data = BitConverter.GetBytes((sbyte)obj)
+                break;
 
-          case PropertyType.PT_MV_DOUBLE:
-            break;
+              case "TypeCode.Byte":
+                //data = BitConverter.GetBytes((byte)obj)
+                break;
 
-          case PropertyType.PT_MV_CURRENCY:
-            break;
+              case "TypeCode.Int16":
+                //data = BitConverter.GetBytes((short)obj)
+                break;
 
-          case PropertyType.PT_MV_APPTIME:
-            break;
+              case "TypeCode.UInt16":
+                // data = BitConverter.GetBytes((uint)obj)
+                break;
 
-          case PropertyType.PT_MV_LONGLONG:
-            break;
+              case "TypeCode.Int32":
+                //data = BitConverter.GetBytes((int)obj)
+                break;
 
-          case PropertyType.PT_MV_UNICODE:
-            // PropertyType.PT_MV_TSTRING
-            break;
+              case "TypeCode.UInt32":
+                // data = BitConverter.GetBytes((uint)obj)
+                break;
 
-          case PropertyType.PT_MV_STRING8:
-            break;
+              case "TypeCode.Int64":
+                // data = BitConverter.GetBytes((long)obj)
+                break;
 
-          case PropertyType.PT_MV_SYSTIME:
-            break;
-          //case PropertyType.PT_MV_CLSID:
-          //    break
+              case "TypeCode.UInt64":
+                // data = BitConverter.GetBytes((ulong)obj)
+                break;
 
-          case PropertyType.PT_MV_BINARY:
-            break;
+              case "TypeCode.Single":
+                // data = BitConverter.GetBytes((float)obj)
+                break;
 
-          case PropertyType.PT_UNSPECIFIED:
+              case "TypeCode.Double":
+                // data = BitConverter.GetBytes((double)obj)
+                break;
+
+              case "TypeCode.DateTime":
+                // DateTime.Ticks is a long.
+                //  time elapsed time since 12:00:00 midnight, January 1, 0001 in 100-ns-intervals
+                // data = BitConverter.GetBytes(((DateTime)obj).Ticks)
+                break;
+
+              case "string":
+                data = stringToUtf8Array(value);
+                break;
+
+              default:
+                throw new Error("PT_BINARY property type value out of range!");
+            }
+
             break;
 
           case PropertyType.PT_NULL:
             break;
 
+          case PropertyType.PT_ACTIONS:
+            throw new Error("PT_ACTIONS property type is not supported");
+
+          case PropertyType.PT_UNSPECIFIED:
+            throw new Error("PT_UNSPECIFIED property type is not supported");
+
           case PropertyType.PT_OBJECT:
-            // TODO: Adding new MSG file
+            // TODO: Add support for MSG
             break;
+
+          case PropertyType.PT_SVREID:
+            throw new Error("PT_SVREID property type is not supported");
+
+          case PropertyType.PT_SRESTRICT:
+            throw new Error("PT_SRESTRICT property type is not supported");
+
+          default:
+            throw new Error("type is out of range!");
         }
-      });
 
-      if (messageSize != null) {
-        buf.writeUint16(PropertyTags.PR_MESSAGE_SIZE.type); // 2 bytes
+        this.push(new Property({
+          id: tag.id,
+          type: tag.type,
+          flags,
+          data
+        }));
+      }
+      /**
+       * writes the properties structure to a cfb stream in storage
+       * @param storage
+       * @param messageSize
+       * @param prefix a function that will be called with the buffer before the properties get written to it.
+       * @returns {number}
+       */
 
-        buf.writeUint16(PropertyTags.PR_MESSAGE_SIZE.id); // 2 bytes
+    }, {
+      key: "writeProperties",
+      value: function writeProperties(storage, prefix, messageSize) {
+        const buf = makeByteBuffer();
+        prefix(buf);
+        let size = 0; // The data inside the property stream (1) MUST be an array of 16-byte entries. The number of properties,
+        // each represented by one entry, can be determined by first measuring the size of the property stream (1),
+        // then subtracting the size of the header from it, and then dividing the result by the size of one entry.
+        // The structure of each entry, representing one property, depends on whether the property is a fixed length
+        // property or not.
 
-        buf.writeUint32(PropertyFlag.PROPATTR_READABLE | PropertyFlag.PROPATTR_WRITABLE); // 4 bytes
+        this.forEach(property => {
+          // property tag: A 32-bit value that contains a property type and a property ID. The low-order 16 bits
+          // represent the property type. The high-order 16 bits represent the property ID.
+          buf.writeUint16(property.type); // 2 bytes
 
-        buf.writeUint64(messageSize + size + 8);
-        buf.writeUint32(0);
-      } // Make the properties stream
+          buf.writeUint16(property.id); // 2 bytes
+
+          buf.writeUint32(property._flags); // 4 bytes
+
+          switch (property.type) {
+            //case PropertyType.PT_ACTIONS:
+            //    break
+            case PropertyType.PT_I8:
+            case PropertyType.PT_APPTIME:
+            case PropertyType.PT_SYSTIME:
+            case PropertyType.PT_DOUBLE:
+              buf.append(property._data);
+              break;
+
+            case PropertyType.PT_ERROR:
+            case PropertyType.PT_LONG:
+            case PropertyType.PT_FLOAT:
+              buf.append(property._data);
+              buf.writeUint32(0);
+              break;
+
+            case PropertyType.PT_SHORT:
+              buf.append(property._data);
+              buf.writeUint32(0);
+              buf.writeUint16(0);
+              break;
+
+            case PropertyType.PT_BOOLEAN:
+              buf.append(property._data);
+              buf.append(new Uint8Array(7));
+              break;
+            //case PropertyType.PT_CURRENCY:
+            //    binaryWriter.Write(property.Data)
+            //    break
+
+            case PropertyType.PT_UNICODE:
+              // Write the length of the property to the propertiesstream
+              buf.writeInt32(property._data.length + 2);
+              buf.writeUint32(0);
+              storage.addStream(property.name(), property._data);
+              size += property._data.length;
+              break;
+
+            case PropertyType.PT_STRING8:
+              // Write the length of the property to the propertiesstream
+              buf.writeInt32(property._data.length + 1);
+              buf.writeUint32(0);
+              storage.addStream(property.name(), property._data);
+              size += property._data.length;
+              break;
+
+            case PropertyType.PT_CLSID:
+              buf.append(property._data);
+              break;
+            //case PropertyType.PT_SVREID:
+            //    break
+            //case PropertyType.PT_SRESTRICT:
+            //    storage.AddStream(property.Name).SetData(property.Data)
+            //    break
+
+            case PropertyType.PT_BINARY:
+              // Write the length of the property to the propertiesstream
+              buf.writeInt32(property._data.length);
+              buf.writeUint32(0);
+              storage.addStream(property.name(), property._data);
+              size += property._data.length;
+              break;
+
+            case PropertyType.PT_MV_SHORT:
+              break;
+
+            case PropertyType.PT_MV_LONG:
+              break;
+
+            case PropertyType.PT_MV_FLOAT:
+              break;
+
+            case PropertyType.PT_MV_DOUBLE:
+              break;
+
+            case PropertyType.PT_MV_CURRENCY:
+              break;
+
+            case PropertyType.PT_MV_APPTIME:
+              break;
+
+            case PropertyType.PT_MV_LONGLONG:
+              break;
+
+            case PropertyType.PT_MV_UNICODE:
+              // PropertyType.PT_MV_TSTRING
+              break;
+
+            case PropertyType.PT_MV_STRING8:
+              break;
+
+            case PropertyType.PT_MV_SYSTIME:
+              break;
+            //case PropertyType.PT_MV_CLSID:
+            //    break
+
+            case PropertyType.PT_MV_BINARY:
+              break;
+
+            case PropertyType.PT_UNSPECIFIED:
+              break;
+
+            case PropertyType.PT_NULL:
+              break;
+
+            case PropertyType.PT_OBJECT:
+              // TODO: Adding new MSG file
+              break;
+          }
+        });
+
+        if (messageSize != null) {
+          buf.writeUint16(PropertyTags.PR_MESSAGE_SIZE.type); // 2 bytes
+
+          buf.writeUint16(PropertyTags.PR_MESSAGE_SIZE.id); // 2 bytes
+
+          buf.writeUint32(PropertyFlag.PROPATTR_READABLE | PropertyFlag.PROPATTR_WRITABLE); // 4 bytes
+
+          buf.writeUint64(messageSize + size + 8);
+          buf.writeUint32(0);
+        } // Make the properties stream
 
 
-      size += buf.offset;
-      storage.addStream(PropertyTagLiterals.PropertiesStreamName, byteBufferAsUint8Array(buf)); // if(!storage.TryGetStream(PropertyTags.PropertiesStreamName, out var propertiesStream))
-      // propertiesStream = storage.AddStream(PropertyTags.PropertiesStreamName);
-      // TODO: is this the written length?
+        size += buf.offset;
+        storage.addStream(PropertyTagLiterals.PropertiesStreamName, byteBufferAsUint8Array(buf)); // if(!storage.TryGetStream(PropertyTags.PropertiesStreamName, out var propertiesStream))
+        // propertiesStream = storage.AddStream(PropertyTags.PropertiesStreamName);
+        // TODO: is this the written length?
 
-      return size;
-    }
+        return size;
+      }
+    }]);
 
-  }
+    return Properties;
+  }( /*#__PURE__*/_wrapNativeSuper(Array));
 
   /**
    * The properties stream contained inside the top level of the .msg file, which represents the Message object itself.
    */
-  class TopLevelProperties extends Properties {
-    constructor(...args) {
-      super(...args);
+  let TopLevelProperties = /*#__PURE__*/function (_Properties) {
+    _inherits(TopLevelProperties, _Properties);
 
-      _defineProperty(this, "nextRecipientId", void 0);
+    var _super = _createSuper(TopLevelProperties);
 
-      _defineProperty(this, "nextAttachmentId", void 0);
+    function TopLevelProperties(...args) {
+      var _this;
 
-      _defineProperty(this, "recipientCount", void 0);
+      _classCallCheck(this, TopLevelProperties);
 
-      _defineProperty(this, "attachmentCount", void 0);
+      _this = _super.call(this, ...args);
+
+      _defineProperty(_assertThisInitialized(_this), "nextRecipientId", void 0);
+
+      _defineProperty(_assertThisInitialized(_this), "nextAttachmentId", void 0);
+
+      _defineProperty(_assertThisInitialized(_this), "recipientCount", void 0);
+
+      _defineProperty(_assertThisInitialized(_this), "attachmentCount", void 0);
+
+      return _this;
     }
 
-    // TODO: add constructor to read in existing CFB stream
+    _createClass(TopLevelProperties, [{
+      key: "writeProperties",
+      // TODO: add constructor to read in existing CFB stream
 
-    /**
-     *
-     * @param storage
-     * @param prefix
-     * @param messageSize
-     */
-    writeProperties(storage, prefix, messageSize) {
-      // prefix required by the standard: 32 bytes
-      const topLevelPropPrefix = buf => {
-        prefix(buf); // Reserved(8 bytes): This field MUST be set to zero when writing a .msg file and MUST be ignored
-        // when reading a.msg file.
+      /**
+       *
+       * @param storage
+       * @param prefix
+       * @param messageSize
+       */
+      value: function writeProperties(storage, prefix, messageSize) {
+        // prefix required by the standard: 32 bytes
+        const topLevelPropPrefix = buf => {
+          prefix(buf); // Reserved(8 bytes): This field MUST be set to zero when writing a .msg file and MUST be ignored
+          // when reading a.msg file.
 
-        buf.writeUint64(0); // Next Recipient ID(4 bytes): The ID to use for naming the next Recipient object storage if one is
-        // created inside the .msg file. The naming convention to be used is specified in section 2.2.1.If
-        // no Recipient object storages are contained in the.msg file, this field MUST be set to 0.
+          buf.writeUint64(0); // Next Recipient ID(4 bytes): The ID to use for naming the next Recipient object storage if one is
+          // created inside the .msg file. The naming convention to be used is specified in section 2.2.1.If
+          // no Recipient object storages are contained in the.msg file, this field MUST be set to 0.
 
-        buf.writeUint32(this.nextRecipientId); // Next Attachment ID (4 bytes): The ID to use for naming the next Attachment object storage if one
-        // is created inside the .msg file. The naming convention to be used is specified in section 2.2.2.
-        // If no Attachment object storages are contained in the.msg file, this field MUST be set to 0.
+          buf.writeUint32(this.nextRecipientId); // Next Attachment ID (4 bytes): The ID to use for naming the next Attachment object storage if one
+          // is created inside the .msg file. The naming convention to be used is specified in section 2.2.2.
+          // If no Attachment object storages are contained in the.msg file, this field MUST be set to 0.
 
-        buf.writeUint32(this.nextAttachmentId); // Recipient Count(4 bytes): The number of Recipient objects.
+          buf.writeUint32(this.nextAttachmentId); // Recipient Count(4 bytes): The number of Recipient objects.
 
-        buf.writeUint32(this.recipientCount); // Attachment Count (4 bytes): The number of Attachment objects.
+          buf.writeUint32(this.recipientCount); // Attachment Count (4 bytes): The number of Attachment objects.
 
-        buf.writeUint32(this.attachmentCount); // Reserved(8 bytes): This field MUST be set to 0 when writing a msg file and MUST be ignored when
-        // reading a msg file.
+          buf.writeUint32(this.attachmentCount); // Reserved(8 bytes): This field MUST be set to 0 when writing a msg file and MUST be ignored when
+          // reading a msg file.
 
-        buf.writeUint64(0);
-      };
+          buf.writeUint64(0);
+        };
 
-      return super.writeProperties(storage, topLevelPropPrefix, messageSize);
-    }
+        return _get(_getPrototypeOf(TopLevelProperties.prototype), "writeProperties", this).call(this, storage, topLevelPropPrefix, messageSize);
+      }
+    }]);
 
-  }
+    return TopLevelProperties;
+  }(Properties);
 
   /**
    * The entry stream MUST be named "__substg1.0_00030102" and consist of 8-byte entries, one for each
@@ -11845,15 +12091,23 @@
    *
    * see: https://msdn.microsoft.com/en-us/library/ee159689(v=exchg.80).aspx
    */
-  class EntryStream extends Array {
+  let EntryStream = /*#__PURE__*/function (_Array) {
+    _inherits(EntryStream, _Array);
+
+    var _super = _createSuper(EntryStream);
+
     /**
      * creates this object and reads all the EntryStreamItems from
      * the given storage
      * @param storage {any}
      */
-    constructor(storage) {
-      super();
-      if (storage == null) return;
+    function EntryStream(storage) {
+      var _this;
+
+      _classCallCheck(this, EntryStream);
+
+      _this = _super.call(this);
+      if (storage == null) return _possibleConstructorReturn(_this);
       const stream = storage.getStream(PropertyTagLiterals.EntryStream);
 
       if (stream.byteLength <= 0) {
@@ -11864,8 +12118,11 @@
 
       while (buf.offset < buf.limit) {
         const entryStreamItem = EntryStreamItem.fromBuffer(buf);
-        this.push(entryStreamItem);
+
+        _this.push(entryStreamItem);
       }
+
+      return _this;
     }
     /**
      * writes all the EntryStreamItems as a stream to the storage
@@ -11874,49 +12131,59 @@
      */
 
 
-    write(storage, streamName = PropertyTagLiterals.EntryStream) {
-      const buf = makeByteBuffer();
-      this.forEach(entry => entry.write(buf));
-      storage.addStream(streamName, byteBufferAsUint8Array(buf));
-    }
+    _createClass(EntryStream, [{
+      key: "write",
+      value: function write(storage, streamName = PropertyTagLiterals.EntryStream) {
+        const buf = makeByteBuffer();
+        this.forEach(entry => entry.write(buf));
+        storage.addStream(streamName, byteBufferAsUint8Array(buf));
+      }
+    }]);
 
-  }
+    return EntryStream;
+  }( /*#__PURE__*/_wrapNativeSuper(Array));
   /**
    * Represents one item in the EntryStream
    */
 
-  class EntryStreamItem {
-    /**
-     * the Property Kind subfield of the Index and Kind Information field), this value is the LID part of the
-     * PropertyName structure, as specified in [MS-OXCDATA] section 2.6.1. If this property is a string named
-     * property, this value is the offset in bytes into the strings stream where the value of the Name field of
-     * the PropertyName structure is located.
-     * was ushort
-     * */
+  let EntryStreamItem = /*#__PURE__*/function () {
+    _createClass(EntryStreamItem, null, [{
+      key: "fromBuffer",
 
-    /**
-     * The following structure specifies the stream indexes and whether the property is a numerical
-     * named property or a string named property
-     * @type {IndexAndKindInformation}
-     */
+      /**
+       * the Property Kind subfield of the Index and Kind Information field), this value is the LID part of the
+       * PropertyName structure, as specified in [MS-OXCDATA] section 2.6.1. If this property is a string named
+       * property, this value is the offset in bytes into the strings stream where the value of the Name field of
+       * the PropertyName structure is located.
+       * was ushort
+       * */
 
-    /**
-     * creates this objcet and reads all the properties from the given buffer
-     * @param buf {ByteBuffer}
-     */
-    static fromBuffer(buf) {
-      const nameIdentifierOrStringOffset = buf.readUint16();
-      const indexAndKindInformation = IndexAndKindInformation.fromBuffer(buf);
-      return new EntryStreamItem(nameIdentifierOrStringOffset, indexAndKindInformation);
-    }
-    /**
-     * creates this object from the properties
-     * @param nameIdentifierOrStringOffset {number}
-     * @param indexAndKindInformation {IndexAndKindInformation}
-     */
+      /**
+       * The following structure specifies the stream indexes and whether the property is a numerical
+       * named property or a string named property
+       * @type {IndexAndKindInformation}
+       */
 
+      /**
+       * creates this objcet and reads all the properties from the given buffer
+       * @param buf {ByteBuffer}
+       */
+      value: function fromBuffer(buf) {
+        const nameIdentifierOrStringOffset = buf.readUint16();
+        const indexAndKindInformation = IndexAndKindInformation.fromBuffer(buf);
+        return new EntryStreamItem(nameIdentifierOrStringOffset, indexAndKindInformation);
+      }
+      /**
+       * creates this object from the properties
+       * @param nameIdentifierOrStringOffset {number}
+       * @param indexAndKindInformation {IndexAndKindInformation}
+       */
 
-    constructor(nameIdentifierOrStringOffset, indexAndKindInformation) {
+    }]);
+
+    function EntryStreamItem(nameIdentifierOrStringOffset, indexAndKindInformation) {
+      _classCallCheck(this, EntryStreamItem);
+
       _defineProperty(this, "nameIdentifierOrStringOffset", void 0);
 
       _defineProperty(this, "nameIdentifierOrStringOffsetHex", void 0);
@@ -11933,28 +12200,37 @@
      */
 
 
-    write(buf) {
-      buf.writeUint32(this.nameIdentifierOrStringOffset);
-      const packed = this.indexAndKindInformation.guidIndex << 1 | this.indexAndKindInformation.propertyKind;
-      buf.writeUint16(packed);
-      buf.writeUint16(this.indexAndKindInformation.propertyIndex); //Doesn't seem to be the case in the spec.
-      // Fortunately section 3.2 clears this up.
-    }
+    _createClass(EntryStreamItem, [{
+      key: "write",
+      value: function write(buf) {
+        buf.writeUint32(this.nameIdentifierOrStringOffset);
+        const packed = this.indexAndKindInformation.guidIndex << 1 | this.indexAndKindInformation.propertyKind;
+        buf.writeUint16(packed);
+        buf.writeUint16(this.indexAndKindInformation.propertyIndex); //Doesn't seem to be the case in the spec.
+        // Fortunately section 3.2 clears this up.
+      }
+    }]);
 
-  }
-  class IndexAndKindInformation {
-    // System.Uint16
-    // 1 byte
-    static fromBuffer(buf) {
-      const propertyIndex = buf.readUint16();
-      const packedValue = buf.readUint16();
-      const guidIndex = packedValue >>> 1 & 0xFFFF;
-      const propertyKind = packedValue & 0x07;
-      if (![0xFF, 0x01, 0x00].includes(propertyKind)) throw new Error("invalid propertyKind:" + propertyKind);
-      return new IndexAndKindInformation(propertyIndex, guidIndex, propertyKind);
-    }
+    return EntryStreamItem;
+  }();
+  let IndexAndKindInformation = /*#__PURE__*/function () {
+    _createClass(IndexAndKindInformation, null, [{
+      key: "fromBuffer",
+      // System.Uint16
+      // 1 byte
+      value: function fromBuffer(buf) {
+        const propertyIndex = buf.readUint16();
+        const packedValue = buf.readUint16();
+        const guidIndex = packedValue >>> 1 & 0xFFFF;
+        const propertyKind = packedValue & 0x07;
+        if (![0xFF, 0x01, 0x00].includes(propertyKind)) throw new Error("invalid propertyKind:" + propertyKind);
+        return new IndexAndKindInformation(propertyIndex, guidIndex, propertyKind);
+      }
+    }]);
 
-    constructor(propertyIndex, guidIndex, propertyKind) {
+    function IndexAndKindInformation(propertyIndex, guidIndex, propertyKind) {
+      _classCallCheck(this, IndexAndKindInformation);
+
       _defineProperty(this, "propertyIndex", void 0);
 
       _defineProperty(this, "guidIndex", void 0);
@@ -11966,12 +12242,16 @@
       this.propertyKind = propertyKind;
     }
 
-    write(buf) {
-      buf.writeUint16(this.propertyIndex);
-      buf.writeUint32(this.guidIndex + this.propertyKind);
-    }
+    _createClass(IndexAndKindInformation, [{
+      key: "write",
+      value: function write(buf) {
+        buf.writeUint16(this.propertyIndex);
+        buf.writeUint32(this.guidIndex + this.propertyKind);
+      }
+    }]);
 
-  }
+    return IndexAndKindInformation;
+  }();
 
   /**
    * The GUID stream MUST be named "__substg1.0_00020102". It MUST store the property set GUID
@@ -11983,21 +12263,32 @@
    * properties will refer to it by its index
    */
 
-  class GuidStream extends Array {
+  let GuidStream = /*#__PURE__*/function (_Array) {
+    _inherits(GuidStream, _Array);
+
+    var _super = _createSuper(GuidStream);
+
     /**
      * create this object
      * @param storage the storage that contains the PropertyTags.GuidStream
      */
-    constructor(storage) {
-      super();
-      if (storage == null) return;
+    function GuidStream(storage) {
+      var _this;
+
+      _classCallCheck(this, GuidStream);
+
+      _this = _super.call(this);
+      if (storage == null) return _possibleConstructorReturn(_this);
       const stream = storage.getStream(PropertyTagLiterals.GuidStream);
       const buf = makeByteBuffer(null, stream);
 
       while (buf.offset < buf.limit) {
         const guid = buf.slice(buf.offset, buf.offset + 16).toArrayBuffer(true);
-        this.push(new Uint8Array(guid));
+
+        _this.push(new Uint8Array(guid));
       }
+
+      return _this;
     }
     /**
      * writes all the guids as a stream to the storage
@@ -12005,15 +12296,19 @@
      */
 
 
-    write(storage) {
-      const buf = makeByteBuffer();
-      this.forEach(g => {
-        buf.append(g);
-        storage.addStream(PropertyTagLiterals.GuidStream, buf);
-      });
-    }
+    _createClass(GuidStream, [{
+      key: "write",
+      value: function write(storage) {
+        const buf = makeByteBuffer();
+        this.forEach(g => {
+          buf.append(g);
+          storage.addStream(PropertyTagLiterals.GuidStream, buf);
+        });
+      }
+    }]);
 
-  }
+    return GuidStream;
+  }( /*#__PURE__*/_wrapNativeSuper(Array));
 
   /**
    * The string stream MUST be named "__substg1.0_00040102". It MUST consist of one entry for each
@@ -12024,19 +12319,29 @@
    * terminating null character to the string
    * See https://msdn.microsoft.com/en-us/library/ee124409(v=exchg.80).aspx
    */
-  class StringStream extends Array {
+  let StringStream = /*#__PURE__*/function (_Array) {
+    _inherits(StringStream, _Array);
+
+    var _super = _createSuper(StringStream);
+
     /**
      * create StringStream and read all the StringStreamItems from the given storage, if any.
      */
-    constructor(storage) {
-      super();
-      if (storage == null) return;
+    function StringStream(storage) {
+      var _this;
+
+      _classCallCheck(this, StringStream);
+
+      _this = _super.call(this);
+      if (storage == null) return _possibleConstructorReturn(_this);
       const stream = storage.getStream(PropertyTagLiterals.StringStream);
       const buf = makeByteBuffer(null, stream);
 
       while (buf.offset < buf.limit) {
-        this.push(StringStreamItem.fromBuffer(buf));
+        _this.push(StringStreamItem.fromBuffer(buf));
       }
+
+      return _this;
     }
     /**
      * write all the StringStreamItems as a stream to the storage
@@ -12044,47 +12349,57 @@
      */
 
 
-    write(storage) {
-      const buf = makeByteBuffer();
-      this.forEach(s => s.write(buf));
-      storage.addStream(PropertyTagLiterals.StringStream, buf);
-    }
+    _createClass(StringStream, [{
+      key: "write",
+      value: function write(storage) {
+        const buf = makeByteBuffer();
+        this.forEach(s => s.write(buf));
+        storage.addStream(PropertyTagLiterals.StringStream, buf);
+      }
+    }]);
 
-  }
+    return StringStream;
+  }( /*#__PURE__*/_wrapNativeSuper(Array));
   /**
    * Represents one Item in the StringStream
    */
 
-  class StringStreamItem {
-    /**
-     * the length of the following name field in bytes
-     * was uint
-     * @type number
-     */
+  let StringStreamItem = /*#__PURE__*/function () {
+    _createClass(StringStreamItem, null, [{
+      key: "fromBuffer",
 
-    /**
-     * A Unicode string that is the name of the property. A new entry MUST always start
-     * on a 4 byte boundary; therefore, if the size of the Name field is not an exact multiple of 4, and
-     * another Name field entry occurs after it, null characters MUST be appended to the stream after it
-     * until the 4-byte boundary is reached.The Name Length field for the next entry will then start at
-     * the beginning of the next 4-byte boundary
-     * @type {string}
-     */
+      /**
+       * the length of the following name field in bytes
+       * was uint
+       * @type number
+       */
 
-    /**
-     * create a StringStreamItem from a byte buffer
-     * @param buf {ByteBuffer}
-     */
-    static fromBuffer(buf) {
-      const length = buf.readUint32(); // Encoding.Unicode.GetString(binaryReader.ReadBytes((int) Length)).Trim('\0');
+      /**
+       * A Unicode string that is the name of the property. A new entry MUST always start
+       * on a 4 byte boundary; therefore, if the size of the Name field is not an exact multiple of 4, and
+       * another Name field entry occurs after it, null characters MUST be appended to the stream after it
+       * until the 4-byte boundary is reached.The Name Length field for the next entry will then start at
+       * the beginning of the next 4-byte boundary
+       * @type {string}
+       */
 
-      const name = buf.readUTF8String(length);
-      const boundary = StringStreamItem.get4BytesBoundary(length);
-      buf.offset = buf.offset + boundary;
-      return new StringStreamItem(name);
-    }
+      /**
+       * create a StringStreamItem from a byte buffer
+       * @param buf {ByteBuffer}
+       */
+      value: function fromBuffer(buf) {
+        const length = buf.readUint32(); // Encoding.Unicode.GetString(binaryReader.ReadBytes((int) Length)).Trim('\0');
 
-    constructor(name) {
+        const name = buf.readUTF8String(length);
+        const boundary = StringStreamItem.get4BytesBoundary(length);
+        buf.offset = buf.offset + boundary;
+        return new StringStreamItem(name);
+      }
+    }]);
+
+    function StringStreamItem(name) {
+      _classCallCheck(this, StringStreamItem);
+
       _defineProperty(this, "length", void 0);
 
       _defineProperty(this, "name", void 0);
@@ -12098,42 +12413,56 @@
      */
 
 
-    write(buf) {
-      buf.writeUint32(this.length);
-      buf.writeUTF8String(this.name);
-      const boundary = StringStreamItem.get4BytesBoundary(this.length);
+    _createClass(StringStreamItem, [{
+      key: "write",
+      value: function write(buf) {
+        buf.writeUint32(this.length);
+        buf.writeUTF8String(this.name);
+        const boundary = StringStreamItem.get4BytesBoundary(this.length);
 
-      for (let i = 0; i < boundary; i++) {
-        buf.writeUint8(0);
+        for (let i = 0; i < boundary; i++) {
+          buf.writeUint8(0);
+        }
       }
-    }
-    /**
-     * Extract 4 from the given <paramref name="length"/> until the result is smaller
-     * than 4 and then returns this result
-     * @param length {number} was uint
-     */
+      /**
+       * Extract 4 from the given <paramref name="length"/> until the result is smaller
+       * than 4 and then returns this result
+       * @param length {number} was uint
+       */
 
+    }], [{
+      key: "get4BytesBoundary",
+      value: function get4BytesBoundary(length) {
+        if (length === 0) return 4;
 
-    static get4BytesBoundary(length) {
-      if (length === 0) return 4;
+        while (length >= 4) length -= 4;
 
-      while (length >= 4) length -= 4;
+        return length;
+      }
+    }]);
 
-      return length;
-    }
+    return StringStreamItem;
+  }();
 
-  }
+  let NamedProperties = /*#__PURE__*/function (_Array) {
+    _inherits(NamedProperties, _Array);
 
-  class NamedProperties extends Array {
+    var _super = _createSuper(NamedProperties);
+
     // The offset index for a named property
-    constructor(topLevelProperties) {
-      super();
+    function NamedProperties(topLevelProperties) {
+      var _this;
 
-      _defineProperty(this, "_topLevelProperties", void 0);
+      _classCallCheck(this, NamedProperties);
 
-      _defineProperty(this, "_namedPropertyIndex", void 0);
+      _this = _super.call(this);
 
-      this._topLevelProperties = topLevelProperties;
+      _defineProperty(_assertThisInitialized(_this), "_topLevelProperties", void 0);
+
+      _defineProperty(_assertThisInitialized(_this), "_namedPropertyIndex", void 0);
+
+      _this._topLevelProperties = topLevelProperties;
+      return _this;
     }
     /**
      * adds a NamedPropertyTag. Only support for properties by ID for now.
@@ -12142,86 +12471,94 @@
      */
 
 
-    addProperty(mapiTag, obj) {
-      // Named property field 0000. 0x8000 + property offset
-      this._topLevelProperties.addProperty({
-        id: 0x8000 + this._namedPropertyIndex,
-        type: obj
-      });
+    _createClass(NamedProperties, [{
+      key: "addProperty",
+      value: function addProperty(mapiTag, obj) {
+        // Named property field 0000. 0x8000 + property offset
+        this._topLevelProperties.addProperty({
+          id: 0x8000 + this._namedPropertyIndex,
+          type: obj
+        });
 
-      this._namedPropertyIndex += 1;
-      this.push({
-        nameIdentifier: mapiTag.id,
-        guid: mapiTag.guid,
-        kind: PropertyKind.Lid,
-        nameSize: 0,
-        name: ""
-      });
-    }
-    /**
-     * Writes the properties to the storage. Unfortunately this is going to have to be used after we already written the top level properties.
-     * @param storage {any}
-     * @param messageSize {number}
-     */
-
-
-    writeProperties(storage, messageSize = 0) {
-      // Grab the nameIdStorage, 3.1 on the SPEC
-      storage = storage.getStorage(PropertyTagLiterals.NameIdStorage);
-      const entryStream = new EntryStream(storage);
-      const stringStream = new StringStream(storage);
-      const guidStream = new GuidStream(storage);
-      const entryStream2 = new EntryStream(storage); // TODO:
-
-      const guids = this.map(np => np.guid).filter(
-      /* TODO: unique*/
-      () => {
-        throw new Error();
-      });
-      guids.forEach(g => guidStream.push(g));
-      this.forEach((np, propertyIndex) => {
-        // (ushort) (guids.IndexOf(namedProperty.Guid) + 3);
-        const guidIndex = guids.indexOf(np.guid) + 3; // Depending on the property type. This is doing name.
-
-        entryStream.push(new EntryStreamItem(np.nameIdentifier, new IndexAndKindInformation(propertyIndex, guidIndex, PropertyKind.Lid))); //+3 as per spec.
-
-        entryStream2.push(new EntryStreamItem(np.nameIdentifier, new IndexAndKindInformation(propertyIndex, guidIndex, PropertyKind.Lid))); //3.2.2 of the SPEC [MS-OXMSG]
-
-        entryStream2.write(storage, NamedProperties._generateStreamString(np.nameIdentifier, guidIndex, np.kind)); // 3.2.2 of the SPEC Needs to be written, because the stream changes as per named object.
-
-        entryStream2.splice(0, entryStream2.length);
-      });
-      guidStream.write(storage);
-      entryStream.write(storage);
-      stringStream.write(storage);
-    }
-    /**
-     * generates the stream strings
-     * @param nameIdentifier {number} was uint
-     * @param guidTarget {number} was uint
-     * @param propertyKind {PropertyKindEnum} 1 byte
-     */
-
-
-    static _generateStreamString(nameIdentifier, guidTarget, propertyKind) {
-      switch (propertyKind) {
-        case PropertyKind.Lid:
-          const number = 4096 + (nameIdentifier ^ guidTarget << 1) % 0x1F << 16 | 0x00000102;
-          return "__substg1.0_" + number.toString(16).toUpperCase().padStart(8, '0');
-
-        default:
-          throw new Error("not implemented!");
+        this._namedPropertyIndex += 1;
+        this.push({
+          nameIdentifier: mapiTag.id,
+          guid: mapiTag.guid,
+          kind: PropertyKind.Lid,
+          nameSize: 0,
+          name: ""
+        });
       }
-    }
+      /**
+       * Writes the properties to the storage. Unfortunately this is going to have to be used after we already written the top level properties.
+       * @param storage {any}
+       * @param messageSize {number}
+       */
 
-  }
+    }, {
+      key: "writeProperties",
+      value: function writeProperties(storage, messageSize = 0) {
+        // Grab the nameIdStorage, 3.1 on the SPEC
+        storage = storage.getStorage(PropertyTagLiterals.NameIdStorage);
+        const entryStream = new EntryStream(storage);
+        const stringStream = new StringStream(storage);
+        const guidStream = new GuidStream(storage);
+        const entryStream2 = new EntryStream(storage); // TODO:
+
+        const guids = this.map(np => np.guid).filter(
+        /* TODO: unique*/
+        () => {
+          throw new Error();
+        });
+        guids.forEach(g => guidStream.push(g));
+        this.forEach((np, propertyIndex) => {
+          // (ushort) (guids.IndexOf(namedProperty.Guid) + 3);
+          const guidIndex = guids.indexOf(np.guid) + 3; // Depending on the property type. This is doing name.
+
+          entryStream.push(new EntryStreamItem(np.nameIdentifier, new IndexAndKindInformation(propertyIndex, guidIndex, PropertyKind.Lid))); //+3 as per spec.
+
+          entryStream2.push(new EntryStreamItem(np.nameIdentifier, new IndexAndKindInformation(propertyIndex, guidIndex, PropertyKind.Lid))); //3.2.2 of the SPEC [MS-OXMSG]
+
+          entryStream2.write(storage, NamedProperties._generateStreamString(np.nameIdentifier, guidIndex, np.kind)); // 3.2.2 of the SPEC Needs to be written, because the stream changes as per named object.
+
+          entryStream2.splice(0, entryStream2.length);
+        });
+        guidStream.write(storage);
+        entryStream.write(storage);
+        stringStream.write(storage);
+      }
+      /**
+       * generates the stream strings
+       * @param nameIdentifier {number} was uint
+       * @param guidTarget {number} was uint
+       * @param propertyKind {PropertyKindEnum} 1 byte
+       */
+
+    }], [{
+      key: "_generateStreamString",
+      value: function _generateStreamString(nameIdentifier, guidTarget, propertyKind) {
+        switch (propertyKind) {
+          case PropertyKind.Lid:
+            const number = 4096 + (nameIdentifier ^ guidTarget << 1) % 0x1F << 16 | 0x00000102;
+            return "__substg1.0_" + number.toString(16).toUpperCase().padStart(8, '0');
+
+          default:
+            throw new Error("not implemented!");
+        }
+      }
+    }]);
+
+    return NamedProperties;
+  }( /*#__PURE__*/_wrapNativeSuper(Array));
 
   /**
    * base class for all MSG files
    */
 
-  class Message {
-    constructor() {
+  let Message = /*#__PURE__*/function () {
+    function Message() {
+      _classCallCheck(this, Message);
+
       _defineProperty(this, "_saved", false);
 
       _defineProperty(this, "iconIndex", void 0);
@@ -12252,52 +12589,57 @@
       this._namedProperties = new NamedProperties(this._topLevelProperties);
     }
 
-    _save() {
-      this._topLevelProperties.addProperty(PropertyTags.PR_MESSAGE_CLASS_W, this._messageClass);
+    _createClass(Message, [{
+      key: "_save",
+      value: function _save() {
+        this._topLevelProperties.addProperty(PropertyTags.PR_MESSAGE_CLASS_W, this._messageClass);
 
-      this._topLevelProperties.writeProperties(this._storage, () => {}, this._messageSize);
+        this._topLevelProperties.writeProperties(this._storage, () => {}, this._messageSize);
 
-      this._namedProperties.writeProperties(this._storage, 0);
+        this._namedProperties.writeProperties(this._storage, 0);
 
-      this._saved = true;
-      this._messageSize = 0;
-    }
-    /**
-     * writes the Message to an underlying CFB
-     * structure and returns a serialized
-     * representation
-     *
-     */
+        this._saved = true;
+        this._messageSize = 0;
+      }
+      /**
+       * writes the Message to an underlying CFB
+       * structure and returns a serialized
+       * representation
+       *
+       */
 
+    }, {
+      key: "saveToBuffer",
+      value: function saveToBuffer() {
+        this._save();
 
-    saveToBuffer() {
-      this._save();
+        return this._storage.toBytes();
+      }
+    }, {
+      key: "addProperty",
+      value: function addProperty(propertyTag, value, flags = PropertyFlag.PROPATTR_WRITABLE) {
+        if (this._saved) throw new Error("Message is already saved!");
 
-      return this._storage.toBytes();
-    }
+        this._topLevelProperties.addOrReplaceProperty(propertyTag, value, flags);
+      }
+    }]);
 
-    addProperty(propertyTag, value, flags = PropertyFlag.PROPATTR_WRITABLE) {
-      if (this._saved) throw new Error("Message is already saved!");
+    return Message;
+  }();
 
-      this._topLevelProperties.addOrReplaceProperty(propertyTag, value, flags);
-    }
+  let Address = function Address(email, displayName, addressType = 'SMTP') {
+    _classCallCheck(this, Address);
 
-  }
+    _defineProperty(this, "addressType", void 0);
 
-  class Address {
-    constructor(email, displayName, addressType = 'SMTP') {
-      _defineProperty(this, "addressType", void 0);
+    _defineProperty(this, "email", void 0);
 
-      _defineProperty(this, "email", void 0);
+    _defineProperty(this, "displayName", void 0);
 
-      _defineProperty(this, "displayName", void 0);
-
-      this.email = email;
-      this.displayName = isNullOrWhiteSpace(this.displayName) ? email : displayName;
-      this.addressType = addressType;
-    }
-
-  }
+    this.email = email;
+    this.displayName = isNullOrWhiteSpace(this.displayName) ? email : displayName;
+    this.addressType = addressType;
+  };
 
   function makeUUIDBuffer() {
     return v4({}, new Uint8Array(16), 0);
@@ -12370,100 +12712,145 @@
   /**
    * The properties stream contained inside an Recipient storage object.
    */
-  class RecipientProperties extends Properties {
-    writeProperties(storage, prefix, messageSize) {
-      const recipPropPrefix = buf => {
-        prefix(buf); // Reserved(8 bytes): This field MUST be set to zero when writing a .msg file and MUST be ignored
-        // when reading a.msg file.
+  let RecipientProperties = /*#__PURE__*/function (_Properties) {
+    _inherits(RecipientProperties, _Properties);
 
-        buf.writeUint64(0);
-      };
+    var _super = _createSuper(RecipientProperties);
 
-      return super.writeProperties(storage, recipPropPrefix, messageSize);
+    function RecipientProperties() {
+      _classCallCheck(this, RecipientProperties);
+
+      return _super.apply(this, arguments);
     }
 
-  }
+    _createClass(RecipientProperties, [{
+      key: "writeProperties",
+      value: function writeProperties(storage, prefix, messageSize) {
+        const recipPropPrefix = buf => {
+          prefix(buf); // Reserved(8 bytes): This field MUST be set to zero when writing a .msg file and MUST be ignored
+          // when reading a.msg file.
+
+          buf.writeUint64(0);
+        };
+
+        return _get(_getPrototypeOf(RecipientProperties.prototype), "writeProperties", this).call(this, storage, recipPropPrefix, messageSize);
+      }
+    }]);
+
+    return RecipientProperties;
+  }(Properties);
 
   /**
    * Wrapper around a list of recipients
    */
-  class Recipients extends Array {
-    /**
-     * add a new To-Recipient to the list
-     * @param email email address of the recipient
-     * @param displayName display name of the recipient (optional)
-     * @param addressType address type of the recipient (default SMTP)
-     * @param objectType mapiObjectType of the recipient (default MAPI_MAILUSER)
-     * @param displayType recipientRowDisplayType of the recipient (default MessagingUser)
-     */
-    addTo(email, displayName = "", addressType = 'SMTP', objectType = MapiObjectType.MAPI_MAILUSER, displayType = RecipientRowDisplayType.MessagingUser) {
-      this.push(new Recipient(this.length, email, displayName, addressType, RecipientType.To, objectType, displayType));
-    }
-    /**
-     * add a new Cc-Recipient to the list
-     * @param email email address of the recipient
-     * @param displayName display name of the recipient (optional)
-     * @param addressType address type of the recipient (default SMTP)
-     * @param objectType mapiObjectType of the recipient (default MAPI_MAILUSER)
-     * @param displayType recipientRowDisplayType of the recipient (default MessagingUser)
-     */
+  let Recipients = /*#__PURE__*/function (_Array) {
+    _inherits(Recipients, _Array);
 
+    var _super = _createSuper(Recipients);
 
-    addCc(email, displayName = "", addressType = 'SMTP', objectType = MapiObjectType.MAPI_MAILUSER, displayType = RecipientRowDisplayType.MessagingUser) {
-      this.push(new Recipient(this.length, email, displayName, addressType, RecipientType.Cc, objectType, displayType));
+    function Recipients() {
+      _classCallCheck(this, Recipients);
+
+      return _super.apply(this, arguments);
     }
 
-    addBcc(email, displayName = "", addressType = 'SMTP', objectType = MapiObjectType.MAPI_MAILUSER, displayType = RecipientRowDisplayType.MessagingUser) {
-      this.push(new Recipient(this.length, email, displayName, addressType, RecipientType.Bcc, objectType, displayType));
-    }
+    _createClass(Recipients, [{
+      key: "addTo",
 
-    writeToStorage(rootStorage) {
-      let size = 0;
-
-      for (let i = 0; i < this.length; i++) {
-        const recipient = this[i];
-        const storage = rootStorage.addStorage(PropertyTagLiterals.RecipientStoragePrefix + X8(i));
-        size += recipient.writeProperties(storage);
+      /**
+       * add a new To-Recipient to the list
+       * @param email email address of the recipient
+       * @param displayName display name of the recipient (optional)
+       * @param addressType address type of the recipient (default SMTP)
+       * @param objectType mapiObjectType of the recipient (default MAPI_MAILUSER)
+       * @param displayType recipientRowDisplayType of the recipient (default MessagingUser)
+       */
+      value: function addTo(email, displayName = "", addressType = 'SMTP', objectType = MapiObjectType.MAPI_MAILUSER, displayType = RecipientRowDisplayType.MessagingUser) {
+        this.push(new Recipient(this.length, email, displayName, addressType, RecipientType.To, objectType, displayType));
       }
+      /**
+       * add a new Cc-Recipient to the list
+       * @param email email address of the recipient
+       * @param displayName display name of the recipient (optional)
+       * @param addressType address type of the recipient (default SMTP)
+       * @param objectType mapiObjectType of the recipient (default MAPI_MAILUSER)
+       * @param displayType recipientRowDisplayType of the recipient (default MessagingUser)
+       */
 
-      return size;
+    }, {
+      key: "addCc",
+      value: function addCc(email, displayName = "", addressType = 'SMTP', objectType = MapiObjectType.MAPI_MAILUSER, displayType = RecipientRowDisplayType.MessagingUser) {
+        this.push(new Recipient(this.length, email, displayName, addressType, RecipientType.Cc, objectType, displayType));
+      }
+    }, {
+      key: "addBcc",
+      value: function addBcc(email, displayName = "", addressType = 'SMTP', objectType = MapiObjectType.MAPI_MAILUSER, displayType = RecipientRowDisplayType.MessagingUser) {
+        this.push(new Recipient(this.length, email, displayName, addressType, RecipientType.Bcc, objectType, displayType));
+      }
+    }, {
+      key: "writeToStorage",
+      value: function writeToStorage(rootStorage) {
+        let size = 0;
+
+        for (let i = 0; i < this.length; i++) {
+          const recipient = this[i];
+          const storage = rootStorage.addStorage(PropertyTagLiterals.RecipientStoragePrefix + X8(i));
+          size += recipient.writeProperties(storage);
+        }
+
+        return size;
+      }
+    }]);
+
+    return Recipients;
+  }( /*#__PURE__*/_wrapNativeSuper(Array));
+  let Recipient = /*#__PURE__*/function (_Address) {
+    _inherits(Recipient, _Address);
+
+    var _super2 = _createSuper(Recipient);
+
+    function Recipient(rowId, email, displayName, addressType, recipientType, objectType, displayType) {
+      var _this;
+
+      _classCallCheck(this, Recipient);
+
+      _this = _super2.call(this, email, displayName, addressType);
+
+      _defineProperty(_assertThisInitialized(_this), "_rowId", void 0);
+
+      _defineProperty(_assertThisInitialized(_this), "recipientType", void 0);
+
+      _defineProperty(_assertThisInitialized(_this), "_displayType", void 0);
+
+      _defineProperty(_assertThisInitialized(_this), "_objectType", void 0);
+
+      _this._rowId = rowId;
+      _this.recipientType = recipientType;
+      _this._displayType = displayType;
+      _this._objectType = objectType;
+      return _this;
     }
 
-  }
-  class Recipient extends Address {
-    constructor(rowId, email, displayName, addressType, recipientType, objectType, displayType) {
-      super(email, displayName, addressType);
+    _createClass(Recipient, [{
+      key: "writeProperties",
+      value: function writeProperties(storage) {
+        const propertiesStream = new RecipientProperties();
+        propertiesStream.addProperty(PropertyTags.PR_ROWID, this._rowId);
+        propertiesStream.addProperty(PropertyTags.PR_ENTRYID, generateEntryId());
+        propertiesStream.addProperty(PropertyTags.PR_INSTANCE_KEY, generateInstanceKey());
+        propertiesStream.addProperty(PropertyTags.PR_RECIPIENT_TYPE, this.recipientType);
+        propertiesStream.addProperty(PropertyTags.PR_ADDRTYPE_W, this.addressType);
+        propertiesStream.addProperty(PropertyTags.PR_EMAIL_ADDRESS_W, this.email);
+        propertiesStream.addProperty(PropertyTags.PR_OBJECT_TYPE, this._objectType);
+        propertiesStream.addProperty(PropertyTags.PR_DISPLAY_TYPE, this._displayType);
+        propertiesStream.addProperty(PropertyTags.PR_DISPLAY_NAME_W, this.displayName);
+        propertiesStream.addProperty(PropertyTags.PR_SEARCH_KEY, generateSearchKey(this.addressType, this.email));
+        return propertiesStream.writeProperties(storage, () => {});
+      }
+    }]);
 
-      _defineProperty(this, "_rowId", void 0);
-
-      _defineProperty(this, "recipientType", void 0);
-
-      _defineProperty(this, "_displayType", void 0);
-
-      _defineProperty(this, "_objectType", void 0);
-
-      this._rowId = rowId;
-      this.recipientType = recipientType;
-      this._displayType = displayType;
-      this._objectType = objectType;
-    }
-
-    writeProperties(storage) {
-      const propertiesStream = new RecipientProperties();
-      propertiesStream.addProperty(PropertyTags.PR_ROWID, this._rowId);
-      propertiesStream.addProperty(PropertyTags.PR_ENTRYID, generateEntryId());
-      propertiesStream.addProperty(PropertyTags.PR_INSTANCE_KEY, generateInstanceKey());
-      propertiesStream.addProperty(PropertyTags.PR_RECIPIENT_TYPE, this.recipientType);
-      propertiesStream.addProperty(PropertyTags.PR_ADDRTYPE_W, this.addressType);
-      propertiesStream.addProperty(PropertyTags.PR_EMAIL_ADDRESS_W, this.email);
-      propertiesStream.addProperty(PropertyTags.PR_OBJECT_TYPE, this._objectType);
-      propertiesStream.addProperty(PropertyTags.PR_DISPLAY_TYPE, this._displayType);
-      propertiesStream.addProperty(PropertyTags.PR_DISPLAY_NAME_W, this.displayName);
-      propertiesStream.addProperty(PropertyTags.PR_SEARCH_KEY, generateSearchKey(this.addressType, this.email));
-      return propertiesStream.writeProperties(storage, () => {});
-    }
-
-  }
+    return Recipient;
+  }(Address);
 
   var emailAddresses = createCommonjsModule(function (module) {
   // email-addresses.js - RFC 5322 email address parser
@@ -13503,10 +13890,6 @@
   })();
   });
 
-  var addressRfc2822 = createCommonjsModule(function (module, exports) {
-
-
-
   exports.parse = function parse(line, startAt) {
     if (!line) throw new Error('Nothing to parse');
     line = line.trim();
@@ -13548,7 +13931,7 @@
 
     let l = adr.local;
     if (!adr.name && /:/.test(l)) l = `"${l}"`;
-    return new Address(adr.name, `${l}@${adr.domain}`, comments);
+    return new Address$1(adr.name, `${l}@${adr.domain}`, comments);
   }
 
   exports.parseFrom = function (line) {
@@ -13563,111 +13946,127 @@
     return exports.parse(line, 'reply-to');
   };
 
-  class Group {
-    constructor(display_name, addresses) {
+  let Group = /*#__PURE__*/function () {
+    function Group(display_name, addresses) {
+      _classCallCheck(this, Group);
+
       this.phrase = display_name;
       this.addresses = addresses;
     }
 
-    format() {
-      return `${this.phrase}:${this.addresses.map(function (a) {
-      return a.format();
-    }).join(',')}`;
-    }
+    _createClass(Group, [{
+      key: "format",
+      value: function format() {
+        return `${this.phrase}:${this.addresses.map(function (a) {
+        return a.format();
+      }).join(',')}`;
+      }
+    }, {
+      key: "name",
+      value: function name() {
+        let phrase = this.phrase;
+        if (!(phrase && phrase.length)) phrase = this.comment;
 
-    name() {
-      let phrase = this.phrase;
-      if (!(phrase && phrase.length)) phrase = this.comment;
+        const name = _extract_name(phrase);
 
-      const name = _extract_name(phrase);
+        return name;
+      }
+    }]);
 
-      return name;
-    }
+    return Group;
+  }();
 
-  }
+  let Address$1 = /*#__PURE__*/function () {
+    function Address(phrase, address, comment) {
+      _classCallCheck(this, Address);
 
-  class Address {
-    constructor(phrase, address, comment) {
       this.phrase = phrase || '';
       this.address = address || '';
       this.comment = comment || '';
     }
 
-    host() {
-      const match = /.*@(.*)$/.exec(this.address);
-      if (!match) return null;
-      return match[1];
-    }
+    _createClass(Address, [{
+      key: "host",
+      value: function host() {
+        const match = /.*@(.*)$/.exec(this.address);
+        if (!match) return null;
+        return match[1];
+      }
+    }, {
+      key: "user",
+      value: function user() {
+        const match = /^(.*)@/.exec(this.address);
+        if (!match) return null;
+        return match[1];
+      }
+    }, {
+      key: "format",
+      value: function format() {
+        const phrase = this.phrase;
+        const email = this.address;
+        let comment = this.comment;
+        const addr = [];
+        const atext = new RegExp('^[\\-\\w !#$%&\'*+/=?^`{|}~]+$');
 
-    user() {
-      const match = /^(.*)@/.exec(this.address);
-      if (!match) return null;
-      return match[1];
-    }
+        if (phrase && phrase.length) {
+          addr.push(atext.test(phrase.trim()) ? phrase : _quote_no_esc(phrase) ? phrase : `"${phrase}"`);
 
-    format() {
-      const phrase = this.phrase;
-      const email = this.address;
-      let comment = this.comment;
-      const addr = [];
-      const atext = new RegExp('^[\\-\\w !#$%&\'*+/=?^`{|}~]+$');
-
-      if (phrase && phrase.length) {
-        addr.push(atext.test(phrase.trim()) ? phrase : _quote_no_esc(phrase) ? phrase : `"${phrase}"`);
-
-        if (email && email.length) {
-          addr.push(`<${email}>`);
+          if (email && email.length) {
+            addr.push(`<${email}>`);
+          }
+        } else if (email && email.length) {
+          addr.push(email);
         }
-      } else if (email && email.length) {
-        addr.push(email);
-      }
 
-      if (comment && /\S/.test(comment)) {
-        comment = comment.replace(/^\s*\(?/, '(').replace(/\)?\s*$/, ')');
-      }
-
-      if (comment && comment.length) {
-        addr.push(comment);
-      }
-
-      return addr.join(' ');
-    }
-
-    name() {
-      let phrase = this.phrase;
-      const addr = this.address;
-
-      if (!(phrase && phrase.length)) {
-        phrase = this.comment;
-      }
-
-      let name = _extract_name(phrase); // first.last@domain address
-
-
-      if (name === '') {
-        const match = /([^%.@_]+([._][^%.@_]+)+)[@%]/.exec(addr);
-
-        if (match) {
-          name = match[1].replace(/[._]+/g, ' ');
-          name = _extract_name(name);
+        if (comment && /\S/.test(comment)) {
+          comment = comment.replace(/^\s*\(?/, '(').replace(/\)?\s*$/, ')');
         }
+
+        if (comment && comment.length) {
+          addr.push(comment);
+        }
+
+        return addr.join(' ');
       }
+    }, {
+      key: "name",
+      value: function name() {
+        let phrase = this.phrase;
+        const addr = this.address;
 
-      if (name === '' && /\/g=/i.test(addr)) {
-        // X400 style address
-        let match = /\/g=([^/]*)/i.exec(addr);
-        const f = match[1];
-        match = /\/s=([^/]*)/i.exec(addr);
-        const l = match[1];
-        name = _extract_name(`${f} ${l}`);
+        if (!(phrase && phrase.length)) {
+          phrase = this.comment;
+        }
+
+        let name = _extract_name(phrase); // first.last@domain address
+
+
+        if (name === '') {
+          const match = /([^%.@_]+([._][^%.@_]+)+)[@%]/.exec(addr);
+
+          if (match) {
+            name = match[1].replace(/[._]+/g, ' ');
+            name = _extract_name(name);
+          }
+        }
+
+        if (name === '' && /\/g=/i.test(addr)) {
+          // X400 style address
+          let match = /\/g=([^/]*)/i.exec(addr);
+          const f = match[1];
+          match = /\/s=([^/]*)/i.exec(addr);
+          const l = match[1];
+          name = _extract_name(`${f} ${l}`);
+        }
+
+        return name;
       }
+    }]);
 
-      return name;
-    }
+    return Address;
+  }();
 
-  }
-
-  exports.Address = Address; // This is because JS regexps have no equivalent of
+  exports.Address = Address$1; // This is because JS regexps have no equivalent of
   // zero-width negative look-behind assertion for: /(?<!\\)"/
 
   function _quote_no_esc(str) {
@@ -13733,7 +14132,6 @@
     name = name.replace(/\[[^\]]*\]/g, '').replace(/(^[\s'"]+|[\s'"]+$)/g, '').replace(/\s{2,}/g, ' ');
     return name;
   }
-  });
 
   /* eslint-disable node/no-deprecated-api */
 
@@ -24845,170 +25243,211 @@
     return chars.replace(/[\\|^*+?[\]().-]/g, '\\$&');
   }
 
-  class OneOffEntryId extends Address {
-    constructor(email, displayName, addressType = "SMTP", messageFormat = MessageFormat.TextAndHtml, canLookupEmailAddress = false) {
-      super(email, displayName, addressType);
+  let OneOffEntryId = /*#__PURE__*/function (_Address) {
+    _inherits(OneOffEntryId, _Address);
 
-      _defineProperty(this, "_messageFormat", void 0);
+    var _super = _createSuper(OneOffEntryId);
 
-      _defineProperty(this, "_canLookupEmailAddress", void 0);
+    function OneOffEntryId(email, displayName, addressType = "SMTP", messageFormat = MessageFormat.TextAndHtml, canLookupEmailAddress = false) {
+      var _this;
 
-      this._messageFormat = messageFormat;
-      this._canLookupEmailAddress = canLookupEmailAddress;
+      _classCallCheck(this, OneOffEntryId);
+
+      _this = _super.call(this, email, displayName, addressType);
+
+      _defineProperty(_assertThisInitialized(_this), "_messageFormat", void 0);
+
+      _defineProperty(_assertThisInitialized(_this), "_canLookupEmailAddress", void 0);
+
+      _this._messageFormat = messageFormat;
+      _this._canLookupEmailAddress = canLookupEmailAddress;
+      return _this;
     }
 
-    toByteArray() {
-      const buf = makeByteBuffer(); // Flags (4 bytes): This value is set to 0x00000000. Bits in this field indicate under what circumstances
-      // a short-term EntryID is valid. However, in any EntryID stored in a property value, these 4 bytes are
-      // zero, indicating a long-term EntryID.
+    _createClass(OneOffEntryId, [{
+      key: "toByteArray",
+      value: function toByteArray() {
+        const buf = makeByteBuffer(); // Flags (4 bytes): This value is set to 0x00000000. Bits in this field indicate under what circumstances
+        // a short-term EntryID is valid. However, in any EntryID stored in a property value, these 4 bytes are
+        // zero, indicating a long-term EntryID.
 
-      buf.writeUint32(0); // ProviderUID (16 bytes): The identifier of the provider that created the EntryID. This value is used to
-      // route EntryIDs to the correct provider and MUST be set to %x81.2B.1F.A4.BE.A3.10.19.9D.6E.00.DD.01.0F.54.02.
+        buf.writeUint32(0); // ProviderUID (16 bytes): The identifier of the provider that created the EntryID. This value is used to
+        // route EntryIDs to the correct provider and MUST be set to %x81.2B.1F.A4.BE.A3.10.19.9D.6E.00.DD.01.0F.54.02.
 
-      buf.append(Uint8Array.from([0x81, 0x2B, 0x1F, 0xA4, 0xBE, 0xA3, 0x10, 0x19, 0x9D, 0x6E, 0x00, 0xDD, 0x01, 0x0F, 0x54, 0x02])); // Version (2 bytes): This value is set to 0x0000.
+        buf.append(Uint8Array.from([0x81, 0x2B, 0x1F, 0xA4, 0xBE, 0xA3, 0x10, 0x19, 0x9D, 0x6E, 0x00, 0xDD, 0x01, 0x0F, 0x54, 0x02])); // Version (2 bytes): This value is set to 0x0000.
 
-      buf.writeUint16(0);
-      let bits = 0x0000; // Pad(1 bit): (mask 0x8000) Reserved.This value is set to '0'.
-      // bits |= 0x00 << 0
-      // MAE (2 bits): (mask 0x0C00) The encoding used for Macintosh-specific data attachments, as specified in
-      // [MS-OXCMAIL] section 2.1.3.4.3. The values for this field are specified in the following table.
-      // Name        | Word value | Field value | Description
-      // BinHex        0x0000       b'00'         BinHex encoded.
-      // UUENCODE      0x0020       b'01'         UUENCODED.Not valid if the message is in Multipurpose Internet Mail
-      //                                          Extensions(MIME) format, in which case the flag will be ignored and
-      //                                          BinHex used instead.
-      // AppleSingle   0x0040      b'10'          Apple Single encoded.Allowed only when the message format is MIME.
-      // AppleDouble   0x0060      b'11'          Apple Double encoded.Allowed only when the message format is MIME.
-      // bits |= 0x00 << 1
-      // bits |= 0x00 << 2
-      // Format (4 bits): (enumeration, mask 0x1E00) The message format desired for this recipient (1), as specified
-      // in the following table.
-      // Name        | Word value | Field value | Description
-      // TextOnly      0x0006       b'0011'       Send a plain text message body.
-      // HtmlOnly      0x000E       b'0111'       Send an HTML message body.
-      // TextAndHtml   0x0016       b'1011'       Send a multipart / alternative body with both plain text and HTML.
+        buf.writeUint16(0);
+        let bits = 0x0000; // Pad(1 bit): (mask 0x8000) Reserved.This value is set to '0'.
+        // bits |= 0x00 << 0
+        // MAE (2 bits): (mask 0x0C00) The encoding used for Macintosh-specific data attachments, as specified in
+        // [MS-OXCMAIL] section 2.1.3.4.3. The values for this field are specified in the following table.
+        // Name        | Word value | Field value | Description
+        // BinHex        0x0000       b'00'         BinHex encoded.
+        // UUENCODE      0x0020       b'01'         UUENCODED.Not valid if the message is in Multipurpose Internet Mail
+        //                                          Extensions(MIME) format, in which case the flag will be ignored and
+        //                                          BinHex used instead.
+        // AppleSingle   0x0040      b'10'          Apple Single encoded.Allowed only when the message format is MIME.
+        // AppleDouble   0x0060      b'11'          Apple Double encoded.Allowed only when the message format is MIME.
+        // bits |= 0x00 << 1
+        // bits |= 0x00 << 2
+        // Format (4 bits): (enumeration, mask 0x1E00) The message format desired for this recipient (1), as specified
+        // in the following table.
+        // Name        | Word value | Field value | Description
+        // TextOnly      0x0006       b'0011'       Send a plain text message body.
+        // HtmlOnly      0x000E       b'0111'       Send an HTML message body.
+        // TextAndHtml   0x0016       b'1011'       Send a multipart / alternative body with both plain text and HTML.
 
-      switch (this._messageFormat) {
-        case MessageFormat.TextOnly:
-          //bits |= 0x00 << 3
-          //bits |= 0x00 << 4
-          bits |= 0x01 << 5;
-          bits |= 0x01 << 6;
-          break;
+        switch (this._messageFormat) {
+          case MessageFormat.TextOnly:
+            //bits |= 0x00 << 3
+            //bits |= 0x00 << 4
+            bits |= 0x01 << 5;
+            bits |= 0x01 << 6;
+            break;
 
-        case MessageFormat.HtmlOnly:
-          //bits |= 0x00 << 3
-          bits |= 0x01 << 4;
-          bits |= 0x01 << 5;
-          bits |= 0x01 << 6;
-          break;
+          case MessageFormat.HtmlOnly:
+            //bits |= 0x00 << 3
+            bits |= 0x01 << 4;
+            bits |= 0x01 << 5;
+            bits |= 0x01 << 6;
+            break;
 
-        case MessageFormat.TextAndHtml:
-          bits |= 0x01 << 3; //bits |= 0x00 << 4
+          case MessageFormat.TextAndHtml:
+            bits |= 0x01 << 3; //bits |= 0x00 << 4
 
-          bits |= 0x01 << 5;
-          bits |= 0x01 << 6;
-          break;
-      } // M (1 bit): (mask 0x0100) A flag that indicates how messages are to be sent. If b'0', indicates messages are
-      // to be sent to the recipient (1) in Transport Neutral Encapsulation Format (TNEF) format; if b'1', messages
-      // are sent to the recipient (1) in pure MIME format.
-
-
-      bits |= 0x01 << 7; // U (1 bit): (mask 0x0080) A flag that indicates the format of the string fields that follow. If b'1', the
-      // string fields following are in Unicode (UTF-16 form) with 2-byte terminating null characters; if b'0', the
-      // string fields following are multibyte character set (MBCS) characters terminated by a single 0 byte.
-
-      bits |= 0x01 << 8; // R (2 bits): (mask 0x0060) Reserved. This value is set to b'00'.
-      //bits |= 0x00 << 9
-      //bits |= 0x00 << 10
-      // L (1 bit): (mask 0x0010) A flag that indicates whether the server can look up an address in the address
-      // book. If b'1', server cannot look up this user's email address in the address book. If b'0', server can
-      // look up this user's email address in the address book.
-
-      if (this._canLookupEmailAddress) {
-        bits |= 0x01 << 11;
-      } // Pad (4 bits): (mask 0x000F) Reserved. This value is set to b'0000'.
-      // bits |= 0x01 << 12
-      // bits |= 0x01 << 13
-      // bits |= 0x01 << 14
-      // bits |= 0x01 << 15
-      // if (BitConverter.IsLittleEndian) {
-      //     bits = bits.Reverse().ToArray();
-      //     binaryWriter.Write(bits);
-      // } else {
-      //     binaryWriter.Write(bits);
-      // }
+            bits |= 0x01 << 5;
+            bits |= 0x01 << 6;
+            break;
+        } // M (1 bit): (mask 0x0100) A flag that indicates how messages are to be sent. If b'0', indicates messages are
+        // to be sent to the recipient (1) in Transport Neutral Encapsulation Format (TNEF) format; if b'1', messages
+        // are sent to the recipient (1) in pure MIME format.
 
 
-      buf.writeUint8(bits >>> 8 & 0xFF);
-      buf.writeUint8(bits & 0xFF); //Strings.WriteNullTerminatedUnicodeString(binaryWriter, DisplayName);
+        bits |= 0x01 << 7; // U (1 bit): (mask 0x0080) A flag that indicates the format of the string fields that follow. If b'1', the
+        // string fields following are in Unicode (UTF-16 form) with 2-byte terminating null characters; if b'0', the
+        // string fields following are multibyte character set (MBCS) characters terminated by a single 0 byte.
 
-      buf.append(stringToUtf16LeArray(this.displayName));
-      buf.writeUint16(0);
-      buf.append(stringToUtf16LeArray(this.addressType));
-      buf.writeUint16(0);
-      buf.append(stringToUtf16LeArray(this.email));
-      buf.writeUint16(0);
-      return byteBufferAsUint8Array(buf);
-    }
+        bits |= 0x01 << 8; // R (2 bits): (mask 0x0060) Reserved. This value is set to b'00'.
+        //bits |= 0x00 << 9
+        //bits |= 0x00 << 10
+        // L (1 bit): (mask 0x0010) A flag that indicates whether the server can look up an address in the address
+        // book. If b'1', server cannot look up this user's email address in the address book. If b'0', server can
+        // look up this user's email address in the address book.
 
-  }
+        if (this._canLookupEmailAddress) {
+          bits |= 0x01 << 11;
+        } // Pad (4 bits): (mask 0x000F) Reserved. This value is set to b'0000'.
+        // bits |= 0x01 << 12
+        // bits |= 0x01 << 13
+        // bits |= 0x01 << 14
+        // bits |= 0x01 << 15
+        // if (BitConverter.IsLittleEndian) {
+        //     bits = bits.Reverse().ToArray();
+        //     binaryWriter.Write(bits);
+        // } else {
+        //     binaryWriter.Write(bits);
+        // }
 
-  class Sender extends Address {
-    constructor(email, displayName, addressType = "SMTP", messageFormat = MessageFormat.TextAndHtml, canLookupEmailAddress = false, senderIsCreator = true) {
-      super(email, displayName, addressType);
 
-      _defineProperty(this, "_messageFormat", void 0);
+        buf.writeUint8(bits >>> 8 & 0xFF);
+        buf.writeUint8(bits & 0xFF); //Strings.WriteNullTerminatedUnicodeString(binaryWriter, DisplayName);
 
-      _defineProperty(this, "_canLookupEmailAddress", void 0);
-
-      _defineProperty(this, "_senderIsCreator", void 0);
-
-      this._messageFormat = messageFormat;
-      this._canLookupEmailAddress = canLookupEmailAddress;
-      this._senderIsCreator = senderIsCreator;
-    }
-
-    writeProperties(stream) {
-      if (this._senderIsCreator) {
-        stream.addProperty(PropertyTags.PR_CreatorEmailAddr_W, this.email);
-        stream.addProperty(PropertyTags.PR_CreatorSimpleDispName_W, this.displayName);
-        stream.addProperty(PropertyTags.PR_CreatorAddrType_W, this.addressType);
+        buf.append(stringToUtf16LeArray(this.displayName));
+        buf.writeUint16(0);
+        buf.append(stringToUtf16LeArray(this.addressType));
+        buf.writeUint16(0);
+        buf.append(stringToUtf16LeArray(this.email));
+        buf.writeUint16(0);
+        return byteBufferAsUint8Array(buf);
       }
+    }]);
 
-      const senderEntryId = new OneOffEntryId(this.email, this.displayName, this.addressType, this._messageFormat, this._canLookupEmailAddress);
-      stream.addProperty(PropertyTags.PR_SENDER_ENTRYID, senderEntryId.toByteArray());
-      stream.addProperty(PropertyTags.PR_SENDER_EMAIL_ADDRESS_W, this.email);
-      stream.addProperty(PropertyTags.PR_SENDER_NAME_W, this.displayName);
-      stream.addProperty(PropertyTags.PR_SENDER_ADDRTYPE_W, this.addressType);
+    return OneOffEntryId;
+  }(Address);
+
+  let Sender = /*#__PURE__*/function (_Address) {
+    _inherits(Sender, _Address);
+
+    var _super = _createSuper(Sender);
+
+    function Sender(email, displayName, addressType = "SMTP", messageFormat = MessageFormat.TextAndHtml, canLookupEmailAddress = false, senderIsCreator = true) {
+      var _this;
+
+      _classCallCheck(this, Sender);
+
+      _this = _super.call(this, email, displayName, addressType);
+
+      _defineProperty(_assertThisInitialized(_this), "_messageFormat", void 0);
+
+      _defineProperty(_assertThisInitialized(_this), "_canLookupEmailAddress", void 0);
+
+      _defineProperty(_assertThisInitialized(_this), "_senderIsCreator", void 0);
+
+      _this._messageFormat = messageFormat;
+      _this._canLookupEmailAddress = canLookupEmailAddress;
+      _this._senderIsCreator = senderIsCreator;
+      return _this;
     }
 
-  }
+    _createClass(Sender, [{
+      key: "writeProperties",
+      value: function writeProperties(stream) {
+        if (this._senderIsCreator) {
+          stream.addProperty(PropertyTags.PR_CreatorEmailAddr_W, this.email);
+          stream.addProperty(PropertyTags.PR_CreatorSimpleDispName_W, this.displayName);
+          stream.addProperty(PropertyTags.PR_CreatorAddrType_W, this.addressType);
+        }
 
-  class AttachmentProperties extends Properties {
-    /**
-     * Writes all properties either as a CFStream or as a collection in
-     * a PropertyTags.PropertiesStreamName stream to the given storage, this depends
-     * on the PropertyType
-     * See theProperties class it's Properties.WriteProperties method for the logic
-     * that is used to determine this
-     * @param storage cfb storage to write into
-     * @param prefix
-     * @param messageSize
-     * @returns {number} total size of written Properties
-     */
-    writeProperties(storage, prefix, messageSize) {
-      const attachmentPropertyPrefix = buf => {
-        prefix(buf); // Reserved (8 bytes): This field MUST be set to
-        // zero when writing a .msg file and MUST be ignored when reading a .msg file.
+        const senderEntryId = new OneOffEntryId(this.email, this.displayName, this.addressType, this._messageFormat, this._canLookupEmailAddress);
+        stream.addProperty(PropertyTags.PR_SENDER_ENTRYID, senderEntryId.toByteArray());
+        stream.addProperty(PropertyTags.PR_SENDER_EMAIL_ADDRESS_W, this.email);
+        stream.addProperty(PropertyTags.PR_SENDER_NAME_W, this.displayName);
+        stream.addProperty(PropertyTags.PR_SENDER_ADDRTYPE_W, this.addressType);
+      }
+    }]);
 
-        buf.writeUint64(0);
-      };
+    return Sender;
+  }(Address);
 
-      return super.writeProperties(storage, attachmentPropertyPrefix, messageSize);
+  let AttachmentProperties = /*#__PURE__*/function (_Properties) {
+    _inherits(AttachmentProperties, _Properties);
+
+    var _super = _createSuper(AttachmentProperties);
+
+    function AttachmentProperties() {
+      _classCallCheck(this, AttachmentProperties);
+
+      return _super.apply(this, arguments);
     }
 
-  }
+    _createClass(AttachmentProperties, [{
+      key: "writeProperties",
+
+      /**
+       * Writes all properties either as a CFStream or as a collection in
+       * a PropertyTags.PropertiesStreamName stream to the given storage, this depends
+       * on the PropertyType
+       * See theProperties class it's Properties.WriteProperties method for the logic
+       * that is used to determine this
+       * @param storage cfb storage to write into
+       * @param prefix
+       * @param messageSize
+       * @returns {number} total size of written Properties
+       */
+      value: function writeProperties(storage, prefix, messageSize) {
+        const attachmentPropertyPrefix = buf => {
+          prefix(buf); // Reserved (8 bytes): This field MUST be set to
+          // zero when writing a .msg file and MUST be ignored when reading a .msg file.
+
+          buf.writeUint64(0);
+        };
+
+        return _get(_getPrototypeOf(AttachmentProperties.prototype), "writeProperties", this).call(this, storage, attachmentPropertyPrefix, messageSize);
+      }
+    }]);
+
+    return AttachmentProperties;
+  }(Properties);
 
   const MimeTypes = Object.freeze({
     "323": "text/h323",
@@ -25577,11 +26016,13 @@
     return aos;
   }
 
-  class Attachment {
+  let Attachment = /*#__PURE__*/function () {
     // was: DateTime
     // TODO
-    constructor(data, // was: Stream
+    function Attachment(data, // was: Stream
     fileName, creationTime, lastModificationTime, type = AttachmentType.ATTACH_BY_VALUE, renderingPosition = -1, contentId = "", isContactPhoto = false) {
+      _classCallCheck(this, Attachment);
+
       _defineProperty(this, "_file", void 0);
 
       _defineProperty(this, "data", void 0);
@@ -25612,165 +26053,195 @@
       this.isContactPhoto = isContactPhoto;
     }
 
-    writeProperties(storage, index) {
-      const attachmentProperties = new AttachmentProperties();
-      attachmentProperties.addProperty(PropertyTags.PR_ATTACH_NUM, index, PropertyFlag.PROPATTR_READABLE);
-      attachmentProperties.addProperty(PropertyTags.PR_INSTANCE_KEY, generateInstanceKey(), PropertyFlag.PROPATTR_READABLE);
-      attachmentProperties.addProperty(PropertyTags.PR_RECORD_KEY, generateRecordKey(), PropertyFlag.PROPATTR_READABLE);
-      attachmentProperties.addProperty(PropertyTags.PR_RENDERING_POSITION, this.renderingPosition, PropertyFlag.PROPATTR_READABLE);
-      attachmentProperties.addProperty(PropertyTags.PR_OBJECT_TYPE, MapiObjectType.MAPI_ATTACH);
+    _createClass(Attachment, [{
+      key: "writeProperties",
+      value: function writeProperties(storage, index) {
+        const attachmentProperties = new AttachmentProperties();
+        attachmentProperties.addProperty(PropertyTags.PR_ATTACH_NUM, index, PropertyFlag.PROPATTR_READABLE);
+        attachmentProperties.addProperty(PropertyTags.PR_INSTANCE_KEY, generateInstanceKey(), PropertyFlag.PROPATTR_READABLE);
+        attachmentProperties.addProperty(PropertyTags.PR_RECORD_KEY, generateRecordKey(), PropertyFlag.PROPATTR_READABLE);
+        attachmentProperties.addProperty(PropertyTags.PR_RENDERING_POSITION, this.renderingPosition, PropertyFlag.PROPATTR_READABLE);
+        attachmentProperties.addProperty(PropertyTags.PR_OBJECT_TYPE, MapiObjectType.MAPI_ATTACH);
 
-      if (!isNullOrEmpty(this.fileName)) {
-        attachmentProperties.addProperty(PropertyTags.PR_DISPLAY_NAME_W, this.fileName);
-        attachmentProperties.addProperty(PropertyTags.PR_ATTACH_FILENAME_W, fileNameToDosFileName(this.fileName));
-        attachmentProperties.addProperty(PropertyTags.PR_ATTACH_LONG_FILENAME_W, this.fileName);
-        attachmentProperties.addProperty(PropertyTags.PR_ATTACH_EXTENSION_W, getPathExtension(this.fileName));
+        if (!isNullOrEmpty(this.fileName)) {
+          attachmentProperties.addProperty(PropertyTags.PR_DISPLAY_NAME_W, this.fileName);
+          attachmentProperties.addProperty(PropertyTags.PR_ATTACH_FILENAME_W, fileNameToDosFileName(this.fileName));
+          attachmentProperties.addProperty(PropertyTags.PR_ATTACH_LONG_FILENAME_W, this.fileName);
+          attachmentProperties.addProperty(PropertyTags.PR_ATTACH_EXTENSION_W, getPathExtension(this.fileName));
 
-        if (!isNullOrEmpty(this.contentId)) {
-          attachmentProperties.addProperty(PropertyTags.PR_ATTACH_CONTENT_ID_W, this.contentId);
-        } // TODO: get mimetype from user.
-
-
-        attachmentProperties.addProperty(PropertyTags.PR_ATTACH_MIME_TAG_W, getMimeType(this.fileName));
-      }
-
-      attachmentProperties.addProperty(PropertyTags.PR_ATTACH_METHOD, this.type);
-
-      switch (this.type) {
-        case AttachmentType.ATTACH_BY_VALUE:
-        case AttachmentType.ATTACH_EMBEDDED_MSG:
-          attachmentProperties.addProperty(PropertyTags.PR_ATTACH_DATA_BIN, this.data);
-          attachmentProperties.addProperty(PropertyTags.PR_ATTACH_SIZE, this.data.length);
-          break;
-
-        case AttachmentType.ATTACH_BY_REF_ONLY:
-          // TODO:
-          throw new Error("attach_by_ref_only not implemented!"); // $FlowFixMe[unreachable-code]
-        //case AttachmentType.ATTACH_EMBEDDED_MSG:
-        //    var msgStorage = storage.AddStorage(PropertyTags.PR_ATTACH_DATA_BIN.Name)
-        //    var cf = new CompoundFile(Stream)
-        //    Storage.Copy(cf.RootStorage, msgStorage)
-        //    propertiesStream.AddProperty(PropertyTags.PR_ATTACH_SIZE, Stream.Length)
-        //    propertiesStream.AddProperty(PropertyTags.PR_ATTACH_ENCODING, 0)
-        //    break
-
-        case AttachmentType.ATTACH_BY_REFERENCE:
-        case AttachmentType.ATTACH_BY_REF_RESOLVE:
-        case AttachmentType.NO_ATTACHMENT:
-        case AttachmentType.ATTACH_OLE:
-          throw new Error("AttachByReference, AttachByRefResolve, NoAttachment and AttachOle are not supported");
-      }
-
-      if (this.contentId) {
-        attachmentProperties.addProperty(PropertyTags.PR_ATTACHMENT_HIDDEN, true);
-        attachmentProperties.addProperty(PropertyTags.PR_ATTACH_FLAGS, AttachmentFlags.ATT_MHTML_REF);
-      } // TODO: DateTime
+          if (!isNullOrEmpty(this.contentId)) {
+            attachmentProperties.addProperty(PropertyTags.PR_ATTACH_CONTENT_ID_W, this.contentId);
+          } // TODO: get mimetype from user.
 
 
-      const now = Date.now();
-      attachmentProperties.addProperty(PropertyTags.PR_CREATION_TIME, now);
-      attachmentProperties.addProperty(PropertyTags.PR_LAST_MODIFICATION_TIME, now);
-      attachmentProperties.addProperty(PropertyTags.PR_STORE_SUPPORT_MASK, StoreSupportMaskConst, PropertyFlag.PROPATTR_READABLE);
-      return attachmentProperties.writeProperties(storage, () => {});
-    }
+          attachmentProperties.addProperty(PropertyTags.PR_ATTACH_MIME_TAG_W, getMimeType(this.fileName));
+        }
 
-  }
+        attachmentProperties.addProperty(PropertyTags.PR_ATTACH_METHOD, this.type);
 
-  class Attachments extends Array {
-    /**
-     * checks if fileName already exists in this object
-     * @param fileName {string} the name to check.
-     * @param contentId {string} the contentId of the file
-     * @private
-     */
-    _checkAttachmentFileName(fileName, contentId) {
-      //const file = Path.GetFileName(fileName).toLowerCase()
-      const cid = contentId.toLowerCase();
+        switch (this.type) {
+          case AttachmentType.ATTACH_BY_VALUE:
+          case AttachmentType.ATTACH_EMBEDDED_MSG:
+            attachmentProperties.addProperty(PropertyTags.PR_ATTACH_DATA_BIN, this.data);
+            attachmentProperties.addProperty(PropertyTags.PR_ATTACH_SIZE, this.data.length);
+            break;
 
-      if (this.some(attachment => attachment.fileName.toLowerCase() === fileName && attachment.contentId.toLowerCase() === cid)) {
-        throw new Error("The attachment with the name '" + fileName + "' already exists");
-      }
-    }
-    /**
-     * Writes the Attachment objects to the given storage and sets all the needed properties
-     * @param rootStorage
-     * @returns {number} the total size of the written attachment objects and their properties
-     */
-
-
-    writeToStorage(rootStorage) {
-      let size = 0;
-
-      for (let i = 0; i < this.length; i++) {
-        const attachment = this[i];
-        const storage = rootStorage.addStorage(PropertyTagLiterals.AttachmentStoragePrefix + X8(i));
-        size += attachment.writeProperties(storage, i);
-      }
-
-      return size;
-    }
-    /**
-     * adds an Attachment by AttachmentType.ATTACH_BY_VALUE (default)
-     * @param data {Uint8Array} data to add as attachment
-     * @param fileName {string} file to add with full path
-     * @param creationTime {number} file creation time
-     * @param lastModificationTime {number} file modification time
-     * @param type {AttachmentTypeEnum} how to attach the attachment
-     * @param renderingPosition {number} how to display in a rich text message
-     * @param isInline {boolean} set to true to add the attachment inline
-     * @param contentId {string} the id for the inline attachment if isInline is true
-     * @param isContactPhoto {boolean} if the attachment is a contact photo
-     */
-
-
-    add(data, fileName, creationTime, lastModificationTime, contentId = "", type = AttachmentType.ATTACH_BY_VALUE, renderingPosition = -1, isInline = false, isContactPhoto = false) {
-      if (this.length >= 2048) throw new Error("length > 2048 => too many attachments!");
-
-      this._checkAttachmentFileName(fileName, contentId);
-
-      const a = new Attachment(...arguments);
-      this.push(a);
-    }
-
-  }
-
-  class Strings {
-    /**
-     * returns the str as an escaped RTF string
-     * @param str {string} string to escape
-     */
-    static escapeRtf(str) {
-      const rtfEscaped = [];
-      const escapedChars = ['{', '}', '\\'];
-
-      for (const glyph of str) {
-        const charCode = glyph.charCodeAt(0);
-        if (charCode <= 31) continue; // non-printables
-
-        if (charCode <= 127) {
-          // 7-bit ascii
-          if (escapedChars.includes(glyph)) rtfEscaped.push('\\');
-          rtfEscaped.push(glyph);
-        } else if (charCode <= 255) {
-          // 8-bit ascii
-          rtfEscaped.push("\\'" + x2(charCode));
-        } else {
-          // unicode. may consist of multiple code points
-          for (const codepoint of glyph.split('')) {
+          case AttachmentType.ATTACH_BY_REF_ONLY:
             // TODO:
-            // RTF control words generally accept signed 16-bit numbers as arguments.
-            // For this reason, Unicode values greater than 32767 must be expressed as negative numbers.
-            rtfEscaped.push("\\u");
-            rtfEscaped.push(codepoint.charCodeAt(0));
-            rtfEscaped.push('?');
-          }
+            throw new Error("attach_by_ref_only not implemented!"); // $FlowFixMe[unreachable-code]
+          //case AttachmentType.ATTACH_EMBEDDED_MSG:
+          //    var msgStorage = storage.AddStorage(PropertyTags.PR_ATTACH_DATA_BIN.Name)
+          //    var cf = new CompoundFile(Stream)
+          //    Storage.Copy(cf.RootStorage, msgStorage)
+          //    propertiesStream.AddProperty(PropertyTags.PR_ATTACH_SIZE, Stream.Length)
+          //    propertiesStream.AddProperty(PropertyTags.PR_ATTACH_ENCODING, 0)
+          //    break
+
+          case AttachmentType.ATTACH_BY_REFERENCE:
+          case AttachmentType.ATTACH_BY_REF_RESOLVE:
+          case AttachmentType.NO_ATTACHMENT:
+          case AttachmentType.ATTACH_OLE:
+            throw new Error("AttachByReference, AttachByRefResolve, NoAttachment and AttachOle are not supported");
+        }
+
+        if (this.contentId) {
+          attachmentProperties.addProperty(PropertyTags.PR_ATTACHMENT_HIDDEN, true);
+          attachmentProperties.addProperty(PropertyTags.PR_ATTACH_FLAGS, AttachmentFlags.ATT_MHTML_REF);
+        } // TODO: DateTime
+
+
+        const now = Date.now();
+        attachmentProperties.addProperty(PropertyTags.PR_CREATION_TIME, now);
+        attachmentProperties.addProperty(PropertyTags.PR_LAST_MODIFICATION_TIME, now);
+        attachmentProperties.addProperty(PropertyTags.PR_STORE_SUPPORT_MASK, StoreSupportMaskConst, PropertyFlag.PROPATTR_READABLE);
+        return attachmentProperties.writeProperties(storage, () => {});
+      }
+    }]);
+
+    return Attachment;
+  }();
+
+  let Attachments = /*#__PURE__*/function (_Array) {
+    _inherits(Attachments, _Array);
+
+    var _super = _createSuper(Attachments);
+
+    function Attachments() {
+      _classCallCheck(this, Attachments);
+
+      return _super.apply(this, arguments);
+    }
+
+    _createClass(Attachments, [{
+      key: "_checkAttachmentFileName",
+
+      /**
+       * checks if fileName already exists in this object
+       * @param fileName {string} the name to check.
+       * @param contentId {string} the contentId of the file
+       * @private
+       */
+      value: function _checkAttachmentFileName(fileName, contentId) {
+        //const file = Path.GetFileName(fileName).toLowerCase()
+        const cid = contentId.toLowerCase();
+
+        if (this.some(attachment => attachment.fileName.toLowerCase() === fileName && attachment.contentId.toLowerCase() === cid)) {
+          throw new Error("The attachment with the name '" + fileName + "' already exists");
         }
       }
+      /**
+       * Writes the Attachment objects to the given storage and sets all the needed properties
+       * @param rootStorage
+       * @returns {number} the total size of the written attachment objects and their properties
+       */
 
-      return "{\\rtf1\\ansi\\ansicpg1252\\fromhtml1 {\\*\\htmltag1 " + rtfEscaped.join("") + " }}";
+    }, {
+      key: "writeToStorage",
+      value: function writeToStorage(rootStorage) {
+        let size = 0;
+
+        for (let i = 0; i < this.length; i++) {
+          const attachment = this[i];
+          const storage = rootStorage.addStorage(PropertyTagLiterals.AttachmentStoragePrefix + X8(i));
+          size += attachment.writeProperties(storage, i);
+        }
+
+        return size;
+      }
+      /**
+       * adds an Attachment by AttachmentType.ATTACH_BY_VALUE (default)
+       * @param data {Uint8Array} data to add as attachment
+       * @param fileName {string} file to add with full path
+       * @param creationTime {number} file creation time
+       * @param lastModificationTime {number} file modification time
+       * @param type {AttachmentTypeEnum} how to attach the attachment
+       * @param renderingPosition {number} how to display in a rich text message
+       * @param isInline {boolean} set to true to add the attachment inline
+       * @param contentId {string} the id for the inline attachment if isInline is true
+       * @param isContactPhoto {boolean} if the attachment is a contact photo
+       */
+
+    }, {
+      key: "add",
+      value: function add(data, fileName, creationTime, lastModificationTime, contentId = "", type = AttachmentType.ATTACH_BY_VALUE, renderingPosition = -1, isInline = false, isContactPhoto = false) {
+        if (this.length >= 2048) throw new Error("length > 2048 => too many attachments!");
+
+        this._checkAttachmentFileName(fileName, contentId);
+
+        const a = new Attachment(...arguments);
+        this.push(a);
+      }
+    }]);
+
+    return Attachments;
+  }( /*#__PURE__*/_wrapNativeSuper(Array));
+
+  let Strings = /*#__PURE__*/function () {
+    function Strings() {
+      _classCallCheck(this, Strings);
     }
 
-  }
+    _createClass(Strings, null, [{
+      key: "escapeRtf",
+
+      /**
+       * returns the str as an escaped RTF string
+       * @param str {string} string to escape
+       */
+      value: function escapeRtf(str) {
+        const rtfEscaped = [];
+        const escapedChars = ['{', '}', '\\'];
+
+        for (const glyph of str) {
+          const charCode = glyph.charCodeAt(0);
+          if (charCode <= 31) continue; // non-printables
+
+          if (charCode <= 127) {
+            // 7-bit ascii
+            if (escapedChars.includes(glyph)) rtfEscaped.push('\\');
+            rtfEscaped.push(glyph);
+          } else if (charCode <= 255) {
+            // 8-bit ascii
+            rtfEscaped.push("\\'" + x2(charCode));
+          } else {
+            // unicode. may consist of multiple code points
+            for (const codepoint of glyph.split('')) {
+              // TODO:
+              // RTF control words generally accept signed 16-bit numbers as arguments.
+              // For this reason, Unicode values greater than 32767 must be expressed as negative numbers.
+              rtfEscaped.push("\\u");
+              rtfEscaped.push(codepoint.charCodeAt(0));
+              rtfEscaped.push('?');
+            }
+          }
+        }
+
+        return "{\\rtf1\\ansi\\ansicpg1252\\fromhtml1 {\\*\\htmltag1 " + rtfEscaped.join("") + " }}";
+      }
+    }]);
+
+    return Strings;
+  }();
 
   /**
    * The PidTagReportTag property ([MS-OXPROPS] section 2.917) contains the data that is used to correlate the report
@@ -25781,7 +26252,7 @@
    * See https://msdn.microsoft.com/en-us/library/ee160822(v=exchg.80).aspx
    */
 
-  class ReportTag {
+  let ReportTag = /*#__PURE__*/function () {
     // (9 bytes): A null-terminated string of nine characters used for validation; set to "PCDFEB09".
     // (4 bytes): This field specifies the version. If the SearchFolderEntryId field is present, this field MUST be set to
     // 0x00020001; otherwise, this field MUST be set to 0x00010001.
@@ -25809,7 +26280,9 @@
     // (Variable): The subject of the original message. If the value of the ANSITextSize field is 0x00000000, this field
     // is omitted. If the value is not zero, the field is filled with the number of bytes specified by the ANSITextSize
     // field.
-    constructor(ansiText) {
+    function ReportTag(ansiText) {
+      _classCallCheck(this, ReportTag);
+
       _defineProperty(this, "cookie", "PCDFEB09\0");
 
       _defineProperty(this, "version", 0x00010001);
@@ -25843,78 +26316,91 @@
      */
 
 
-    toByteArray() {
-      const buf = makeByteBuffer(); // Cookie (9 bytes): A null-terminated string of nine characters used for validation; set to "PCDFEB09".
-      // TODO:
+    _createClass(ReportTag, [{
+      key: "toByteArray",
+      value: function toByteArray() {
+        const buf = makeByteBuffer(); // Cookie (9 bytes): A null-terminated string of nine characters used for validation; set to "PCDFEB09".
+        // TODO:
 
-      buf.writeUTF8String(this.cookie); // Version (4 bytes): This field specifies the version. If the SearchFolderEntryId field is present,
-      // this field MUST be set to 0x00020001; otherwise, this field MUST be set to 0x00010001.
+        buf.writeUTF8String(this.cookie); // Version (4 bytes): This field specifies the version. If the SearchFolderEntryId field is present,
+        // this field MUST be set to 0x00020001; otherwise, this field MUST be set to 0x00010001.
 
-      buf.writeUint32(this.version); // (4 bytes): Size of the StoreEntryId field.
+        buf.writeUint32(this.version); // (4 bytes): Size of the StoreEntryId field.
 
-      buf.writeUint32(this.storeEntryIdSize); // (Variable length of bytes): This field specifies the entry ID of the mailbox that contains the original message. If
-      // the value of the StoreEntryIdSize field is 0x00000000, this field is omitted. If the value is not zero, this field
-      // is filled with the number of bytes specified by the StoreEntryIdSize field.
-      //buf.append(this.storeEntryId);
-      // (4 bytes): Size of the FolderEntryId field.
+        buf.writeUint32(this.storeEntryIdSize); // (Variable length of bytes): This field specifies the entry ID of the mailbox that contains the original message. If
+        // the value of the StoreEntryIdSize field is 0x00000000, this field is omitted. If the value is not zero, this field
+        // is filled with the number of bytes specified by the StoreEntryIdSize field.
+        //buf.append(this.storeEntryId);
+        // (4 bytes): Size of the FolderEntryId field.
 
-      buf.writeUint32(this.folderEntryIdSize); // (Variable): This field specifies the entry ID of the folder that contains the original message. If the value of the
-      // FolderEntryIdSize field is 0x00000000, this field is omitted. If the value is not zero, the field is filled with
-      // the number of bytes specified by the FolderEntryIdSize field.
-      //buf.append(this.folderEntryId)
-      // (4 bytes): Size of the MessageEntryId field.
+        buf.writeUint32(this.folderEntryIdSize); // (Variable): This field specifies the entry ID of the folder that contains the original message. If the value of the
+        // FolderEntryIdSize field is 0x00000000, this field is omitted. If the value is not zero, the field is filled with
+        // the number of bytes specified by the FolderEntryIdSize field.
+        //buf.append(this.folderEntryId)
+        // (4 bytes): Size of the MessageEntryId field.
 
-      buf.writeUint32(this.messageEntryIdSize); // (Variable): This field specifies the entry ID of the original message. If the value of the MessageEntryIdSize field
-      // is 0x00000000, this field is omitted. If the value is not zero, the field is filled with the number of bytes
-      // specified by the MessageEntryIdSize field.
-      //buf.append(this.messageEntryId)
-      // (4 bytes): Size of the SearchFolderEntryId field.
+        buf.writeUint32(this.messageEntryIdSize); // (Variable): This field specifies the entry ID of the original message. If the value of the MessageEntryIdSize field
+        // is 0x00000000, this field is omitted. If the value is not zero, the field is filled with the number of bytes
+        // specified by the MessageEntryIdSize field.
+        //buf.append(this.messageEntryId)
+        // (4 bytes): Size of the SearchFolderEntryId field.
 
-      buf.writeUint32(this.searchFolderEntryIdSize); // (Variable): This field specifies the entry ID of an alternate folder that contains the original message. If the
-      // value of the SearchFolderEntryIdSize field is 0x00000000, this field is omitted. If the value is not zero, the
-      // field is filled with the number of bytes specified by the SearchFolderEntryIdSize field.
-      //buf.append(this.searchFolderEntryId)
-      // (4 bytes): Size of the MessageSearchKey field.
+        buf.writeUint32(this.searchFolderEntryIdSize); // (Variable): This field specifies the entry ID of an alternate folder that contains the original message. If the
+        // value of the SearchFolderEntryIdSize field is 0x00000000, this field is omitted. If the value is not zero, the
+        // field is filled with the number of bytes specified by the SearchFolderEntryIdSize field.
+        //buf.append(this.searchFolderEntryId)
+        // (4 bytes): Size of the MessageSearchKey field.
 
-      buf.writeUint32(this.messageSearchKeySize); // (variable): This field specifies the search key of the original message. If the value of the MessageSearchKeySize
-      // field is 0x00000000, this field is omitted. If the value is not zero, the MessageSearchKey field is filled with the
-      // number of bytes specified by the MessageSearchKeySize field.
-      //buf.append(this.messageSearchKey)
-      // (4 bytes): Number of characters in the ANSI Text field.
+        buf.writeUint32(this.messageSearchKeySize); // (variable): This field specifies the search key of the original message. If the value of the MessageSearchKeySize
+        // field is 0x00000000, this field is omitted. If the value is not zero, the MessageSearchKey field is filled with the
+        // number of bytes specified by the MessageSearchKeySize field.
+        //buf.append(this.messageSearchKey)
+        // (4 bytes): Number of characters in the ANSI Text field.
 
-      buf.writeUint32(this.ansiText.length); // (Variable): The subject of the original message. If the value of the ANSITextSize field is 0x00000000, this field
-      // is omitted. If the value is not zero, the field is filled with the number of bytes specified by the ANSITextSize
-      // field.
+        buf.writeUint32(this.ansiText.length); // (Variable): The subject of the original message. If the value of the ANSITextSize field is 0x00000000, this field
+        // is omitted. If the value is not zero, the field is filled with the number of bytes specified by the ANSITextSize
+        // field.
 
-      buf.writeUTF8String(this.ansiText);
-      return byteBufferAsUint8Array(buf);
-    }
+        buf.writeUTF8String(this.ansiText);
+        return byteBufferAsUint8Array(buf);
+      }
+    }]);
 
-  }
+    return ReportTag;
+  }();
 
   const CRC32_TABLE = [0x00000000, 0x77073096, 0xEE0E612C, 0x990951BA, 0x076DC419, 0x706AF48F, 0xE963A535, 0x9E6495A3, 0x0EDB8832, 0x79DCB8A4, 0xE0D5E91E, 0x97D2D988, 0x09B64C2B, 0x7EB17CBD, 0xE7B82D07, 0x90BF1D91, 0x1DB71064, 0x6AB020F2, 0xF3B97148, 0x84BE41DE, 0x1ADAD47D, 0x6DDDE4EB, 0xF4D4B551, 0x83D385C7, 0x136C9856, 0x646BA8C0, 0xFD62F97A, 0x8A65C9EC, 0x14015C4F, 0x63066CD9, 0xFA0F3D63, 0x8D080DF5, 0x3B6E20C8, 0x4C69105E, 0xD56041E4, 0xA2677172, 0x3C03E4D1, 0x4B04D447, 0xD20D85FD, 0xA50AB56B, 0x35B5A8FA, 0x42B2986C, 0xDBBBC9D6, 0xACBCF940, 0x32D86CE3, 0x45DF5C75, 0xDCD60DCF, 0xABD13D59, 0x26D930AC, 0x51DE003A, 0xC8D75180, 0xBFD06116, 0x21B4F4B5, 0x56B3C423, 0xCFBA9599, 0xB8BDA50F, 0x2802B89E, 0x5F058808, 0xC60CD9B2, 0xB10BE924, 0x2F6F7C87, 0x58684C11, 0xC1611DAB, 0xB6662D3D, 0x76DC4190, 0x01DB7106, 0x98D220BC, 0xEFD5102A, 0x71B18589, 0x06B6B51F, 0x9FBFE4A5, 0xE8B8D433, 0x7807C9A2, 0x0F00F934, 0x9609A88E, 0xE10E9818, 0x7F6A0DBB, 0x086D3D2D, 0x91646C97, 0xE6635C01, 0x6B6B51F4, 0x1C6C6162, 0x856530D8, 0xF262004E, 0x6C0695ED, 0x1B01A57B, 0x8208F4C1, 0xF50FC457, 0x65B0D9C6, 0x12B7E950, 0x8BBEB8EA, 0xFCB9887C, 0x62DD1DDF, 0x15DA2D49, 0x8CD37CF3, 0xFBD44C65, 0x4DB26158, 0x3AB551CE, 0xA3BC0074, 0xD4BB30E2, 0x4ADFA541, 0x3DD895D7, 0xA4D1C46D, 0xD3D6F4FB, 0x4369E96A, 0x346ED9FC, 0xAD678846, 0xDA60B8D0, 0x44042D73, 0x33031DE5, 0xAA0A4C5F, 0xDD0D7CC9, 0x5005713C, 0x270241AA, 0xBE0B1010, 0xC90C2086, 0x5768B525, 0x206F85B3, 0xB966D409, 0xCE61E49F, 0x5EDEF90E, 0x29D9C998, 0xB0D09822, 0xC7D7A8B4, 0x59B33D17, 0x2EB40D81, 0xB7BD5C3B, 0xC0BA6CAD, 0xEDB88320, 0x9ABFB3B6, 0x03B6E20C, 0x74B1D29A, 0xEAD54739, 0x9DD277AF, 0x04DB2615, 0x73DC1683, 0xE3630B12, 0x94643B84, 0x0D6D6A3E, 0x7A6A5AA8, 0xE40ECF0B, 0x9309FF9D, 0x0A00AE27, 0x7D079EB1, 0xF00F9344, 0x8708A3D2, 0x1E01F268, 0x6906C2FE, 0xF762575D, 0x806567CB, 0x196C3671, 0x6E6B06E7, 0xFED41B76, 0x89D32BE0, 0x10DA7A5A, 0x67DD4ACC, 0xF9B9DF6F, 0x8EBEEFF9, 0x17B7BE43, 0x60B08ED5, 0xD6D6A3E8, 0xA1D1937E, 0x38D8C2C4, 0x4FDFF252, 0xD1BB67F1, 0xA6BC5767, 0x3FB506DD, 0x48B2364B, 0xD80D2BDA, 0xAF0A1B4C, 0x36034AF6, 0x41047A60, 0xDF60EFC3, 0xA867DF55, 0x316E8EEF, 0x4669BE79, 0xCB61B38C, 0xBC66831A, 0x256FD2A0, 0x5268E236, 0xCC0C7795, 0xBB0B4703, 0x220216B9, 0x5505262F, 0xC5BA3BBE, 0xB2BD0B28, 0x2BB45A92, 0x5CB36A04, 0xC2D7FFA7, 0xB5D0CF31, 0x2CD99E8B, 0x5BDEAE1D, 0x9B64C2B0, 0xEC63F226, 0x756AA39C, 0x026D930A, 0x9C0906A9, 0xEB0E363F, 0x72076785, 0x05005713, 0x95BF4A82, 0xE2B87A14, 0x7BB12BAE, 0x0CB61B38, 0x92D28E9B, 0xE5D5BE0D, 0x7CDCEFB7, 0x0BDBDF21, 0x86D3D2D4, 0xF1D4E242, 0x68DDB3F8, 0x1FDA836E, 0x81BE16CD, 0xF6B9265B, 0x6FB077E1, 0x18B74777, 0x88085AE6, 0xFF0F6A70, 0x66063BCA, 0x11010B5C, 0x8F659EFF, 0xF862AE69, 0x616BFFD3, 0x166CCF45, 0xA00AE278, 0xD70DD2EE, 0x4E048354, 0x3903B3C2, 0xA7672661, 0xD06016F7, 0x4969474D, 0x3E6E77DB, 0xAED16A4A, 0xD9D65ADC, 0x40DF0B66, 0x37D83BF0, 0xA9BCAE53, 0xDEBB9EC5, 0x47B2CF7F, 0x30B5FFE9, 0xBDBDF21C, 0xCABAC28A, 0x53B39330, 0x24B4A3A6, 0xBAD03605, 0xCDD70693, 0x54DE5729, 0x23D967BF, 0xB3667A2E, 0xC4614AB8, 0x5D681B02, 0x2A6F2B94, 0xB40BBE37, 0xC30C8EA1, 0x5A05DF1B, 0x2D02EF8D];
-  class Crc32 {
-    /**
-     * calculates a checksum of a ByteBuffers contents
-     * @param buffer {ByteBuffer}
-     * @returns {number} the crc32 of this buffer's contents between offset and limit
-     */
-    static calculate(buffer) {
-      if (buffer.offset >= buffer.limit) return 0;
-      const origOffset = buffer.offset;
-      let result = 0;
-
-      while (buffer.offset < buffer.limit) {
-        const cur = buffer.readUint8();
-        result = CRC32_TABLE[(result ^ cur) & 0xFF] ^ result >>> 8;
-      }
-
-      buffer.offset = origOffset; // unsigned representation. (-1 >>> 0) === 4294967295
-
-      return result >>> 0;
+  let Crc32 = /*#__PURE__*/function () {
+    function Crc32() {
+      _classCallCheck(this, Crc32);
     }
 
-  }
+    _createClass(Crc32, null, [{
+      key: "calculate",
+
+      /**
+       * calculates a checksum of a ByteBuffers contents
+       * @param buffer {ByteBuffer}
+       * @returns {number} the crc32 of this buffer's contents between offset and limit
+       */
+      value: function calculate(buffer) {
+        if (buffer.offset >= buffer.limit) return 0;
+        const origOffset = buffer.offset;
+        let result = 0;
+
+        while (buffer.offset < buffer.limit) {
+          const cur = buffer.readUint8();
+          result = CRC32_TABLE[(result ^ cur) & 0xFF] ^ result >>> 8;
+        }
+
+        buffer.offset = origOffset; // unsigned representation. (-1 >>> 0) === 4294967295
+
+        return result >>> 0;
+      }
+    }]);
+
+    return Crc32;
+  }();
 
   const INIT_DICT_SIZE = 207;
   const MAX_DICT_SIZE = 4096;
@@ -26106,420 +26592,452 @@
   }
 
   const subjectPrefixRegex = /^(\D{1,3}:\s)(.*)$/;
-  class Email extends Message {
+  let Email = /*#__PURE__*/function (_Message) {
+    _inherits(Email, _Message);
+
+    var _super = _createSuper(Email);
+
     // was: DateTime
     // Corresponds to the message ID field as specified in [RFC2822].
     // If set then this value will be used, when not set the value will be read from the
     // TransportMessageHeaders when this property is set
-    constructor(draft = false, readReceipt = false) {
-      super();
+    function Email(draft = false, readReceipt = false) {
+      var _this;
 
-      _defineProperty(this, "recipients", void 0);
+      _classCallCheck(this, Email);
 
-      _defineProperty(this, "replyToRecipients", void 0);
+      _this = _super.call(this);
 
-      _defineProperty(this, "attachments", void 0);
+      _defineProperty(_assertThisInitialized(_this), "recipients", void 0);
 
-      _defineProperty(this, "_subject", "");
+      _defineProperty(_assertThisInitialized(_this), "replyToRecipients", void 0);
 
-      _defineProperty(this, "_sender", void 0);
+      _defineProperty(_assertThisInitialized(_this), "attachments", void 0);
 
-      _defineProperty(this, "_representing", void 0);
+      _defineProperty(_assertThisInitialized(_this), "_subject", "");
 
-      _defineProperty(this, "_receiving", void 0);
+      _defineProperty(_assertThisInitialized(_this), "_sender", void 0);
 
-      _defineProperty(this, "_receivingRepresenting", void 0);
+      _defineProperty(_assertThisInitialized(_this), "_representing", void 0);
 
-      _defineProperty(this, "subjectPrefix", void 0);
+      _defineProperty(_assertThisInitialized(_this), "_receiving", void 0);
 
-      _defineProperty(this, "_subjectNormalized", void 0);
+      _defineProperty(_assertThisInitialized(_this), "_receivingRepresenting", void 0);
 
-      _defineProperty(this, "priority", void 0);
+      _defineProperty(_assertThisInitialized(_this), "subjectPrefix", void 0);
 
-      _defineProperty(this, "importance", void 0);
+      _defineProperty(_assertThisInitialized(_this), "_subjectNormalized", void 0);
 
-      _defineProperty(this, "_bodyText", void 0);
+      _defineProperty(_assertThisInitialized(_this), "priority", void 0);
 
-      _defineProperty(this, "_bodyHtml", void 0);
+      _defineProperty(_assertThisInitialized(_this), "importance", void 0);
 
-      _defineProperty(this, "_bodyRtf", void 0);
+      _defineProperty(_assertThisInitialized(_this), "_bodyText", void 0);
 
-      _defineProperty(this, "bodyRtfCompressed", void 0);
+      _defineProperty(_assertThisInitialized(_this), "_bodyHtml", void 0);
 
-      _defineProperty(this, "_sentOn", void 0);
+      _defineProperty(_assertThisInitialized(_this), "_bodyRtf", void 0);
 
-      _defineProperty(this, "_receivedOn", void 0);
+      _defineProperty(_assertThisInitialized(_this), "bodyRtfCompressed", void 0);
 
-      _defineProperty(this, "internetMessageId", void 0);
+      _defineProperty(_assertThisInitialized(_this), "_sentOn", void 0);
 
-      _defineProperty(this, "internetReferences", void 0);
+      _defineProperty(_assertThisInitialized(_this), "_receivedOn", void 0);
 
-      _defineProperty(this, "inReplyToId", void 0);
+      _defineProperty(_assertThisInitialized(_this), "internetMessageId", void 0);
 
-      _defineProperty(this, "transportMessageHeadersText", void 0);
+      _defineProperty(_assertThisInitialized(_this), "internetReferences", void 0);
 
-      _defineProperty(this, "transportMessageHeaders", void 0);
+      _defineProperty(_assertThisInitialized(_this), "inReplyToId", void 0);
 
-      _defineProperty(this, "draft", void 0);
+      _defineProperty(_assertThisInitialized(_this), "transportMessageHeadersText", void 0);
 
-      _defineProperty(this, "readReceipt", void 0);
+      _defineProperty(_assertThisInitialized(_this), "transportMessageHeaders", void 0);
 
-      _defineProperty(this, "messageEditorFormat", void 0);
+      _defineProperty(_assertThisInitialized(_this), "draft", void 0);
 
-      this.recipients = new Recipients();
-      this.replyToRecipients = new Recipients();
-      this.attachments = new Attachments();
-      this.priority = MessagePriority.PRIO_NONURGENT;
-      this.importance = MessageImportance.IMPORTANCE_NORMAL;
-      this.iconIndex = MessageIconIndex.NewMail;
-      this.draft = draft;
-      this.readReceipt = readReceipt;
-      this._bodyHtml = "";
-      this._bodyText = "";
-      this._sentOn = null;
-      this._receivedOn = null;
+      _defineProperty(_assertThisInitialized(_this), "readReceipt", void 0);
+
+      _defineProperty(_assertThisInitialized(_this), "messageEditorFormat", void 0);
+
+      _this.recipients = new Recipients();
+      _this.replyToRecipients = new Recipients();
+      _this.attachments = new Attachments();
+      _this.priority = MessagePriority.PRIO_NONURGENT;
+      _this.importance = MessageImportance.IMPORTANCE_NORMAL;
+      _this.iconIndex = MessageIconIndex.NewMail;
+      _this.draft = draft;
+      _this.readReceipt = readReceipt;
+      _this._bodyHtml = "";
+      _this._bodyText = "";
+      _this._sentOn = null;
+      _this._receivedOn = null;
+      return _this;
     }
 
-    sender(address, displayName) {
-      this._sender = new Sender(address, displayName || "");
-      return this;
-    }
+    _createClass(Email, [{
+      key: "sender",
+      value: function sender(address, displayName) {
+        this._sender = new Sender(address, displayName || "");
+        return this;
+      }
+    }, {
+      key: "bodyHtml",
+      value: function bodyHtml(html) {
+        this._bodyHtml = html;
+        return this;
+      }
+    }, {
+      key: "bodyText",
+      value: function bodyText(txt) {
+        this._bodyText = txt;
+        return this;
+      }
+    }, {
+      key: "bodyFormat",
+      value: function bodyFormat(fmt) {
+        this.messageEditorFormat = fmt;
+        return this;
+      }
+    }, {
+      key: "subject",
+      value: function subject(_subject) {
+        this._subject = _subject;
 
-    bodyHtml(html) {
-      this._bodyHtml = html;
-      return this;
-    }
+        this._setSubject();
 
-    bodyText(txt) {
-      this._bodyText = txt;
-      return this;
-    }
+        return this;
+      }
+    }, {
+      key: "to",
+      value: function to(address, displayName) {
+        this.recipients.addTo(address, displayName);
+        return this;
+      }
+    }, {
+      key: "cc",
+      value: function cc(address, displayName) {
+        this.recipients.addCc(address, displayName);
+        return this;
+      }
+    }, {
+      key: "bcc",
+      value: function bcc(address, displayName) {
+        this.recipients.addBcc(address, displayName);
+        return this;
+      }
+    }, {
+      key: "replyTo",
+      value: function replyTo(address, displayName) {
+        this.replyToRecipients.addTo(address, displayName);
+        return this;
+      }
+    }, {
+      key: "tos",
+      value: function tos(recipients) {
+        recipients.forEach(r => this.to(r.address, r.name));
+        return this;
+      }
+    }, {
+      key: "ccs",
+      value: function ccs(recipients) {
+        recipients.forEach(r => this.cc(r.address, r.name));
+        return this;
+      }
+    }, {
+      key: "bccs",
+      value: function bccs(recipients) {
+        recipients.forEach(r => this.bcc(r.address, r.name));
+        return this;
+      }
+    }, {
+      key: "replyTos",
+      value: function replyTos(recipients) {
+        recipients.forEach(r => this.replyTo(r.address, r.name));
+        return this;
+      }
+    }, {
+      key: "sentOn",
+      value: function sentOn(when) {
+        this._sentOn = when;
+        return this;
+      }
+    }, {
+      key: "receivedOn",
+      value: function receivedOn(when) {
+        this._receivedOn = when;
+        return this;
+      }
+    }, {
+      key: "attach",
+      value: function attach(data, fileName, contentId = "", type = AttachmentType.ATTACH_BY_VALUE, creationTime = Date.now(), lastModificationTime = Date.now(), renderingPosition = -1, isContactPhoto = false) {
+        this.attachments.add(...arguments);
+        return this;
+      }
+      /**
+       * the raw transport headers
+       * @param headers
+       */
 
-    bodyFormat(fmt) {
-      this.messageEditorFormat = fmt;
-      return this;
-    }
+    }, {
+      key: "headers",
+      value: function headers(_headers) {
+        this.transportMessageHeadersText = _headers; // TODO... or not?
+        // this.transportMessageHeaders = new MessageHeader(parseMessageHeaders(headers))
 
-    subject(subject) {
-      this._subject = subject;
+        return this;
+      }
+    }, {
+      key: "msg",
+      value: function msg() {
+        this._writeToStorage();
 
-      this._setSubject();
+        return _get(_getPrototypeOf(Email.prototype), "saveToBuffer", this).call(this);
+      }
+    }, {
+      key: "_setSubject",
+      value: function _setSubject() {
+        if (!isNullOrEmpty(this.subjectPrefix)) {
+          if (this._subject.startsWith(this.subjectPrefix)) {
+            this._subjectNormalized = this._subject.slice(this.subjectPrefix.length);
+          } else {
+            const match = this._subject.match(subjectPrefixRegex);
 
-      return this;
-    }
+            if (match != null) {
+              this.subjectPrefix = match[1];
+              this._subjectNormalized = match[2];
+            }
+          }
+        } else if (!isNullOrEmpty(this._subject)) {
+          this._subjectNormalized = this._subject;
 
-    to(address, displayName) {
-      this.recipients.addTo(address, displayName);
-      return this;
-    }
-
-    cc(address, displayName) {
-      this.recipients.addCc(address, displayName);
-      return this;
-    }
-
-    bcc(address, displayName) {
-      this.recipients.addBcc(address, displayName);
-      return this;
-    }
-
-    replyTo(address, displayName) {
-      this.replyToRecipients.addTo(address, displayName);
-      return this;
-    }
-
-    tos(recipients) {
-      recipients.forEach(r => this.to(r.address, r.name));
-      return this;
-    }
-
-    ccs(recipients) {
-      recipients.forEach(r => this.cc(r.address, r.name));
-      return this;
-    }
-
-    bccs(recipients) {
-      recipients.forEach(r => this.bcc(r.address, r.name));
-      return this;
-    }
-
-    replyTos(recipients) {
-      recipients.forEach(r => this.replyTo(r.address, r.name));
-      return this;
-    }
-
-    sentOn(when) {
-      this._sentOn = when;
-      return this;
-    }
-
-    receivedOn(when) {
-      this._receivedOn = when;
-      return this;
-    }
-
-    attach(data, fileName, contentId = "", type = AttachmentType.ATTACH_BY_VALUE, creationTime = Date.now(), lastModificationTime = Date.now(), renderingPosition = -1, isContactPhoto = false) {
-      this.attachments.add(...arguments);
-      return this;
-    }
-    /**
-     * the raw transport headers
-     * @param headers
-     */
-
-
-    headers(headers) {
-      this.transportMessageHeadersText = headers; // TODO... or not?
-      // this.transportMessageHeaders = new MessageHeader(parseMessageHeaders(headers))
-
-      return this;
-    }
-
-    msg() {
-      this._writeToStorage();
-
-      return super.saveToBuffer();
-    }
-
-    _setSubject() {
-      if (!isNullOrEmpty(this.subjectPrefix)) {
-        if (this._subject.startsWith(this.subjectPrefix)) {
-          this._subjectNormalized = this._subject.slice(this.subjectPrefix.length);
-        } else {
           const match = this._subject.match(subjectPrefixRegex);
 
           if (match != null) {
             this.subjectPrefix = match[1];
             this._subjectNormalized = match[2];
           }
-        }
-      } else if (!isNullOrEmpty(this._subject)) {
-        this._subjectNormalized = this._subject;
-
-        const match = this._subject.match(subjectPrefixRegex);
-
-        if (match != null) {
-          this.subjectPrefix = match[1];
-          this._subjectNormalized = match[2];
-        }
-      } else {
-        this._subjectNormalized = this._subject;
-      }
-
-      if (!this.subjectPrefix) this.subjectPrefix = "";
-    }
-    /**
-     * write to the cfb of the underlying message
-     */
-
-
-    _writeToStorage() {
-      const rootStorage = this._storage;
-      if (this._messageClass === MessageClass.Unknown) this._messageClass = MessageClass.IPM_Note;
-      this._messageSize += this.recipients.writeToStorage(rootStorage);
-      this._messageSize += this.attachments.writeToStorage(rootStorage);
-      const recipientCount = this.recipients.length;
-      const attachmentCount = this.attachments.length;
-      this._topLevelProperties.recipientCount = recipientCount;
-      this._topLevelProperties.attachmentCount = attachmentCount;
-      this._topLevelProperties.nextRecipientId = recipientCount;
-      this._topLevelProperties.nextAttachmentId = attachmentCount;
-
-      this._topLevelProperties.addProperty(PropertyTags.PR_ENTRYID, generateEntryId());
-
-      this._topLevelProperties.addProperty(PropertyTags.PR_INSTANCE_KEY, generateInstanceKey());
-
-      this._topLevelProperties.addProperty(PropertyTags.PR_STORE_SUPPORT_MASK, StoreSupportMaskConst, PropertyFlag.PROPATTR_READABLE);
-
-      this._topLevelProperties.addProperty(PropertyTags.PR_STORE_UNICODE_MASK, StoreSupportMaskConst, PropertyFlag.PROPATTR_READABLE);
-
-      this._topLevelProperties.addProperty(PropertyTags.PR_ALTERNATE_RECIPIENT_ALLOWED, true, PropertyFlag.PROPATTR_READABLE);
-
-      this._topLevelProperties.addProperty(PropertyTags.PR_HASATTACH, attachmentCount > 0);
-
-      if (this.transportMessageHeadersText) {
-        this._topLevelProperties.addProperty(PropertyTags.PR_TRANSPORT_MESSAGE_HEADERS_W, this.transportMessageHeadersText);
-      }
-
-      const transportHeaders = this.transportMessageHeaders;
-
-      if (transportHeaders) {
-        if (!isNullOrWhiteSpace(transportHeaders.messageId)) {
-          this._topLevelProperties.addProperty(PropertyTags.PR_INTERNET_MESSAGE_ID_W, transportHeaders.messageId);
+        } else {
+          this._subjectNormalized = this._subject;
         }
 
-        const refCount = transportHeaders.references.length;
+        if (!this.subjectPrefix) this.subjectPrefix = "";
+      }
+      /**
+       * write to the cfb of the underlying message
+       */
 
-        if (refCount > 0) {
-          this._topLevelProperties.addProperty(PropertyTags.PR_INTERNET_REFERENCES_W, transportHeaders.references[refCount - 1]);
+    }, {
+      key: "_writeToStorage",
+      value: function _writeToStorage() {
+        const rootStorage = this._storage;
+        if (this._messageClass === MessageClass.Unknown) this._messageClass = MessageClass.IPM_Note;
+        this._messageSize += this.recipients.writeToStorage(rootStorage);
+        this._messageSize += this.attachments.writeToStorage(rootStorage);
+        const recipientCount = this.recipients.length;
+        const attachmentCount = this.attachments.length;
+        this._topLevelProperties.recipientCount = recipientCount;
+        this._topLevelProperties.attachmentCount = attachmentCount;
+        this._topLevelProperties.nextRecipientId = recipientCount;
+        this._topLevelProperties.nextAttachmentId = attachmentCount;
+
+        this._topLevelProperties.addProperty(PropertyTags.PR_ENTRYID, generateEntryId());
+
+        this._topLevelProperties.addProperty(PropertyTags.PR_INSTANCE_KEY, generateInstanceKey());
+
+        this._topLevelProperties.addProperty(PropertyTags.PR_STORE_SUPPORT_MASK, StoreSupportMaskConst, PropertyFlag.PROPATTR_READABLE);
+
+        this._topLevelProperties.addProperty(PropertyTags.PR_STORE_UNICODE_MASK, StoreSupportMaskConst, PropertyFlag.PROPATTR_READABLE);
+
+        this._topLevelProperties.addProperty(PropertyTags.PR_ALTERNATE_RECIPIENT_ALLOWED, true, PropertyFlag.PROPATTR_READABLE);
+
+        this._topLevelProperties.addProperty(PropertyTags.PR_HASATTACH, attachmentCount > 0);
+
+        if (this.transportMessageHeadersText) {
+          this._topLevelProperties.addProperty(PropertyTags.PR_TRANSPORT_MESSAGE_HEADERS_W, this.transportMessageHeadersText);
         }
 
-        const replCount = transportHeaders.inReplyTo.length;
+        const transportHeaders = this.transportMessageHeaders;
 
-        if (replCount > 0) {
-          this._topLevelProperties.addProperty(PropertyTags.PR_IN_REPLY_TO_ID_W, transportHeaders.inReplyTo[replCount - 1]);
-        }
-      }
+        if (transportHeaders) {
+          if (!isNullOrWhiteSpace(transportHeaders.messageId)) {
+            this._topLevelProperties.addProperty(PropertyTags.PR_INTERNET_MESSAGE_ID_W, transportHeaders.messageId);
+          }
 
-      if (!isNullOrWhiteSpace(this.internetMessageId)) {
-        this._topLevelProperties.addOrReplaceProperty(PropertyTags.PR_INTERNET_MESSAGE_ID_W, this.internetMessageId);
-      }
+          const refCount = transportHeaders.references.length;
 
-      if (!isNullOrWhiteSpace(this.internetReferences)) {
-        this._topLevelProperties.addOrReplaceProperty(PropertyTags.PR_INTERNET_REFERENCES_W, this.internetReferences);
-      }
+          if (refCount > 0) {
+            this._topLevelProperties.addProperty(PropertyTags.PR_INTERNET_REFERENCES_W, transportHeaders.references[refCount - 1]);
+          }
 
-      if (!isNullOrWhiteSpace(this.inReplyToId)) {
-        this._topLevelProperties.addOrReplaceProperty(PropertyTags.PR_IN_REPLY_TO_ID_W, this.inReplyToId);
-      }
+          const replCount = transportHeaders.inReplyTo.length;
 
-      let messageFlags = MessageFlags.MSGFLAG_UNMODIFIED;
-      if (attachmentCount > 0) messageFlags |= MessageFlags.MSGFLAG_HASATTACH; // int Encoding.UTF8.CodePage == 65001
-
-      this._topLevelProperties.addProperty(PropertyTags.PR_INTERNET_CPID, 65001);
-
-      this._topLevelProperties.addProperty(PropertyTags.PR_BODY_W, this._bodyText);
-
-      if (!isNullOrEmpty(this._bodyHtml) && !this.draft) {
-        this._topLevelProperties.addProperty(PropertyTags.PR_HTML, this._bodyHtml);
-
-        this._topLevelProperties.addProperty(PropertyTags.PR_RTF_IN_SYNC, false);
-      } else if (isNullOrWhiteSpace(this._bodyRtf) && !isNullOrWhiteSpace(this._bodyHtml)) {
-        this._bodyRtf = Strings.escapeRtf(this._bodyHtml);
-        this.bodyRtfCompressed = true;
-      }
-
-      if (!isNullOrWhiteSpace(this._bodyRtf)) {
-        this._topLevelProperties.addProperty(PropertyTags.PR_RTF_COMPRESSED, compress(stringToUtf8Array(this._bodyRtf)));
-
-        this._topLevelProperties.addProperty(PropertyTags.PR_RTF_IN_SYNC, this.bodyRtfCompressed);
-      }
-
-      if (this.messageEditorFormat !== MessageEditorFormat.EDITOR_FORMAT_DONTKNOW) {
-        this._topLevelProperties.addProperty(PropertyTags.PR_MSG_EDITOR_FORMAT, this.messageEditorFormat);
-      } // TODO: SentOn.HasValue
-
-
-      if (this._sentOn == null) this._sentOn = new Date(); // TODO: _receivedOn.HasValue?
-
-      if (this._receivedOn != null) {
-        this._topLevelProperties.addProperty(PropertyTags.PR_MESSAGE_DELIVERY_TIME, dateToFileTime(this._receivedOn));
-      } // was SentOn.Value.ToUniversalTime()
-
-
-      this._topLevelProperties.addProperty(PropertyTags.PR_CLIENT_SUBMIT_TIME, dateToFileTime(this._sentOn));
-
-      this._topLevelProperties.addProperty(PropertyTags.PR_ACCESS, MapiAccess.MAPI_ACCESS_DELETE | MapiAccess.MAPI_ACCESS_MODIFY | MapiAccess.MAPI_ACCESS_READ);
-
-      this._topLevelProperties.addProperty(PropertyTags.PR_ACCESS_LEVEL, MapiAccess.MAPI_ACCESS_MODIFY);
-
-      this._topLevelProperties.addProperty(PropertyTags.PR_OBJECT_TYPE, MapiObjectType.MAPI_MESSAGE);
-
-      this._setSubject();
-
-      this._topLevelProperties.addProperty(PropertyTags.PR_SUBJECT_W, this._subject);
-
-      this._topLevelProperties.addProperty(PropertyTags.PR_NORMALIZED_SUBJECT_W, this._subjectNormalized);
-
-      this._topLevelProperties.addProperty(PropertyTags.PR_SUBJECT_PREFIX_W, this.subjectPrefix);
-
-      this._topLevelProperties.addProperty(PropertyTags.PR_CONVERSATION_TOPIC_W, this._subjectNormalized); // http://www.meridiandiscovery.com/how-to/e-mail-conversation-index-metadata-computer-forensics/
-      // http://stackoverflow.com/questions/11860540/does-outlook-embed-a-messageid-or-equivalent-in-its-email-elements
-      // propertiesStream.AddProperty(PropertyTags.PR_CONVERSATION_INDEX, Subject)
-      // TODO: Change modification time when this message is opened and only modified
-
-
-      const utcNow = Date.now();
-
-      this._topLevelProperties.addProperty(PropertyTags.PR_CREATION_TIME, utcNow);
-
-      this._topLevelProperties.addProperty(PropertyTags.PR_LAST_MODIFICATION_TIME, utcNow);
-
-      this._topLevelProperties.addProperty(PropertyTags.PR_PRIORITY, this.priority);
-
-      this._topLevelProperties.addProperty(PropertyTags.PR_IMPORTANCE, this.importance); // was CultureInfo.CurrentCulture.LCID
-
-
-      this._topLevelProperties.addProperty(PropertyTags.PR_MESSAGE_LOCALE_ID, localeId());
-
-      if (this.draft) {
-        messageFlags |= MessageFlags.MSGFLAG_UNSENT;
-        this.iconIndex = MessageIconIndex.UnsentMail;
-      }
-
-      if (this.readReceipt) {
-        this._topLevelProperties.addProperty(PropertyTags.PR_READ_RECEIPT_REQUESTED, true);
-
-        const reportTag = new ReportTag(this._subject);
-
-        this._topLevelProperties.addProperty(PropertyTags.PR_REPORT_TAG, reportTag.toByteArray());
-      }
-
-      this._topLevelProperties.addProperty(PropertyTags.PR_MESSAGE_FLAGS, messageFlags);
-
-      this._topLevelProperties.addProperty(PropertyTags.PR_ICON_INDEX, this.iconIndex);
-
-      if (!!this._sender) this._sender.writeProperties(this._topLevelProperties);
-      if (!!this._receiving) this._receiving.writeProperties(this._topLevelProperties);
-      if (!!this._receivingRepresenting) this._receivingRepresenting.writeProperties(this._topLevelProperties);
-      if (!!this._representing) this._representing.writeProperties(this._topLevelProperties);
-
-      if (recipientCount > 0) {
-        const displayTo = [];
-        const displayCc = [];
-        const displayBcc = [];
-
-        for (const recipient of this.recipients) {
-          switch (recipient.recipientType) {
-            case RecipientType.To:
-              if (!isNullOrWhiteSpace(recipient.displayName)) {
-                displayTo.push(recipient.displayName);
-              } else if (!isNullOrWhiteSpace(recipient.email)) {
-                displayTo.push(recipient.email);
-              }
-
-              break;
-
-            case RecipientType.Cc:
-              if (!isNullOrWhiteSpace(recipient.displayName)) {
-                displayCc.push(recipient.displayName);
-              } else if (!isNullOrWhiteSpace(recipient.email)) {
-                displayCc.push(recipient.email);
-              }
-
-              break;
-
-            case RecipientType.Bcc:
-              if (!isNullOrWhiteSpace(recipient.displayName)) {
-                displayBcc.push(recipient.displayName);
-              } else if (!isNullOrWhiteSpace(recipient.email)) {
-                displayBcc.push(recipient.email);
-              }
-
-              break;
-
-            default:
-              throw new Error('RecipientType out of Range: ' + recipient.recipientType);
+          if (replCount > 0) {
+            this._topLevelProperties.addProperty(PropertyTags.PR_IN_REPLY_TO_ID_W, transportHeaders.inReplyTo[replCount - 1]);
           }
         }
 
-        const replyToRecipients = [];
-
-        for (const recipient of this.replyToRecipients) {
-          replyToRecipients.push(recipient.email);
+        if (!isNullOrWhiteSpace(this.internetMessageId)) {
+          this._topLevelProperties.addOrReplaceProperty(PropertyTags.PR_INTERNET_MESSAGE_ID_W, this.internetMessageId);
         }
 
-        this._topLevelProperties.addProperty(PropertyTags.PR_DISPLAY_TO_W, displayTo.join(';'), PropertyFlag.PROPATTR_READABLE);
+        if (!isNullOrWhiteSpace(this.internetReferences)) {
+          this._topLevelProperties.addOrReplaceProperty(PropertyTags.PR_INTERNET_REFERENCES_W, this.internetReferences);
+        }
 
-        this._topLevelProperties.addProperty(PropertyTags.PR_DISPLAY_CC_W, displayCc.join(';'), PropertyFlag.PROPATTR_READABLE);
+        if (!isNullOrWhiteSpace(this.inReplyToId)) {
+          this._topLevelProperties.addOrReplaceProperty(PropertyTags.PR_IN_REPLY_TO_ID_W, this.inReplyToId);
+        }
 
-        this._topLevelProperties.addProperty(PropertyTags.PR_DISPLAY_BCC_W, displayBcc.join(';'), PropertyFlag.PROPATTR_READABLE);
+        let messageFlags = MessageFlags.MSGFLAG_UNMODIFIED;
+        if (attachmentCount > 0) messageFlags |= MessageFlags.MSGFLAG_HASATTACH; // int Encoding.UTF8.CodePage == 65001
 
-        this._topLevelProperties.addProperty(PropertyTags.PR_REPLY_RECIPIENT_NAMES_W, replyToRecipients.join(';'), PropertyFlag.PROPATTR_READABLE);
+        this._topLevelProperties.addProperty(PropertyTags.PR_INTERNET_CPID, 65001);
+
+        this._topLevelProperties.addProperty(PropertyTags.PR_BODY_W, this._bodyText);
+
+        if (!isNullOrEmpty(this._bodyHtml) && !this.draft) {
+          this._topLevelProperties.addProperty(PropertyTags.PR_HTML, this._bodyHtml);
+
+          this._topLevelProperties.addProperty(PropertyTags.PR_RTF_IN_SYNC, false);
+        } else if (isNullOrWhiteSpace(this._bodyRtf) && !isNullOrWhiteSpace(this._bodyHtml)) {
+          this._bodyRtf = Strings.escapeRtf(this._bodyHtml);
+          this.bodyRtfCompressed = true;
+        }
+
+        if (!isNullOrWhiteSpace(this._bodyRtf)) {
+          this._topLevelProperties.addProperty(PropertyTags.PR_RTF_COMPRESSED, compress(stringToUtf8Array(this._bodyRtf)));
+
+          this._topLevelProperties.addProperty(PropertyTags.PR_RTF_IN_SYNC, this.bodyRtfCompressed);
+        }
+
+        if (this.messageEditorFormat !== MessageEditorFormat.EDITOR_FORMAT_DONTKNOW) {
+          this._topLevelProperties.addProperty(PropertyTags.PR_MSG_EDITOR_FORMAT, this.messageEditorFormat);
+        } // TODO: SentOn.HasValue
+
+
+        if (this._sentOn == null) this._sentOn = new Date(); // TODO: _receivedOn.HasValue?
+
+        if (this._receivedOn != null) {
+          this._topLevelProperties.addProperty(PropertyTags.PR_MESSAGE_DELIVERY_TIME, dateToFileTime(this._receivedOn));
+        } // was SentOn.Value.ToUniversalTime()
+
+
+        this._topLevelProperties.addProperty(PropertyTags.PR_CLIENT_SUBMIT_TIME, dateToFileTime(this._sentOn));
+
+        this._topLevelProperties.addProperty(PropertyTags.PR_ACCESS, MapiAccess.MAPI_ACCESS_DELETE | MapiAccess.MAPI_ACCESS_MODIFY | MapiAccess.MAPI_ACCESS_READ);
+
+        this._topLevelProperties.addProperty(PropertyTags.PR_ACCESS_LEVEL, MapiAccess.MAPI_ACCESS_MODIFY);
+
+        this._topLevelProperties.addProperty(PropertyTags.PR_OBJECT_TYPE, MapiObjectType.MAPI_MESSAGE);
+
+        this._setSubject();
+
+        this._topLevelProperties.addProperty(PropertyTags.PR_SUBJECT_W, this._subject);
+
+        this._topLevelProperties.addProperty(PropertyTags.PR_NORMALIZED_SUBJECT_W, this._subjectNormalized);
+
+        this._topLevelProperties.addProperty(PropertyTags.PR_SUBJECT_PREFIX_W, this.subjectPrefix);
+
+        this._topLevelProperties.addProperty(PropertyTags.PR_CONVERSATION_TOPIC_W, this._subjectNormalized); // http://www.meridiandiscovery.com/how-to/e-mail-conversation-index-metadata-computer-forensics/
+        // http://stackoverflow.com/questions/11860540/does-outlook-embed-a-messageid-or-equivalent-in-its-email-elements
+        // propertiesStream.AddProperty(PropertyTags.PR_CONVERSATION_INDEX, Subject)
+        // TODO: Change modification time when this message is opened and only modified
+
+
+        const utcNow = Date.now();
+
+        this._topLevelProperties.addProperty(PropertyTags.PR_CREATION_TIME, utcNow);
+
+        this._topLevelProperties.addProperty(PropertyTags.PR_LAST_MODIFICATION_TIME, utcNow);
+
+        this._topLevelProperties.addProperty(PropertyTags.PR_PRIORITY, this.priority);
+
+        this._topLevelProperties.addProperty(PropertyTags.PR_IMPORTANCE, this.importance); // was CultureInfo.CurrentCulture.LCID
+
+
+        this._topLevelProperties.addProperty(PropertyTags.PR_MESSAGE_LOCALE_ID, localeId());
+
+        if (this.draft) {
+          messageFlags |= MessageFlags.MSGFLAG_UNSENT;
+          this.iconIndex = MessageIconIndex.UnsentMail;
+        }
+
+        if (this.readReceipt) {
+          this._topLevelProperties.addProperty(PropertyTags.PR_READ_RECEIPT_REQUESTED, true);
+
+          const reportTag = new ReportTag(this._subject);
+
+          this._topLevelProperties.addProperty(PropertyTags.PR_REPORT_TAG, reportTag.toByteArray());
+        }
+
+        this._topLevelProperties.addProperty(PropertyTags.PR_MESSAGE_FLAGS, messageFlags);
+
+        this._topLevelProperties.addProperty(PropertyTags.PR_ICON_INDEX, this.iconIndex);
+
+        if (!!this._sender) this._sender.writeProperties(this._topLevelProperties);
+        if (!!this._receiving) this._receiving.writeProperties(this._topLevelProperties);
+        if (!!this._receivingRepresenting) this._receivingRepresenting.writeProperties(this._topLevelProperties);
+        if (!!this._representing) this._representing.writeProperties(this._topLevelProperties);
+
+        if (recipientCount > 0) {
+          const displayTo = [];
+          const displayCc = [];
+          const displayBcc = [];
+
+          for (const recipient of this.recipients) {
+            switch (recipient.recipientType) {
+              case RecipientType.To:
+                if (!isNullOrWhiteSpace(recipient.displayName)) {
+                  displayTo.push(recipient.displayName);
+                } else if (!isNullOrWhiteSpace(recipient.email)) {
+                  displayTo.push(recipient.email);
+                }
+
+                break;
+
+              case RecipientType.Cc:
+                if (!isNullOrWhiteSpace(recipient.displayName)) {
+                  displayCc.push(recipient.displayName);
+                } else if (!isNullOrWhiteSpace(recipient.email)) {
+                  displayCc.push(recipient.email);
+                }
+
+                break;
+
+              case RecipientType.Bcc:
+                if (!isNullOrWhiteSpace(recipient.displayName)) {
+                  displayBcc.push(recipient.displayName);
+                } else if (!isNullOrWhiteSpace(recipient.email)) {
+                  displayBcc.push(recipient.email);
+                }
+
+                break;
+
+              default:
+                throw new Error('RecipientType out of Range: ' + recipient.recipientType);
+            }
+          }
+
+          const replyToRecipients = [];
+
+          for (const recipient of this.replyToRecipients) {
+            replyToRecipients.push(recipient.email);
+          }
+
+          this._topLevelProperties.addProperty(PropertyTags.PR_DISPLAY_TO_W, displayTo.join(';'), PropertyFlag.PROPATTR_READABLE);
+
+          this._topLevelProperties.addProperty(PropertyTags.PR_DISPLAY_CC_W, displayCc.join(';'), PropertyFlag.PROPATTR_READABLE);
+
+          this._topLevelProperties.addProperty(PropertyTags.PR_DISPLAY_BCC_W, displayBcc.join(';'), PropertyFlag.PROPATTR_READABLE);
+
+          this._topLevelProperties.addProperty(PropertyTags.PR_REPLY_RECIPIENT_NAMES_W, replyToRecipients.join(';'), PropertyFlag.PROPATTR_READABLE);
+        }
       }
-    }
+    }]);
 
-  }
+    return Email;
+  }(Message);
 
   exports.CFB = cfb$1;
   exports.Email = Email;
