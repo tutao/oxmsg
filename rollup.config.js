@@ -36,13 +36,13 @@ export default {
 	output: [
 		{
 			file: 'dist/oxmsg.js',
-			format: 'umd',
+			format: 'esm',
 			sourcemap: true,
 			name: 'oxmsg'
 		},
 		{
 			file: 'dist/oxmsg.min.js',
-			format: 'umd',
+			format: 'esm',
 			plugins: [terser()],
 			sourcemap: true,
 			name: 'oxmsg'
