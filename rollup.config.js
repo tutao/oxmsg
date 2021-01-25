@@ -6,13 +6,6 @@ import alias from '@rollup/plugin-alias'
 import {terser} from "rollup-plugin-terser"
 import path from 'path'
 
-const inspector = {
-	transform(code, id) {
-		console.log(id);
-		//console.log( code );
-	}
-}
-
 export default {
 	input: 'lib/index.js',
 	plugins: [

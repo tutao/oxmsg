@@ -5,13 +5,6 @@ import json from '@rollup/plugin-json'
 import alias from '@rollup/plugin-alias'
 import path from 'path'
 
-const inspector = {
-	transform(code, id) {
-		console.log(id);
-		//console.log( code );
-	}
-}
-
 export default {
 	input: 'test/index.js',
 	plugins: [
@@ -35,9 +28,9 @@ export default {
 	output: [
 		{
 			dir: 'build/test',
-			format: 'cjs',
+			format: 'es',
 			sourcemap: true,
-			preserveModules: true,
+			// preserveModules: true,
 			exports: "named"
 		},
 	],
