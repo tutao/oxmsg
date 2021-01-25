@@ -75,9 +75,7 @@ declare module 'cfb' {
 	declare var write: (container: CFBContainer, opts?: CFBWriteOptions) => Buffer | Array<number> | string
 }
 
-declare class BigInt {
-
-	static(value: mixed): number;
+declare interface BigIntType {
 	/**
 	 * Returns a string representation of an object.
 	 * @param radix Specifies a radix for converting numeric values to strings.
@@ -88,10 +86,38 @@ declare class BigInt {
 	toLocaleString(): string;
 
 	/** Returns the primitive value of the specified object. */
+	// $FlowFixMe[bigint-unsupported]
 	valueOf(): bigint;
 
-[Symbol.toStringTag]: "BigInt";
+	[Symbol.toStringTag]: "BigInt";
 }
+
+declare interface BigIntConstructor {
+	// $FlowFixMe[bigint-unsupported]
+	(value?: any): bigint;
+
+	prototype: BigIntType;
+
+	/**
+	 * Interprets the low bits of a BigInt as a 2's-complement signed integer.
+	 * All higher bits are discarded.
+	 * @param bits The number of low bits to use
+	 * @param int The BigInt whose bits to extract
+	 */
+	// $FlowFixMe[bigint-unsupported]
+	asIntN(bits: number, int: bigint): bigint;
+
+	/**
+	 * Interprets the low bits of a BigInt as an unsigned integer.
+	 * All higher bits are discarded.
+	 * @param bits The number of low bits to use
+	 * @param int The BigInt whose bits to extract
+	 */
+	// $FlowFixMe[bigint-unsupported]
+	asUintN(bits: number, int: bigint): bigint;
+}
+
+declare var BigInt: BigIntConstructor;
 
 declare module 'lcid' {
 	declare var to: (string) => number
