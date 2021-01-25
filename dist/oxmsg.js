@@ -11747,6 +11747,7 @@ let Properties = /*#__PURE__*/function (_Array) {
           }
 
           const objType = typeof value;
+          console.log("obj", value, "type", objType);
 
           switch (objType) {
             case "boolean":
@@ -11804,7 +11805,7 @@ let Properties = /*#__PURE__*/function (_Array) {
               break;
 
             default:
-              throw new Error("PT_BINARY property type value out of range!");
+              throw new Error(`PT_BINARY property of type '${objType}' not supported!`);
           }
 
           break;
