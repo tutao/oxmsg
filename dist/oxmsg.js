@@ -6244,32 +6244,23 @@ function oADateToDate(oaDate) {
 
   return new Date(1899, 11, 30 + days, 0, 0, 0, ms);
 }
+
+const FILE_TIME_UNIX_EPOCH_DIFF_MS = 11644473600n; // $FlowIgnore[bigint-unsupported]
+
+const MS_TO_100_NS = 10000n; // Date: milliseconds since 1. January 1970 (UTC)
 // FileTime: unsigned 64 Bit, 100ns units since 1. January 1601 (UTC)
 // ms between 01.01.1970 and 01.01.1601: 11644473600
-// $FlowFixMe[bigint-unsupported]
+// $FlowIgnore[bigint-unsupported]
 
-function fileTimeToDate(lower, upper) {
-  // $FlowIgnore[bigint-unsupported]
-  const fileTime = BigInt.asUintN(64, BigInt(lower) + (BigInt(upper) << 32n)); // $FlowIgnore[bigint-unsupported]
-
-  const filetimeMillis = fileTime / 10000n; // $FlowIgnore[bigint-unsupported]
-
-  const unixtime = filetimeMillis - 11644473600n;
+function fileTimeToDate(fileTime) {
+  const filetimeMillis = fileTime / MS_TO_100_NS;
+  const unixtime = filetimeMillis - FILE_TIME_UNIX_EPOCH_DIFF_MS;
   return new Date(Number(unixtime));
 } // $FlowIgnore[bigint-unsupported]
 
 function dateToFileTime(date) {
-  const unixtime = BigInt(date.getTime()); // $FlowIgnore[bigint-unsupported]
-
-  const fileTime = (unixtime + 11644473600n) * 10000n; // $FlowIgnore[bigint-unsupported]
-
-  const lower = Number(fileTime) & Number.MAX_SAFE_INTEGER; // $FlowIgnore[bigint-unsupported]
-
-  const upper = Number(fileTime >> 32n & 2n ** 32n - 1n);
-  return {
-    lower,
-    upper
-  };
+  const unixtime = BigInt(date.getTime());
+  return (unixtime + FILE_TIME_UNIX_EPOCH_DIFF_MS) * MS_TO_100_NS;
 }
 
 /*
@@ -11392,6 +11383,34 @@ function getLang() {
     if (navigator.language != null) return navigator.language;else return (navigator.languages || ["en_US"])[0];
   } else return "en_US";
 }
+/**
+ * get the upper and lower 32 bits from a 64bit int in a bignum
+ */
+// $FlowIgnore[bigint-unsupported]
+
+
+function bigInt64ToParts(num) {
+  const u64 = BigInt.asUintN(64, num); // $FlowIgnore[bigint-unsupported]
+
+  const lower = Number(u64 & 2n ** 32n - 1n); // $FlowIgnore[bigint-unsupported]
+
+  const upper = Number(u64 / 2n ** 32n & 2n ** 32n - 1n);
+  return {
+    lower,
+    upper
+  };
+}
+/**
+ * create a 64bit int in a bignum from two 32bit ints in numbers
+ * @param lower
+ * @param upper
+ */
+// $FlowIgnore[bigint-unsupported]
+
+function bigInt64FromParts(lower, upper) {
+  // $FlowIgnore[bigint-unsupported]
+  return BigInt.asUintN(64, BigInt(lower) + BigInt(upper) * 2n ** 32n);
+}
 
 const rnds8Pool = new Uint8Array(256); // # of random values to pre-allocate
 
@@ -11573,7 +11592,7 @@ let Property = /*#__PURE__*/function () {
           // https://docs.microsoft.com/de-de/office/client-developer/outlook/mapi/filetime
           const fileTimeLower = view.getUint32(0, false);
           const fileTimeUpper = view.getUint32(4, false);
-          return fileTimeToDate(fileTimeLower, fileTimeUpper);
+          return fileTimeToDate(bigInt64FromParts(fileTimeLower, fileTimeUpper));
 
         default:
           throw new Error("type is not PT_APPTIME or PT_SYSTIME");
@@ -11691,8 +11710,12 @@ let Properties = /*#__PURE__*/function (_Array) {
         case PropertyType.PT_SYSTIME:
           data = new Uint8Array(8);
           view = new DataView(data.buffer);
-          view.setInt32(0, value.fileTimeLower, true);
-          view.setInt32(4, value.fileTimeUpper, true);
+          const {
+            upper,
+            lower
+          } = bigInt64ToParts(value);
+          view.setInt32(0, value.lower, true);
+          view.setInt32(4, value.upper, true);
           break;
 
         case PropertyType.PT_SHORT:
@@ -14389,7 +14412,7 @@ let Email = /*#__PURE__*/function (_Message) {
   }, {
     key: "headers",
     value: function headers(_headers) {
-      this.transportMessageHeadersText = _headers; // TODO... or not?
+      this.transportMessageHeadersText = _headers; // TODO: parse the headers into a MessageHeader, if we think we need to
       // this.transportMessageHeaders = new MessageHeader(parseMessageHeaders(headers))
 
       return this;
@@ -14520,10 +14543,9 @@ let Email = /*#__PURE__*/function (_Message) {
 
       if (this.messageEditorFormat !== MessageEditorFormat.EDITOR_FORMAT_DONTKNOW) {
         this._topLevelProperties.addProperty(PropertyTags.PR_MSG_EDITOR_FORMAT, this.messageEditorFormat);
-      } // TODO: SentOn.HasValue
+      }
 
-
-      if (this._sentOn == null) this._sentOn = new Date(); // TODO: _receivedOn.HasValue?
+      if (this._sentOn == null) this._sentOn = new Date();
 
       if (this._receivedOn != null) {
         this._topLevelProperties.addProperty(PropertyTags.PR_MESSAGE_DELIVERY_TIME, dateToFileTime(this._receivedOn));
