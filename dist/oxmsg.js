@@ -1,6 +1,5 @@
 import require$$0 from 'fs';
 import require$$0$1 from 'buffer';
-import { TextEncoder } from 'util';
 import crypto from 'crypto';
 
 function _classCallCheck(instance, Constructor) {
@@ -6247,22 +6246,29 @@ function oADateToDate(oaDate) {
 }
 // FileTime: unsigned 64 Bit, 100ns units since 1. January 1601 (UTC)
 // ms between 01.01.1970 and 01.01.1601: 11644473600
+// $FlowFixMe[bigint-unsupported]
 
-function fileTimeToDate(fileTimeLower, fileTimeUpper) {
-  // TODO this was using BigInts in the past
-  // but flow didn't like it, not sure what the cause for that is
-  const lower = fileTimeLower / 1e4;
-  const upper = fileTimeUpper * Math.pow(2, 32) / 1e4;
-  return new Date(Number(upper + lower - 11644473600));
-}
+function fileTimeToDate(lower, upper) {
+  // $FlowIgnore[bigint-unsupported]
+  const fileTime = BigInt.asUintN(64, BigInt(lower) + (BigInt(upper) << 32n)); // $FlowIgnore[bigint-unsupported]
+
+  const filetimeMillis = fileTime / 10000n; // $FlowIgnore[bigint-unsupported]
+
+  const unixtime = filetimeMillis - 11644473600n;
+  return new Date(Number(unixtime));
+} // $FlowIgnore[bigint-unsupported]
+
 function dateToFileTime(date) {
-  // TODO this was also using bigints
-  const ns = (date.getTime() + 11644473600) * 1e4;
-  const fileTimeLower = Number(ns & Number.MAX_SAFE_INTEGER);
-  const fileTimeUpper = Number(ns / Math.pow(2, 32));
+  const unixtime = BigInt(date.getTime()); // $FlowIgnore[bigint-unsupported]
+
+  const fileTime = (unixtime + 11644473600n) * 10000n; // $FlowIgnore[bigint-unsupported]
+
+  const lower = Number(fileTime) & Number.MAX_SAFE_INTEGER; // $FlowIgnore[bigint-unsupported]
+
+  const upper = Number(fileTime >> 32n & 2n ** 32n - 1n);
   return {
-    fileTimeLower,
-    fileTimeUpper
+    lower,
+    upper
   };
 }
 
