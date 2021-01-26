@@ -14574,7 +14574,7 @@ let Email = /*#__PURE__*/function (_Message) {
       // TODO: Change modification time when this message is opened and only modified
 
 
-      const utcNow = Date.now();
+      const utcNow = dateToFileTime(new Date());
 
       this._topLevelProperties.addProperty(PropertyTags.PR_CREATION_TIME, utcNow);
 
