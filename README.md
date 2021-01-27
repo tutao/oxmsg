@@ -28,8 +28,7 @@ Example usage in examples/node.js.
 MsgKit also supports exporting Outlook Appointments to msg, but those parts are not translated yet.
 
 ## TODO
-- The library currently works in node, but could be made to work in the browser if it's shrunk and the dependencies that rely on node Buffers are replaced (mainly the parsers in lib/mime/header/ that use iconv-lite).
-- `lib/utils/time.js` contains conversions from Windows time formats to js Dates, which are used to write file creation times, email send/received times and similar timestamps. It contains an implementation, but is untested.
+- The library currently works in node, but could be made to work in the browser if it's shrunk and the dependencies that rely on node Buffers are replaced (mainly the parsers in lib/mime/header/ that use iconv-lite). BigInt would need to be polyfilled and bigint literals removed
 - it would probably be good to generate/provide an `index.d.ts` type definition file, which should not be too hard since the actual API surface is tiny.
 - The library has the capability to parse email headers if that should be necessary (`lib/mime/header/`), but that's not
 done yet.
