@@ -4,11 +4,11 @@
   "description": "js library for Microsoft Outlook Item files (.msg)",
   "main": "dist/oxmsg.min.js",
   "scripts": {
-    "build": "rollup --config rollup.config.js && cp dist/oxmsg.js ../tutanota-3/libs/",
+    "build": "rollup --config rollup.config.js",
     "exec:nodejs": "node examples/node.js",
     "clean": "rm -rf ./dist ./build",
     "flow": "flow; test $? -eq 0 -o $? -eq 2",
-    "test": "rollup --config rollup_test.config.js && node 'build/test/index.js'"
+    "test": "rollup --config rollup_test.config.js && node 'build/test/test/index.js'"
   },
   "types": "types/index.d.ts",
   "repository": {

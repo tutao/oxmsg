@@ -30,7 +30,8 @@ export default {
 			dir: 'build/test',
 			format: 'es',
 			sourcemap: true,
-			// preserveModules: true,
+			// dont preserve module structure or we get errors when trying to run
+			preserveModules: false,
 			exports: "named"
 		},
 	],
