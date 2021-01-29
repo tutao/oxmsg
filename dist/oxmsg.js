@@ -3043,8 +3043,11 @@ const PropertyType = Object.freeze({
   // Variable size; a COUNT field followed by that many PT_MV_BINARY values. (PT_MV_BINARY, mv.bin.hex)
   PT_MV_BINARY: 0x1102
 });
-// Flags used to set on a <see cref="Structures.Property" />
+function propertyTypeName(prop) {
+  return Object.entries(PropertyType).find(([name, value]) => prop === name)[0];
+} // Flags used to set on a <see cref="Structures.Property" />
 // See https://msdn.microsoft.com/en-us/library/ee158556(v=exchg.80).aspx
+
 const PropertyFlag = Object.freeze({
   // If this flag is set for a property, that property MUST NOT be deleted from the .msg file
   // (irrespective of which storage it is contained in) and implementations MUST return an error
@@ -11671,6 +11674,7 @@ let Property = /*#__PURE__*/function () {
   return Property;
 }();
 
+const DEFAULT_FLAGS = PropertyFlag.PROPATTR_READABLE | PropertyFlag.PROPATTR_WRITABLE;
 let Properties = /*#__PURE__*/function (_Array) {
   _inherits(Properties, _Array);
 
@@ -11694,8 +11698,29 @@ let Properties = /*#__PURE__*/function (_Array) {
       this.addProperty(tag, obj, flags);
     }
   }, {
+    key: "_expectPropertyType",
+    value: function _expectPropertyType(expected, actual) {
+      if (actual !== expected) {
+        throw new Error(`Invalid PropertyType "${propertyTypeName(actual)}". Expected "${propertyTypeName(expected)}"`);
+      }
+    }
+  }, {
+    key: "addDateProperty",
+    value: function addDateProperty(tag, value, flags = DEFAULT_FLAGS) {
+      this._expectPropertyType(PropertyType.PT_SYSTIME, tag.type);
+
+      this.addProperty(tag, dateToFileTime(value), flags);
+    }
+    /**
+     * @deprecated use typed addPropertyFunctions instead (or make one if it doesn't exist)
+     * @param tag
+     * @param value
+     * @param flags
+     */
+
+  }, {
     key: "addProperty",
-    value: function addProperty(tag, value, flags = PropertyFlag.PROPATTR_READABLE | PropertyFlag.PROPATTR_WRITABLE) {
+    value: function addProperty(tag, value, flags = DEFAULT_FLAGS) {
       if (value == null) return;
       let data = new Uint8Array(0);
       let view;
@@ -11776,57 +11801,10 @@ let Properties = /*#__PURE__*/function (_Array) {
           }
 
           const objType = typeof value;
-          console.log("obj", value, "type", objType);
 
           switch (objType) {
             case "boolean":
               data = Uint8Array.from(value);
-              break;
-
-            case "TypeCode.SByte":
-              //data = BitConverter.GetBytes((sbyte)obj)
-              break;
-
-            case "TypeCode.Byte":
-              //data = BitConverter.GetBytes((byte)obj)
-              break;
-
-            case "TypeCode.Int16":
-              //data = BitConverter.GetBytes((short)obj)
-              break;
-
-            case "TypeCode.UInt16":
-              // data = BitConverter.GetBytes((uint)obj)
-              break;
-
-            case "TypeCode.Int32":
-              //data = BitConverter.GetBytes((int)obj)
-              break;
-
-            case "TypeCode.UInt32":
-              // data = BitConverter.GetBytes((uint)obj)
-              break;
-
-            case "TypeCode.Int64":
-              // data = BitConverter.GetBytes((long)obj)
-              break;
-
-            case "TypeCode.UInt64":
-              // data = BitConverter.GetBytes((ulong)obj)
-              break;
-
-            case "TypeCode.Single":
-              // data = BitConverter.GetBytes((float)obj)
-              break;
-
-            case "TypeCode.Double":
-              // data = BitConverter.GetBytes((double)obj)
-              break;
-
-            case "TypeCode.DateTime":
-              // DateTime.Ticks is a long.
-              //  time elapsed time since 12:00:00 midnight, January 1, 0001 in 100-ns-intervals
-              // data = BitConverter.GetBytes(((DateTime)obj).Ticks)
               break;
 
             case "string":
@@ -13737,12 +13715,10 @@ let Attachment = /*#__PURE__*/function () {
       if (this.contentId) {
         attachmentProperties.addProperty(PropertyTags.PR_ATTACHMENT_HIDDEN, true);
         attachmentProperties.addProperty(PropertyTags.PR_ATTACH_FLAGS, AttachmentFlags.ATT_MHTML_REF);
-      } // TODO: DateTime
+      }
 
-
-      const now = Date.now();
-      attachmentProperties.addProperty(PropertyTags.PR_CREATION_TIME, now);
-      attachmentProperties.addProperty(PropertyTags.PR_LAST_MODIFICATION_TIME, now);
+      attachmentProperties.addDateProperty(PropertyTags.PR_CREATION_TIME, new Date());
+      attachmentProperties.addDateProperty(PropertyTags.PR_LAST_MODIFICATION_TIME, new Date());
       attachmentProperties.addProperty(PropertyTags.PR_STORE_SUPPORT_MASK, StoreSupportMaskConst, PropertyFlag.PROPATTR_READABLE);
       return attachmentProperties.writeProperties(storage, () => {});
     }
@@ -14548,11 +14524,11 @@ let Email = /*#__PURE__*/function (_Message) {
       if (this._sentOn == null) this._sentOn = new Date();
 
       if (this._receivedOn != null) {
-        this._topLevelProperties.addProperty(PropertyTags.PR_MESSAGE_DELIVERY_TIME, dateToFileTime(this._receivedOn));
+        this._topLevelProperties.addDateProperty(PropertyTags.PR_MESSAGE_DELIVERY_TIME, this._receivedOn);
       } // was SentOn.Value.ToUniversalTime()
 
 
-      this._topLevelProperties.addProperty(PropertyTags.PR_CLIENT_SUBMIT_TIME, dateToFileTime(this._sentOn));
+      this._topLevelProperties.addDateProperty(PropertyTags.PR_CLIENT_SUBMIT_TIME, this._sentOn);
 
       this._topLevelProperties.addProperty(PropertyTags.PR_ACCESS, MapiAccess.MAPI_ACCESS_DELETE | MapiAccess.MAPI_ACCESS_MODIFY | MapiAccess.MAPI_ACCESS_READ);
 
@@ -14574,11 +14550,11 @@ let Email = /*#__PURE__*/function (_Message) {
       // TODO: Change modification time when this message is opened and only modified
 
 
-      const utcNow = dateToFileTime(new Date());
+      const utcNow = new Date();
 
-      this._topLevelProperties.addProperty(PropertyTags.PR_CREATION_TIME, utcNow);
+      this._topLevelProperties.addDateProperty(PropertyTags.PR_CREATION_TIME, utcNow);
 
-      this._topLevelProperties.addProperty(PropertyTags.PR_LAST_MODIFICATION_TIME, utcNow);
+      this._topLevelProperties.addDateProperty(PropertyTags.PR_LAST_MODIFICATION_TIME, utcNow);
 
       this._topLevelProperties.addProperty(PropertyTags.PR_PRIORITY, this.priority);
 
