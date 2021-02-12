@@ -12550,6 +12550,13 @@ let NamedProperties = /*#__PURE__*/function (_Array) {
   return NamedProperties;
 }( /*#__PURE__*/_wrapNativeSuper(Array));
 
+// rather than just storing it as a file/inserting it as an attachment
+// *I am unclear on whether this behaviour can be relied upon, or if it is a fluke*. Will outlook always use this CLSID? will it always interpret an MSG purely based on the CLSID?
+// these are questions we should answer, even though it's working now.
+// I've inspected MSG files that were exported from outlook on two different machines, and they both have the same CLSID (this one), so maybe it's a safe bet?
+// - John Feb 2021
+
+const OUTLOOK_CLSID = '0b0d020000000000c000000000000046';
 /**
  * base class for all MSG files
  */
@@ -12572,7 +12579,9 @@ let Message = /*#__PURE__*/function () {
 
     _defineProperty(this, "_messageSize", void 0);
 
-    this._storage = new CFBStorage(); // In the preceding figure, the "__nameid_version1.0" named property mapping storage contains the
+    this._storage = new CFBStorage(cfb.utils.cfb_new({
+      CLSID: OUTLOOK_CLSID
+    })); // In the preceding figure, the "__nameid_version1.0" named property mapping storage contains the
     // three streams  used to provide a mapping from property ID to property name
     // ("__substg1.0_00020102", "__substg1.0_00030102", and "__substg1.0_00040102") and various other
     // streams that provide a mapping from property names to property IDs.

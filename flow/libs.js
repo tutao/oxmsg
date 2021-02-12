@@ -19,6 +19,8 @@ declare module 'cfb' {
 		mt?: Date,
 		/** Content-Type (for MAD) */
 		ctype?: string,
+		/** CLSID - OLE file type identifier **/
+		clsid: string
 	}
 
 	declare type CFBContainer = {
@@ -26,8 +28,6 @@ declare module 'cfb' {
 		FileIndex: Array<CFBEntry>,
 		/** list of files/dirs in the cfb */
 		FullPaths: Array<string>,
-		/** TODO: what's this? */
-		CLSID: string,
 	}
 
 	declare type CFBOptions = {
