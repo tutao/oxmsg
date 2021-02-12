@@ -8,7 +8,7 @@
     "exec:nodejs": "node examples/node.js",
     "clean": "rm -rf ./dist ./build",
     "flow": "flow; test $? -eq 0 -o $? -eq 2",
-    "test": "rollup --config rollup_test.config.js && node 'build/test/test/index.js'"
+    "test": "rollup --config rollup_test.config.js && node 'build/test/index.js'"
   },
   "types": "types/index.d.ts",
   "repository": {
