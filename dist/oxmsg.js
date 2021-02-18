@@ -2750,6 +2750,7 @@ var cfb$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.assign(/*#__PURE__*/O
  * 'storage': directory in the cfb
  * 'stream' : file in the cfb
  * */
+
 let CFBStorage = /*#__PURE__*/function () {
   /** underlying cfb container */
 
@@ -2825,7 +2826,6 @@ let CFBStorage = /*#__PURE__*/function () {
   }, {
     key: "toBytes",
     value: function toBytes() {
-      // TODO: CFB.write may return a string if the correct option is given
       return Uint8Array.from(cfb.write(this._cfb));
     }
   }, {
@@ -11035,7 +11035,7 @@ var bytebufferNode = function () {
 
 function to(locale) {
   const lcid = localeToLcid[locale];
-  if (lcid) return lcid;else throw new Error(`unkown locale ${locale}`);
+  if (lcid) return Number(lcid);else throw new Error(`unkown locale ${locale}`);
 }
 const lcidToLocale = {
   '4': 'zh_CHS',
@@ -11241,9 +11241,7 @@ const lcidToLocale = {
   '21514': 'es_US',
   '31748': 'zh_CHT'
 };
-const localeToLcid = Object.entries(lcidToLocale).reduce((acc, [k, v]) => Object.assign(acc, {
-  [v]: k
-}), {});
+const localeToLcid = invertDict(lcidToLocale);
 
 function Xp(n, p) {
   return n.toString(16).padStart(p, '0').toUpperCase();
@@ -11413,6 +11411,27 @@ function bigInt64ToParts(num) {
 function bigInt64FromParts(lower, upper) {
   // $FlowIgnore[bigint-unsupported]
   return BigInt.asUintN(64, BigInt(lower) + BigInt(upper) * 2n ** 32n);
+}
+
+/**
+ * Convert a mapping from k->v to v->k, should only be used on dicts with a 1 to 1 mapping, or you will lose information
+ * @param dict
+ * @returns {[string, *]|*}
+ */
+function invertDict(dict) {
+  return Object.entries(dict).reduce((acc, [k, v]) => Object.assign(acc, {
+    [v]: k
+  }), {});
+}
+/**
+ * get the name of the key that belongs to a given value in a dict. only use where each key has a unique value
+ * @param dict
+ * @param value
+ * @returns {*}
+ */
+
+function getDictKeyFromValue(dict, value) {
+  return invertDict(dict)[value];
 }
 
 const rnds8Pool = new Uint8Array(256); // # of random values to pre-allocate
@@ -11709,10 +11728,23 @@ let Properties = /*#__PURE__*/function (_Array) {
     value: function addDateProperty(tag, value, flags = DEFAULT_FLAGS) {
       this._expectPropertyType(PropertyType.PT_SYSTIME, tag.type);
 
-      this.addProperty(tag, dateToFileTime(value), flags);
+      this._addProperty(tag, dateToFileTime(value), flags);
+    }
+  }, {
+    key: "addBinaryProperty",
+    value: function addBinaryProperty(tag, data, flags = DEFAULT_FLAGS) {
+      this._expectPropertyType(PropertyType.PT_BINARY, tag.type);
+
+      this._addProperty(tag, data, flags);
+    } // TODO use this internally, replace all calls to addProperty with methods that can actually be typechecked, maybe even make this typecheckable somehow
+
+  }, {
+    key: "_addProperty",
+    value: function _addProperty(tag, value, flags) {
+      return this.addProperty(tag, value, flags);
     }
     /**
-     * @deprecated use typed addPropertyFunctions instead (or make one if it doesn't exist)
+     * @deprecated use typed addPropertyFunctions instead (or make one if it doesn't exist). replace this method with _addProperty and only use it internally
      * @param tag
      * @param value
      * @param flags
@@ -11850,8 +11882,8 @@ let Properties = /*#__PURE__*/function (_Array) {
     /**
      * writes the properties structure to a cfb stream in storage
      * @param storage
-     * @param messageSize
      * @param prefix a function that will be called with the buffer before the properties get written to it.
+     * @param messageSize
      * @returns {number}
      */
 
@@ -11866,7 +11898,7 @@ let Properties = /*#__PURE__*/function (_Array) {
       // The structure of each entry, representing one property, depends on whether the property is a fixed length
       // property or not.
 
-      this.forEach(property => {
+      for (let property of this) {
         // property tag: A 32-bit value that contains a property type and a property ID. The low-order 16 bits
         // represent the property type. The high-order 16 bits represent the property ID.
         buf.writeUint16(property.type); // 2 bytes
@@ -11985,7 +12017,7 @@ let Properties = /*#__PURE__*/function (_Array) {
             // TODO: Adding new MSG file
             break;
         }
-      });
+      }
 
       if (messageSize != null) {
         buf.writeUint16(PropertyTags.PR_MESSAGE_SIZE.type); // 2 bytes
@@ -13026,46 +13058,6 @@ let Sender = /*#__PURE__*/function (_Address) {
   return Sender;
 }(Address);
 
-let AttachmentProperties = /*#__PURE__*/function (_Properties) {
-  _inherits(AttachmentProperties, _Properties);
-
-  var _super = _createSuper(AttachmentProperties);
-
-  function AttachmentProperties() {
-    _classCallCheck(this, AttachmentProperties);
-
-    return _super.apply(this, arguments);
-  }
-
-  _createClass(AttachmentProperties, [{
-    key: "writeProperties",
-
-    /**
-     * Writes all properties either as a CFStream or as a collection in
-     * a PropertyTags.PropertiesStreamName stream to the given storage, this depends
-     * on the PropertyType
-     * See theProperties class it's Properties.WriteProperties method for the logic
-     * that is used to determine this
-     * @param storage cfb storage to write into
-     * @param prefix
-     * @param messageSize
-     * @returns {number} total size of written Properties
-     */
-    value: function writeProperties(storage, prefix, messageSize) {
-      const attachmentPropertyPrefix = buf => {
-        prefix(buf); // Reserved (8 bytes): This field MUST be set to
-        // zero when writing a .msg file and MUST be ignored when reading a .msg file.
-
-        buf.writeUint64(0);
-      };
-
-      return _get(_getPrototypeOf(AttachmentProperties.prototype), "writeProperties", this).call(this, storage, attachmentPropertyPrefix, messageSize);
-    }
-  }]);
-
-  return AttachmentProperties;
-}(Properties);
-
 const MimeTypes = Object.freeze({
   "323": "text/h323",
   "3dmf": "x-world/x-3dmf",
@@ -13634,13 +13626,9 @@ function getMimeType(fileName) {
 }
 
 let Attachment = /*#__PURE__*/function () {
-  // was: DateTime
-  // TODO
   function Attachment(data, // was: Stream
-  fileName, creationTime, lastModificationTime, type = AttachmentType.ATTACH_BY_VALUE, renderingPosition = -1, contentId = "", isContactPhoto = false) {
+  fileName, contentId = "", type = AttachmentType.ATTACH_BY_VALUE, renderingPosition = -1, isContactPhoto = false) {
     _classCallCheck(this, Attachment);
-
-    _defineProperty(this, "_file", void 0);
 
     _defineProperty(this, "data", void 0);
 
@@ -13648,22 +13636,14 @@ let Attachment = /*#__PURE__*/function () {
 
     _defineProperty(this, "type", void 0);
 
-    _defineProperty(this, "renderingPosition", void 0);
-
-    _defineProperty(this, "isInline", void 0);
-
     _defineProperty(this, "contentId", void 0);
+
+    _defineProperty(this, "renderingPosition", void 0);
 
     _defineProperty(this, "isContactPhoto", void 0);
 
-    _defineProperty(this, "creationTime", void 0);
-
-    _defineProperty(this, "lastModificationTime", void 0);
-
     this.data = data;
     this.fileName = fileName;
-    this.creationTime = creationTime;
-    this.lastModificationTime = lastModificationTime;
     this.type = type;
     this.renderingPosition = renderingPosition;
     this.contentId = contentId;
@@ -13673,10 +13653,10 @@ let Attachment = /*#__PURE__*/function () {
   _createClass(Attachment, [{
     key: "writeProperties",
     value: function writeProperties(storage, index) {
-      const attachmentProperties = new AttachmentProperties();
+      const attachmentProperties = new Properties();
       attachmentProperties.addProperty(PropertyTags.PR_ATTACH_NUM, index, PropertyFlag.PROPATTR_READABLE);
-      attachmentProperties.addProperty(PropertyTags.PR_INSTANCE_KEY, generateInstanceKey(), PropertyFlag.PROPATTR_READABLE);
-      attachmentProperties.addProperty(PropertyTags.PR_RECORD_KEY, generateRecordKey(), PropertyFlag.PROPATTR_READABLE);
+      attachmentProperties.addBinaryProperty(PropertyTags.PR_INSTANCE_KEY, generateInstanceKey(), PropertyFlag.PROPATTR_READABLE);
+      attachmentProperties.addBinaryProperty(PropertyTags.PR_RECORD_KEY, generateRecordKey(), PropertyFlag.PROPATTR_READABLE);
       attachmentProperties.addProperty(PropertyTags.PR_RENDERING_POSITION, this.renderingPosition, PropertyFlag.PROPATTR_READABLE);
       attachmentProperties.addProperty(PropertyTags.PR_OBJECT_TYPE, MapiObjectType.MAPI_ATTACH);
 
@@ -13699,26 +13679,16 @@ let Attachment = /*#__PURE__*/function () {
       switch (this.type) {
         case AttachmentType.ATTACH_BY_VALUE:
         case AttachmentType.ATTACH_EMBEDDED_MSG:
-          attachmentProperties.addProperty(PropertyTags.PR_ATTACH_DATA_BIN, this.data);
+          attachmentProperties.addBinaryProperty(PropertyTags.PR_ATTACH_DATA_BIN, this.data);
           attachmentProperties.addProperty(PropertyTags.PR_ATTACH_SIZE, this.data.length);
           break;
 
         case AttachmentType.ATTACH_BY_REF_ONLY:
-          // TODO:
-          throw new Error("attach_by_ref_only not implemented!"); // $FlowFixMe[unreachable-code]
-        //case AttachmentType.ATTACH_EMBEDDED_MSG:
-        //    var msgStorage = storage.AddStorage(PropertyTags.PR_ATTACH_DATA_BIN.Name)
-        //    var cf = new CompoundFile(Stream)
-        //    Storage.Copy(cf.RootStorage, msgStorage)
-        //    propertiesStream.AddProperty(PropertyTags.PR_ATTACH_SIZE, Stream.Length)
-        //    propertiesStream.AddProperty(PropertyTags.PR_ATTACH_ENCODING, 0)
-        //    break
-
         case AttachmentType.ATTACH_BY_REFERENCE:
         case AttachmentType.ATTACH_BY_REF_RESOLVE:
         case AttachmentType.NO_ATTACHMENT:
         case AttachmentType.ATTACH_OLE:
-          throw new Error("AttachByReference, AttachByRefResolve, NoAttachment and AttachOle are not supported");
+          throw new Error(`Attachment type "${getDictKeyFromValue(AttachmentType, this.type)} is not supported`);
       }
 
       if (this.contentId) {
@@ -13729,7 +13699,11 @@ let Attachment = /*#__PURE__*/function () {
       attachmentProperties.addDateProperty(PropertyTags.PR_CREATION_TIME, new Date());
       attachmentProperties.addDateProperty(PropertyTags.PR_LAST_MODIFICATION_TIME, new Date());
       attachmentProperties.addProperty(PropertyTags.PR_STORE_SUPPORT_MASK, StoreSupportMaskConst, PropertyFlag.PROPATTR_READABLE);
-      return attachmentProperties.writeProperties(storage, () => {});
+      return attachmentProperties.writeProperties(storage, buf => {
+        // Reserved (8 bytes): This field MUST be set to
+        // zero when writing a .msg file and MUST be ignored when reading a .msg file.
+        buf.writeUint64(0);
+      });
     }
   }]);
 
@@ -13783,28 +13757,14 @@ let Attachments = /*#__PURE__*/function (_Array) {
 
       return size;
     }
-    /**
-     * adds an Attachment by AttachmentType.ATTACH_BY_VALUE (default)
-     * @param data {Uint8Array} data to add as attachment
-     * @param fileName {string} file to add with full path
-     * @param creationTime {number} file creation time
-     * @param lastModificationTime {number} file modification time
-     * @param type {AttachmentTypeEnum} how to attach the attachment
-     * @param renderingPosition {number} how to display in a rich text message
-     * @param isInline {boolean} set to true to add the attachment inline
-     * @param contentId {string} the id for the inline attachment if isInline is true
-     * @param isContactPhoto {boolean} if the attachment is a contact photo
-     */
-
   }, {
-    key: "add",
-    value: function add(data, fileName, creationTime, lastModificationTime, contentId = "", type = AttachmentType.ATTACH_BY_VALUE, renderingPosition = -1, isInline = false, isContactPhoto = false) {
+    key: "attach",
+    value: function attach(attachment) {
       if (this.length >= 2048) throw new Error("length > 2048 => too many attachments!");
 
-      this._checkAttachmentFileName(fileName, contentId);
+      this._checkAttachmentFileName(attachment.fileName, attachment.contentId);
 
-      const a = new Attachment(...arguments);
-      this.push(a);
+      this.push(attachment);
     }
   }]);
 
@@ -14385,8 +14345,8 @@ let Email = /*#__PURE__*/function (_Message) {
     }
   }, {
     key: "attach",
-    value: function attach(data, fileName, contentId = "", type = AttachmentType.ATTACH_BY_VALUE, creationTime = Date.now(), lastModificationTime = Date.now(), renderingPosition = -1, isContactPhoto = false) {
-      this.attachments.add(...arguments);
+    value: function attach(attachment) {
+      this.attachments.attach(attachment);
       return this;
     }
     /**
@@ -14653,5 +14613,5 @@ let Email = /*#__PURE__*/function (_Message) {
   return Email;
 }(Message);
 
-export { AttachmentType, cfb$1 as CFB, Email, MessageEditorFormat };
+export { Attachment, AttachmentType, cfb$1 as CFB, Email, MessageEditorFormat };
 //# sourceMappingURL=oxmsg.js.map
