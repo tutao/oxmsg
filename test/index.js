@@ -7,5 +7,7 @@ import "../lib/address/one_off_entry_id.spec"
 import "../lib/helpers/rtf_compressor.spec"
 import "../lib/utils/time.spec"
 import "../lib/utils/utils.spec"
+import "../lib/email.spec"
+import "../lib/attachments.spec"
 
 o.run()

@@ -23,6 +23,8 @@ declare module 'cfb' {
 		clsid: string
 	}
 
+	declare type CFBBlob = number[] | Uint8Array;
+
 	declare type CFBContainer = {
 		/** file data */
 		FileIndex: Array<CFBEntry>,
@@ -72,7 +74,14 @@ declare module 'cfb' {
 		compression?: boolean
 	}
 
-	declare var write: (container: CFBContainer, opts?: CFBWriteOptions) => Buffer | Array<number> | string
+	declare function write(container: CFBContainer, opts?: CFBWriteOptions): Buffer | Array<number> | string;
+
+	/** Read a blob or file or binary string */
+	declare function read(f: CFBBlob | string, options?: CFBParsingOptions): CFBContainer;
+
+	/** Find a file entry given a path or file name */
+	declare function find(cfb: CFBContainer, path: string): CFBEntry | null;
+
 }
 
 declare interface BigIntType {
@@ -209,4 +218,45 @@ declare module 'bytebuffer' {
 	limit: number;
 	markedOffset: number;
 	}
+}
+
+
+type OspecSpy<T> = T & {
+	/** Last invocation */
+	args: $ReadOnlyArray<any>,
+	/** All invocations */
+	calls: $ReadOnlyArray<{ this: any, args: $ReadOnlyArray<any> }>,
+	callCount: number,
+}
+
+interface Ospec {
+	<T>(T): {
+		equals: (T) => ComparisonDescriptor,
+		deepEquals: (T) => ComparisonDescriptor,
+		notEquals: (T) => ComparisonDescriptor,
+		notDeepEquals: (T) => ComparisonDescriptor,
+		// Throws can be used when function is passed but Flow can't distinguish them currently
+		throws: (Class<any>) => void
+	};
+
+	(string, (done: DoneFn, timeout: TimeoutFn) => mixed): void;
+
+	spec: (string, () => mixed) => void;
+	only: (string, (done: DoneFn, timeout: TimeoutFn) => mixed) => void;
+	before: ((DoneFn, TimeoutFn) => mixed) => void;
+	after: ((DoneFn, TimeoutFn) => mixed) => void;
+	beforeEach: ((DoneFn, TimeoutFn) => mixed) => void;
+	afterEach: ((DoneFn, TimeoutFn) => mixed) => void;
+
+	spy(): OspecSpy<() => void>;
+
+	spy<T>(T): OspecSpy<T>;
+
+	timeout: (number) => void;
+	specTimeout: (number) => void;
+	report: (results: mixed, stats: mixed) => number;
+}
+
+declare module 'ospec' {
+	declare export default Ospec;
 }
