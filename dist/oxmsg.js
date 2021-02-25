@@ -1,2842 +1,6 @@
-import require$$0 from 'fs';
-import require$$0$1 from 'buffer';
+import require$$0 from 'buffer';
+import require$$0$1 from 'fs';
 import crypto from 'crypto';
-
-function _classCallCheck(instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
-}
-
-function _defineProperties(target, props) {
-  for (var i = 0; i < props.length; i++) {
-    var descriptor = props[i];
-    descriptor.enumerable = descriptor.enumerable || false;
-    descriptor.configurable = true;
-    if ("value" in descriptor) descriptor.writable = true;
-    Object.defineProperty(target, descriptor.key, descriptor);
-  }
-}
-
-function _createClass(Constructor, protoProps, staticProps) {
-  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
-  if (staticProps) _defineProperties(Constructor, staticProps);
-  return Constructor;
-}
-
-function _defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-
-  return obj;
-}
-
-function _inherits(subClass, superClass) {
-  if (typeof superClass !== "function" && superClass !== null) {
-    throw new TypeError("Super expression must either be null or a function");
-  }
-
-  subClass.prototype = Object.create(superClass && superClass.prototype, {
-    constructor: {
-      value: subClass,
-      writable: true,
-      configurable: true
-    }
-  });
-  if (superClass) _setPrototypeOf(subClass, superClass);
-}
-
-function _getPrototypeOf(o) {
-  _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
-    return o.__proto__ || Object.getPrototypeOf(o);
-  };
-  return _getPrototypeOf(o);
-}
-
-function _setPrototypeOf(o, p) {
-  _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
-    o.__proto__ = p;
-    return o;
-  };
-
-  return _setPrototypeOf(o, p);
-}
-
-function _isNativeReflectConstruct() {
-  if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-  if (Reflect.construct.sham) return false;
-  if (typeof Proxy === "function") return true;
-
-  try {
-    Date.prototype.toString.call(Reflect.construct(Date, [], function () {}));
-    return true;
-  } catch (e) {
-    return false;
-  }
-}
-
-function _construct(Parent, args, Class) {
-  if (_isNativeReflectConstruct()) {
-    _construct = Reflect.construct;
-  } else {
-    _construct = function _construct(Parent, args, Class) {
-      var a = [null];
-      a.push.apply(a, args);
-      var Constructor = Function.bind.apply(Parent, a);
-      var instance = new Constructor();
-      if (Class) _setPrototypeOf(instance, Class.prototype);
-      return instance;
-    };
-  }
-
-  return _construct.apply(null, arguments);
-}
-
-function _isNativeFunction(fn) {
-  return Function.toString.call(fn).indexOf("[native code]") !== -1;
-}
-
-function _wrapNativeSuper(Class) {
-  var _cache = typeof Map === "function" ? new Map() : undefined;
-
-  _wrapNativeSuper = function _wrapNativeSuper(Class) {
-    if (Class === null || !_isNativeFunction(Class)) return Class;
-
-    if (typeof Class !== "function") {
-      throw new TypeError("Super expression must either be null or a function");
-    }
-
-    if (typeof _cache !== "undefined") {
-      if (_cache.has(Class)) return _cache.get(Class);
-
-      _cache.set(Class, Wrapper);
-    }
-
-    function Wrapper() {
-      return _construct(Class, arguments, _getPrototypeOf(this).constructor);
-    }
-
-    Wrapper.prototype = Object.create(Class.prototype, {
-      constructor: {
-        value: Wrapper,
-        enumerable: false,
-        writable: true,
-        configurable: true
-      }
-    });
-    return _setPrototypeOf(Wrapper, Class);
-  };
-
-  return _wrapNativeSuper(Class);
-}
-
-function _assertThisInitialized(self) {
-  if (self === void 0) {
-    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  }
-
-  return self;
-}
-
-function _possibleConstructorReturn(self, call) {
-  if (call && (typeof call === "object" || typeof call === "function")) {
-    return call;
-  }
-
-  return _assertThisInitialized(self);
-}
-
-function _createSuper(Derived) {
-  var hasNativeReflectConstruct = _isNativeReflectConstruct();
-
-  return function _createSuperInternal() {
-    var Super = _getPrototypeOf(Derived),
-        result;
-
-    if (hasNativeReflectConstruct) {
-      var NewTarget = _getPrototypeOf(this).constructor;
-
-      result = Reflect.construct(Super, arguments, NewTarget);
-    } else {
-      result = Super.apply(this, arguments);
-    }
-
-    return _possibleConstructorReturn(this, result);
-  };
-}
-
-function _superPropBase(object, property) {
-  while (!Object.prototype.hasOwnProperty.call(object, property)) {
-    object = _getPrototypeOf(object);
-    if (object === null) break;
-  }
-
-  return object;
-}
-
-function _get(target, property, receiver) {
-  if (typeof Reflect !== "undefined" && Reflect.get) {
-    _get = Reflect.get;
-  } else {
-    _get = function _get(target, property, receiver) {
-      var base = _superPropBase(target, property);
-
-      if (!base) return;
-      var desc = Object.getOwnPropertyDescriptor(base, property);
-
-      if (desc.get) {
-        return desc.get.call(receiver);
-      }
-
-      return desc.value;
-    };
-  }
-
-  return _get(target, property, receiver || target);
-}
-
-var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
-
-function createCommonjsModule(fn) {
-  var module = { exports: {} };
-	return fn(module, module.exports), module.exports;
-}
-
-function commonjsRequire (target) {
-	throw new Error('Could not dynamically require "' + target + '". Please configure the dynamicRequireTargets option of @rollup/plugin-commonjs appropriately for this require call to behave properly.');
-}
-
-/* cfb.js (C) 2013-present SheetJS -- http://sheetjs.com */
-
-var cfb = createCommonjsModule(function (module) {
-/* vim: set ts=2: */
-
-/*jshint eqnull:true */
-
-/*exported CFB */
-
-/*global module, require:false, process:false, Buffer:false, Uint8Array:false, Uint16Array:false */
-var Base64 = function make_b64() {
-  var map = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
-  return {
-    encode: function (input) {
-      var o = "";
-      var c1 = 0,
-          c2 = 0,
-          c3 = 0,
-          e1 = 0,
-          e2 = 0,
-          e3 = 0,
-          e4 = 0;
-
-      for (var i = 0; i < input.length;) {
-        c1 = input.charCodeAt(i++);
-        e1 = c1 >> 2;
-        c2 = input.charCodeAt(i++);
-        e2 = (c1 & 3) << 4 | c2 >> 4;
-        c3 = input.charCodeAt(i++);
-        e3 = (c2 & 15) << 2 | c3 >> 6;
-        e4 = c3 & 63;
-
-        if (isNaN(c2)) {
-          e3 = e4 = 64;
-        } else if (isNaN(c3)) {
-          e4 = 64;
-        }
-
-        o += map.charAt(e1) + map.charAt(e2) + map.charAt(e3) + map.charAt(e4);
-      }
-
-      return o;
-    },
-    decode: function b64_decode(input) {
-      var o = "";
-      var c1 = 0,
-          c2 = 0,
-          c3 = 0,
-          e1 = 0,
-          e2 = 0,
-          e3 = 0,
-          e4 = 0;
-      input = input.replace(/[^\w\+\/\=]/g, "");
-
-      for (var i = 0; i < input.length;) {
-        e1 = map.indexOf(input.charAt(i++));
-        e2 = map.indexOf(input.charAt(i++));
-        c1 = e1 << 2 | e2 >> 4;
-        o += String.fromCharCode(c1);
-        e3 = map.indexOf(input.charAt(i++));
-        c2 = (e2 & 15) << 4 | e3 >> 2;
-
-        if (e3 !== 64) {
-          o += String.fromCharCode(c2);
-        }
-
-        e4 = map.indexOf(input.charAt(i++));
-        c3 = (e3 & 3) << 6 | e4;
-
-        if (e4 !== 64) {
-          o += String.fromCharCode(c3);
-        }
-      }
-
-      return o;
-    }
-  };
-}();
-
-var has_buf = typeof Buffer !== 'undefined' && typeof process !== 'undefined' && typeof process.versions !== 'undefined' && process.versions.node;
-
-var Buffer_from = function () {};
-
-if (typeof Buffer !== 'undefined') {
-  var nbfs = !Buffer.from;
-  if (!nbfs) try {
-    Buffer.from("foo", "utf8");
-  } catch (e) {
-    nbfs = true;
-  }
-  Buffer_from = nbfs ? function (buf, enc) {
-    return enc ? new Buffer(buf, enc) : new Buffer(buf);
-  } : Buffer.from.bind(Buffer); // $FlowIgnore
-
-  if (!Buffer.alloc) Buffer.alloc = function (n) {
-    return new Buffer(n);
-  }; // $FlowIgnore
-
-  if (!Buffer.allocUnsafe) Buffer.allocUnsafe = function (n) {
-    return new Buffer(n);
-  };
-}
-
-function new_raw_buf(len) {
-  /* jshint -W056 */
-  return has_buf ? Buffer.alloc(len) : new Array(len);
-  /* jshint +W056 */
-}
-
-function new_unsafe_buf(len) {
-  /* jshint -W056 */
-  return has_buf ? Buffer.allocUnsafe(len) : new Array(len);
-  /* jshint +W056 */
-}
-
-var s2a = function s2a(s) {
-  if (has_buf) return Buffer_from(s, "binary");
-  return s.split("").map(function (x) {
-    return x.charCodeAt(0) & 0xff;
-  });
-};
-
-var chr0 = /\u0000/g,
-    chr1 = /[\u0001-\u0006]/g;
-
-var __toBuffer = function (bufs) {
-  var x = [];
-
-  for (var i = 0; i < bufs[0].length; ++i) {
-    x.push.apply(x, bufs[0][i]);
-  }
-
-  return x;
-};
-
-var ___toBuffer = __toBuffer;
-
-var __utf16le = function (b, s, e) {
-  var ss = [];
-
-  for (var i = s; i < e; i += 2) ss.push(String.fromCharCode(__readUInt16LE(b, i)));
-
-  return ss.join("").replace(chr0, '');
-};
-
-var ___utf16le = __utf16le;
-
-var __hexlify = function (b, s, l) {
-  var ss = [];
-
-  for (var i = s; i < s + l; ++i) ss.push(("0" + b[i].toString(16)).slice(-2));
-
-  return ss.join("");
-};
-
-var ___hexlify = __hexlify;
-
-var __bconcat = function (bufs) {
-  if (Array.isArray(bufs[0])) return [].concat.apply([], bufs);
-  var maxlen = 0,
-      i = 0;
-
-  for (i = 0; i < bufs.length; ++i) maxlen += bufs[i].length;
-
-  var o = new Uint8Array(maxlen);
-
-  for (i = 0, maxlen = 0; i < bufs.length; maxlen += bufs[i].length, ++i) o.set(bufs[i], maxlen);
-
-  return o;
-};
-
-var bconcat = __bconcat;
-
-if (has_buf) {
-  __utf16le = function (b, s, e) {
-    if (!Buffer.isBuffer(b)) return ___utf16le(b, s, e);
-    return b.toString('utf16le', s, e).replace(chr0, '')
-    /*.replace(chr1,'!')*/
-    ;
-  };
-
-  __hexlify = function (b, s, l) {
-    return Buffer.isBuffer(b) ? b.toString('hex', s, s + l) : ___hexlify(b, s, l);
-  };
-
-  __toBuffer = function (bufs) {
-    return bufs[0].length > 0 && Buffer.isBuffer(bufs[0][0]) ? Buffer.concat(bufs[0]) : ___toBuffer(bufs);
-  };
-
-  s2a = function (s) {
-    return Buffer_from(s, "binary");
-  };
-
-  bconcat = function (bufs) {
-    return Buffer.isBuffer(bufs[0]) ? Buffer.concat(bufs) : __bconcat(bufs);
-  };
-}
-
-var __readUInt8 = function (b, idx) {
-  return b[idx];
-};
-
-var __readUInt16LE = function (b, idx) {
-  return b[idx + 1] * (1 << 8) + b[idx];
-};
-
-var __readInt16LE = function (b, idx) {
-  var u = b[idx + 1] * (1 << 8) + b[idx];
-  return u < 0x8000 ? u : (0xffff - u + 1) * -1;
-};
-
-var __readUInt32LE = function (b, idx) {
-  return b[idx + 3] * (1 << 24) + (b[idx + 2] << 16) + (b[idx + 1] << 8) + b[idx];
-};
-
-var __readInt32LE = function (b, idx) {
-  return (b[idx + 3] << 24) + (b[idx + 2] << 16) + (b[idx + 1] << 8) + b[idx];
-};
-
-function ReadShift(size, t) {
-  var oI,
-      oS,
-      type = 0;
-
-  switch (size) {
-    case 1:
-      oI = __readUInt8(this, this.l);
-      break;
-
-    case 2:
-      oI = (t !== 'i' ? __readUInt16LE : __readInt16LE)(this, this.l);
-      break;
-
-    case 4:
-      oI = __readInt32LE(this, this.l);
-      break;
-
-    case 16:
-      type = 2;
-      oS = __hexlify(this, this.l, size);
-  }
-
-  this.l += size;
-  if (type === 0) return oI;
-  return oS;
-}
-
-var __writeUInt32LE = function (b, val, idx) {
-  b[idx] = val & 0xFF;
-  b[idx + 1] = val >>> 8 & 0xFF;
-  b[idx + 2] = val >>> 16 & 0xFF;
-  b[idx + 3] = val >>> 24 & 0xFF;
-};
-
-var __writeInt32LE = function (b, val, idx) {
-  b[idx] = val & 0xFF;
-  b[idx + 1] = val >> 8 & 0xFF;
-  b[idx + 2] = val >> 16 & 0xFF;
-  b[idx + 3] = val >> 24 & 0xFF;
-};
-
-function WriteShift(t, val, f) {
-  var size = 0,
-      i = 0;
-
-  switch (f) {
-    case "hex":
-      for (; i < t; ++i) {
-        this[this.l++] = parseInt(val.slice(2 * i, 2 * i + 2), 16) || 0;
-      }
-
-      return this;
-
-    case "utf16le":
-      var end = this.l + t;
-
-      for (i = 0; i < Math.min(val.length, t); ++i) {
-        var cc = val.charCodeAt(i);
-        this[this.l++] = cc & 0xff;
-        this[this.l++] = cc >> 8;
-      }
-
-      while (this.l < end) this[this.l++] = 0;
-
-      return this;
-  }
-
-  switch (t) {
-    case 1:
-      size = 1;
-      this[this.l] = val & 0xFF;
-      break;
-
-    case 2:
-      size = 2;
-      this[this.l] = val & 0xFF;
-      val >>>= 8;
-      this[this.l + 1] = val & 0xFF;
-      break;
-
-    case 4:
-      size = 4;
-
-      __writeUInt32LE(this, val, this.l);
-
-      break;
-
-    case -4:
-      size = 4;
-
-      __writeInt32LE(this, val, this.l);
-
-      break;
-  }
-
-  this.l += size;
-  return this;
-}
-
-function CheckField(hexstr, fld) {
-  var m = __hexlify(this, this.l, hexstr.length >> 1);
-
-  if (m !== hexstr) throw new Error(fld + 'Expected ' + hexstr + ' saw ' + m);
-  this.l += hexstr.length >> 1;
-}
-
-function prep_blob(blob, pos) {
-  blob.l = pos;
-  blob.read_shift = ReadShift;
-  blob.chk = CheckField;
-  blob.write_shift = WriteShift;
-}
-
-function new_buf(sz) {
-  var o = new_raw_buf(sz);
-  prep_blob(o, 0);
-  return o;
-}
-/* crc32.js (C) 2014-present SheetJS -- http://sheetjs.com */
-
-/* vim: set ts=2: */
-
-/*exported CRC32 */
-
-
-var CRC32;
-
-(function (factory) {
-  /*jshint ignore:start */
-
-  /*eslint-disable */
-  factory(CRC32 = {});
-  /*eslint-enable */
-
-  /*jshint ignore:end */
-})(function (CRC32) {
-  CRC32.version = '1.2.0';
-  /* see perf/crc32table.js */
-
-  /*global Int32Array */
-
-  function signed_crc_table() {
-    var c = 0,
-        table = new Array(256);
-
-    for (var n = 0; n != 256; ++n) {
-      c = n;
-      c = c & 1 ? -306674912 ^ c >>> 1 : c >>> 1;
-      c = c & 1 ? -306674912 ^ c >>> 1 : c >>> 1;
-      c = c & 1 ? -306674912 ^ c >>> 1 : c >>> 1;
-      c = c & 1 ? -306674912 ^ c >>> 1 : c >>> 1;
-      c = c & 1 ? -306674912 ^ c >>> 1 : c >>> 1;
-      c = c & 1 ? -306674912 ^ c >>> 1 : c >>> 1;
-      c = c & 1 ? -306674912 ^ c >>> 1 : c >>> 1;
-      c = c & 1 ? -306674912 ^ c >>> 1 : c >>> 1;
-      table[n] = c;
-    }
-
-    return typeof Int32Array !== 'undefined' ? new Int32Array(table) : table;
-  }
-
-  var T = signed_crc_table();
-
-  function crc32_bstr(bstr, seed) {
-    var C = seed ^ -1,
-        L = bstr.length - 1;
-
-    for (var i = 0; i < L;) {
-      C = C >>> 8 ^ T[(C ^ bstr.charCodeAt(i++)) & 0xFF];
-      C = C >>> 8 ^ T[(C ^ bstr.charCodeAt(i++)) & 0xFF];
-    }
-
-    if (i === L) C = C >>> 8 ^ T[(C ^ bstr.charCodeAt(i)) & 0xFF];
-    return C ^ -1;
-  }
-
-  function crc32_buf(buf, seed) {
-    if (buf.length > 10000) return crc32_buf_8(buf, seed);
-    var C = seed ^ -1,
-        L = buf.length - 3;
-
-    for (var i = 0; i < L;) {
-      C = C >>> 8 ^ T[(C ^ buf[i++]) & 0xFF];
-      C = C >>> 8 ^ T[(C ^ buf[i++]) & 0xFF];
-      C = C >>> 8 ^ T[(C ^ buf[i++]) & 0xFF];
-      C = C >>> 8 ^ T[(C ^ buf[i++]) & 0xFF];
-    }
-
-    while (i < L + 3) C = C >>> 8 ^ T[(C ^ buf[i++]) & 0xFF];
-
-    return C ^ -1;
-  }
-
-  function crc32_buf_8(buf, seed) {
-    var C = seed ^ -1,
-        L = buf.length - 7;
-
-    for (var i = 0; i < L;) {
-      C = C >>> 8 ^ T[(C ^ buf[i++]) & 0xFF];
-      C = C >>> 8 ^ T[(C ^ buf[i++]) & 0xFF];
-      C = C >>> 8 ^ T[(C ^ buf[i++]) & 0xFF];
-      C = C >>> 8 ^ T[(C ^ buf[i++]) & 0xFF];
-      C = C >>> 8 ^ T[(C ^ buf[i++]) & 0xFF];
-      C = C >>> 8 ^ T[(C ^ buf[i++]) & 0xFF];
-      C = C >>> 8 ^ T[(C ^ buf[i++]) & 0xFF];
-      C = C >>> 8 ^ T[(C ^ buf[i++]) & 0xFF];
-    }
-
-    while (i < L + 7) C = C >>> 8 ^ T[(C ^ buf[i++]) & 0xFF];
-
-    return C ^ -1;
-  }
-
-  function crc32_str(str, seed) {
-    var C = seed ^ -1;
-
-    for (var i = 0, L = str.length, c, d; i < L;) {
-      c = str.charCodeAt(i++);
-
-      if (c < 0x80) {
-        C = C >>> 8 ^ T[(C ^ c) & 0xFF];
-      } else if (c < 0x800) {
-        C = C >>> 8 ^ T[(C ^ (192 | c >> 6 & 31)) & 0xFF];
-        C = C >>> 8 ^ T[(C ^ (128 | c & 63)) & 0xFF];
-      } else if (c >= 0xD800 && c < 0xE000) {
-        c = (c & 1023) + 64;
-        d = str.charCodeAt(i++) & 1023;
-        C = C >>> 8 ^ T[(C ^ (240 | c >> 8 & 7)) & 0xFF];
-        C = C >>> 8 ^ T[(C ^ (128 | c >> 2 & 63)) & 0xFF];
-        C = C >>> 8 ^ T[(C ^ (128 | d >> 6 & 15 | (c & 3) << 4)) & 0xFF];
-        C = C >>> 8 ^ T[(C ^ (128 | d & 63)) & 0xFF];
-      } else {
-        C = C >>> 8 ^ T[(C ^ (224 | c >> 12 & 15)) & 0xFF];
-        C = C >>> 8 ^ T[(C ^ (128 | c >> 6 & 63)) & 0xFF];
-        C = C >>> 8 ^ T[(C ^ (128 | c & 63)) & 0xFF];
-      }
-    }
-
-    return C ^ -1;
-  }
-
-  CRC32.table = T;
-  CRC32.bstr = crc32_bstr;
-  CRC32.buf = crc32_buf;
-  CRC32.str = crc32_str;
-});
-/* [MS-CFB] v20171201 */
-
-
-var CFB = function _CFB() {
-  var exports = {};
-  exports.version = '1.2.0';
-  /* [MS-CFB] 2.6.4 */
-
-  function namecmp(l, r) {
-    var L = l.split("/"),
-        R = r.split("/");
-
-    for (var i = 0, c = 0, Z = Math.min(L.length, R.length); i < Z; ++i) {
-      if (c = L[i].length - R[i].length) return c;
-      if (L[i] != R[i]) return L[i] < R[i] ? -1 : 1;
-    }
-
-    return L.length - R.length;
-  }
-
-  function dirname(p) {
-    if (p.charAt(p.length - 1) == "/") return p.slice(0, -1).indexOf("/") === -1 ? p : dirname(p.slice(0, -1));
-    var c = p.lastIndexOf("/");
-    return c === -1 ? p : p.slice(0, c + 1);
-  }
-
-  function filename(p) {
-    if (p.charAt(p.length - 1) == "/") return filename(p.slice(0, -1));
-    var c = p.lastIndexOf("/");
-    return c === -1 ? p : p.slice(c + 1);
-  }
-  /* -------------------------------------------------------------------------- */
-
-  /* DOS Date format:
-     high|YYYYYYYm.mmmddddd.HHHHHMMM.MMMSSSSS|low
-     add 1980 to stored year
-     stored second should be doubled
-  */
-
-  /* write JS date to buf as a DOS date */
-
-
-  function write_dos_date(buf, date) {
-    if (typeof date === "string") date = new Date(date);
-    var hms = date.getHours();
-    hms = hms << 6 | date.getMinutes();
-    hms = hms << 5 | date.getSeconds() >>> 1;
-    buf.write_shift(2, hms);
-    var ymd = date.getFullYear() - 1980;
-    ymd = ymd << 4 | date.getMonth() + 1;
-    ymd = ymd << 5 | date.getDate();
-    buf.write_shift(2, ymd);
-  }
-  /* read four bytes from buf and interpret as a DOS date */
-
-
-  function parse_dos_date(buf) {
-    var hms = buf.read_shift(2) & 0xFFFF;
-    var ymd = buf.read_shift(2) & 0xFFFF;
-    var val = new Date();
-    var d = ymd & 0x1F;
-    ymd >>>= 5;
-    var m = ymd & 0x0F;
-    ymd >>>= 4;
-    val.setMilliseconds(0);
-    val.setFullYear(ymd + 1980);
-    val.setMonth(m - 1);
-    val.setDate(d);
-    var S = hms & 0x1F;
-    hms >>>= 5;
-    var M = hms & 0x3F;
-    hms >>>= 6;
-    val.setHours(hms);
-    val.setMinutes(M);
-    val.setSeconds(S << 1);
-    return val;
-  }
-
-  function parse_extra_field(blob) {
-    prep_blob(blob, 0);
-    var o = {};
-    var flags = 0;
-
-    while (blob.l <= blob.length - 4) {
-      var type = blob.read_shift(2);
-      var sz = blob.read_shift(2),
-          tgt = blob.l + sz;
-      var p = {};
-
-      switch (type) {
-        /* UNIX-style Timestamps */
-        case 0x5455:
-          {
-            flags = blob.read_shift(1);
-            if (flags & 1) p.mtime = blob.read_shift(4);
-            /* for some reason, CD flag corresponds to LFH */
-
-            if (sz > 5) {
-              if (flags & 2) p.atime = blob.read_shift(4);
-              if (flags & 4) p.ctime = blob.read_shift(4);
-            }
-
-            if (p.mtime) p.mt = new Date(p.mtime * 1000);
-          }
-          break;
-      }
-
-      blob.l = tgt;
-      o[type] = p;
-    }
-
-    return o;
-  }
-
-  var fs;
-
-  function get_fs() {
-    return fs || (fs = require$$0);
-  }
-
-  function parse(file, options) {
-    if (file[0] == 0x50 && file[1] == 0x4b) return parse_zip(file, options);
-    if ((file[0] | 0x20) == 0x6d && (file[1] | 0x20) == 0x69) return parse_mad(file, options);
-    if (file.length < 512) throw new Error("CFB file size " + file.length + " < 512");
-    var mver = 3;
-    var ssz = 512;
-    var nmfs = 0; // number of mini FAT sectors
-
-    var difat_sec_cnt = 0;
-    var dir_start = 0;
-    var minifat_start = 0;
-    var difat_start = 0;
-    var fat_addrs = []; // locations of FAT sectors
-
-    /* [MS-CFB] 2.2 Compound File Header */
-
-    var blob = file.slice(0, 512);
-    prep_blob(blob, 0);
-    /* major version */
-
-    var mv = check_get_mver(blob);
-    mver = mv[0];
-
-    switch (mver) {
-      case 3:
-        ssz = 512;
-        break;
-
-      case 4:
-        ssz = 4096;
-        break;
-
-      case 0:
-        if (mv[1] == 0) return parse_zip(file, options);
-
-      /* falls through */
-
-      default:
-        throw new Error("Major Version: Expected 3 or 4 saw " + mver);
-    }
-    /* reprocess header */
-
-
-    if (ssz !== 512) {
-      blob = file.slice(0, ssz);
-      prep_blob(blob, 28
-      /* blob.l */
-      );
-    }
-    /* Save header for final object */
-
-
-    var header = file.slice(0, ssz);
-    check_shifts(blob, mver); // Number of Directory Sectors
-
-    var dir_cnt = blob.read_shift(4, 'i');
-    if (mver === 3 && dir_cnt !== 0) throw new Error('# Directory Sectors: Expected 0 saw ' + dir_cnt); // Number of FAT Sectors
-
-    blob.l += 4; // First Directory Sector Location
-
-    dir_start = blob.read_shift(4, 'i'); // Transaction Signature
-
-    blob.l += 4; // Mini Stream Cutoff Size
-
-    blob.chk('00100000', 'Mini Stream Cutoff Size: '); // First Mini FAT Sector Location
-
-    minifat_start = blob.read_shift(4, 'i'); // Number of Mini FAT Sectors
-
-    nmfs = blob.read_shift(4, 'i'); // First DIFAT sector location
-
-    difat_start = blob.read_shift(4, 'i'); // Number of DIFAT Sectors
-
-    difat_sec_cnt = blob.read_shift(4, 'i'); // Grab FAT Sector Locations
-
-    for (var q = -1, j = 0; j < 109; ++j) {
-      /* 109 = (512 - blob.l)>>>2; */
-      q = blob.read_shift(4, 'i');
-      if (q < 0) break;
-      fat_addrs[j] = q;
-    }
-    /** Break the file up into sectors */
-
-
-    var sectors = sectorify(file, ssz);
-    sleuth_fat(difat_start, difat_sec_cnt, sectors, ssz, fat_addrs);
-    /** Chains */
-
-    var sector_list = make_sector_list(sectors, dir_start, fat_addrs, ssz);
-    sector_list[dir_start].name = "!Directory";
-    if (nmfs > 0 && minifat_start !== ENDOFCHAIN) sector_list[minifat_start].name = "!MiniFAT";
-    sector_list[fat_addrs[0]].name = "!FAT";
-    sector_list.fat_addrs = fat_addrs;
-    sector_list.ssz = ssz;
-    /* [MS-CFB] 2.6.1 Compound File Directory Entry */
-
-    var files = {},
-        Paths = [],
-        FileIndex = [],
-        FullPaths = [];
-    read_directory(dir_start, sector_list, sectors, Paths, nmfs, files, FileIndex, minifat_start);
-    build_full_paths(FileIndex, FullPaths, Paths);
-    Paths.shift();
-    var o = {
-      FileIndex: FileIndex,
-      FullPaths: FullPaths
-    }; // $FlowIgnore
-
-    if (options && options.raw) o.raw = {
-      header: header,
-      sectors: sectors
-    };
-    return o;
-  } // parse
-
-  /* [MS-CFB] 2.2 Compound File Header -- read up to major version */
-
-
-  function check_get_mver(blob) {
-    if (blob[blob.l] == 0x50 && blob[blob.l + 1] == 0x4b) return [0, 0]; // header signature 8
-
-    blob.chk(HEADER_SIGNATURE, 'Header Signature: '); // clsid 16
-    //blob.chk(HEADER_CLSID, 'CLSID: ');
-
-    blob.l += 16; // minor version 2
-
-    var mver = blob.read_shift(2, 'u');
-    return [blob.read_shift(2, 'u'), mver];
-  }
-
-  function check_shifts(blob, mver) {
-    var shift = 0x09; // Byte Order
-    //blob.chk('feff', 'Byte Order: '); // note: some writers put 0xffff
-
-    blob.l += 2; // Sector Shift
-
-    switch (shift = blob.read_shift(2)) {
-      case 0x09:
-        if (mver != 3) throw new Error('Sector Shift: Expected 9 saw ' + shift);
-        break;
-
-      case 0x0c:
-        if (mver != 4) throw new Error('Sector Shift: Expected 12 saw ' + shift);
-        break;
-
-      default:
-        throw new Error('Sector Shift: Expected 9 or 12 saw ' + shift);
-    } // Mini Sector Shift
-
-
-    blob.chk('0600', 'Mini Sector Shift: '); // Reserved
-
-    blob.chk('000000000000', 'Reserved: ');
-  }
-  /** Break the file up into sectors */
-
-
-  function sectorify(file, ssz) {
-    var nsectors = Math.ceil(file.length / ssz) - 1;
-    var sectors = [];
-
-    for (var i = 1; i < nsectors; ++i) sectors[i - 1] = file.slice(i * ssz, (i + 1) * ssz);
-
-    sectors[nsectors - 1] = file.slice(nsectors * ssz);
-    return sectors;
-  }
-  /* [MS-CFB] 2.6.4 Red-Black Tree */
-
-
-  function build_full_paths(FI, FP, Paths) {
-    var i = 0,
-        L = 0,
-        R = 0,
-        C = 0,
-        j = 0,
-        pl = Paths.length;
-    var dad = [],
-        q = [];
-
-    for (; i < pl; ++i) {
-      dad[i] = q[i] = i;
-      FP[i] = Paths[i];
-    }
-
-    for (; j < q.length; ++j) {
-      i = q[j];
-      L = FI[i].L;
-      R = FI[i].R;
-      C = FI[i].C;
-
-      if (dad[i] === i) {
-        if (L !== -1
-        /*NOSTREAM*/
-        && dad[L] !== L) dad[i] = dad[L];
-        if (R !== -1 && dad[R] !== R) dad[i] = dad[R];
-      }
-
-      if (C !== -1
-      /*NOSTREAM*/
-      ) dad[C] = i;
-
-      if (L !== -1 && i != dad[i]) {
-        dad[L] = dad[i];
-        if (q.lastIndexOf(L) < j) q.push(L);
-      }
-
-      if (R !== -1 && i != dad[i]) {
-        dad[R] = dad[i];
-        if (q.lastIndexOf(R) < j) q.push(R);
-      }
-    }
-
-    for (i = 1; i < pl; ++i) if (dad[i] === i) {
-      if (R !== -1
-      /*NOSTREAM*/
-      && dad[R] !== R) dad[i] = dad[R];else if (L !== -1 && dad[L] !== L) dad[i] = dad[L];
-    }
-
-    for (i = 1; i < pl; ++i) {
-      if (FI[i].type === 0
-      /* unknown */
-      ) continue;
-      j = i;
-      if (j != dad[j]) do {
-        j = dad[j];
-        FP[i] = FP[j] + "/" + FP[i];
-      } while (j !== 0 && -1 !== dad[j] && j != dad[j]);
-      dad[i] = -1;
-    }
-
-    FP[0] += "/";
-
-    for (i = 1; i < pl; ++i) {
-      if (FI[i].type !== 2
-      /* stream */
-      ) FP[i] += "/";
-    }
-  }
-
-  function get_mfat_entry(entry, payload, mini) {
-    var start = entry.start,
-        size = entry.size; //return (payload.slice(start*MSSZ, start*MSSZ + size));
-
-    var o = [];
-    var idx = start;
-
-    while (mini && size > 0 && idx >= 0) {
-      o.push(payload.slice(idx * MSSZ, idx * MSSZ + MSSZ));
-      size -= MSSZ;
-      idx = __readInt32LE(mini, idx * 4);
-    }
-
-    if (o.length === 0) return new_buf(0);
-    return bconcat(o).slice(0, entry.size);
-  }
-  /** Chase down the rest of the DIFAT chain to build a comprehensive list
-      DIFAT chains by storing the next sector number as the last 32 bits */
-
-
-  function sleuth_fat(idx, cnt, sectors, ssz, fat_addrs) {
-    var q = ENDOFCHAIN;
-
-    if (idx === ENDOFCHAIN) {
-      if (cnt !== 0) throw new Error("DIFAT chain shorter than expected");
-    } else if (idx !== -1
-    /*FREESECT*/
-    ) {
-        var sector = sectors[idx],
-            m = (ssz >>> 2) - 1;
-        if (!sector) return;
-
-        for (var i = 0; i < m; ++i) {
-          if ((q = __readInt32LE(sector, i * 4)) === ENDOFCHAIN) break;
-          fat_addrs.push(q);
-        }
-
-        sleuth_fat(__readInt32LE(sector, ssz - 4), cnt - 1, sectors, ssz, fat_addrs);
-      }
-  }
-  /** Follow the linked list of sectors for a given starting point */
-
-
-  function get_sector_list(sectors, start, fat_addrs, ssz, chkd) {
-    var buf = [],
-        buf_chain = [];
-    if (!chkd) chkd = [];
-    var modulus = ssz - 1,
-        j = 0,
-        jj = 0;
-
-    for (j = start; j >= 0;) {
-      chkd[j] = true;
-      buf[buf.length] = j;
-      buf_chain.push(sectors[j]);
-      var addr = fat_addrs[Math.floor(j * 4 / ssz)];
-      jj = j * 4 & modulus;
-      if (ssz < 4 + jj) throw new Error("FAT boundary crossed: " + j + " 4 " + ssz);
-      if (!sectors[addr]) break;
-      j = __readInt32LE(sectors[addr], jj);
-    }
-
-    return {
-      nodes: buf,
-      data: __toBuffer([buf_chain])
-    };
-  }
-  /** Chase down the sector linked lists */
-
-
-  function make_sector_list(sectors, dir_start, fat_addrs, ssz) {
-    var sl = sectors.length,
-        sector_list = [];
-    var chkd = [],
-        buf = [],
-        buf_chain = [];
-    var modulus = ssz - 1,
-        i = 0,
-        j = 0,
-        k = 0,
-        jj = 0;
-
-    for (i = 0; i < sl; ++i) {
-      buf = [];
-      k = i + dir_start;
-      if (k >= sl) k -= sl;
-      if (chkd[k]) continue;
-      buf_chain = [];
-      var seen = [];
-
-      for (j = k; j >= 0;) {
-        seen[j] = true;
-        chkd[j] = true;
-        buf[buf.length] = j;
-        buf_chain.push(sectors[j]);
-        var addr = fat_addrs[Math.floor(j * 4 / ssz)];
-        jj = j * 4 & modulus;
-        if (ssz < 4 + jj) throw new Error("FAT boundary crossed: " + j + " 4 " + ssz);
-        if (!sectors[addr]) break;
-        j = __readInt32LE(sectors[addr], jj);
-        if (seen[j]) break;
-      }
-
-      sector_list[k] = {
-        nodes: buf,
-        data: __toBuffer([buf_chain])
-      };
-    }
-
-    return sector_list;
-  }
-  /* [MS-CFB] 2.6.1 Compound File Directory Entry */
-
-
-  function read_directory(dir_start, sector_list, sectors, Paths, nmfs, files, FileIndex, mini) {
-    var minifat_store = 0,
-        pl = Paths.length ? 2 : 0;
-    var sector = sector_list[dir_start].data;
-    var i = 0,
-        namelen = 0,
-        name;
-
-    for (; i < sector.length; i += 128) {
-      var blob = sector.slice(i, i + 128);
-      prep_blob(blob, 64);
-      namelen = blob.read_shift(2);
-      name = __utf16le(blob, 0, namelen - pl);
-      Paths.push(name);
-      var o = {
-        name: name,
-        type: blob.read_shift(1),
-        color: blob.read_shift(1),
-        L: blob.read_shift(4, 'i'),
-        R: blob.read_shift(4, 'i'),
-        C: blob.read_shift(4, 'i'),
-        clsid: blob.read_shift(16),
-        state: blob.read_shift(4, 'i'),
-        start: 0,
-        size: 0
-      };
-      var ctime = blob.read_shift(2) + blob.read_shift(2) + blob.read_shift(2) + blob.read_shift(2);
-      if (ctime !== 0) o.ct = read_date(blob, blob.l - 8);
-      var mtime = blob.read_shift(2) + blob.read_shift(2) + blob.read_shift(2) + blob.read_shift(2);
-      if (mtime !== 0) o.mt = read_date(blob, blob.l - 8);
-      o.start = blob.read_shift(4, 'i');
-      o.size = blob.read_shift(4, 'i');
-
-      if (o.size < 0 && o.start < 0) {
-        o.size = o.type = 0;
-        o.start = ENDOFCHAIN;
-        o.name = "";
-      }
-
-      if (o.type === 5) {
-        /* root */
-        minifat_store = o.start;
-        if (nmfs > 0 && minifat_store !== ENDOFCHAIN) sector_list[minifat_store].name = "!StreamData";
-        /*minifat_size = o.size;*/
-      } else if (o.size >= 4096
-      /* MSCSZ */
-      ) {
-          o.storage = 'fat';
-          if (sector_list[o.start] === undefined) sector_list[o.start] = get_sector_list(sectors, o.start, sector_list.fat_addrs, sector_list.ssz);
-          sector_list[o.start].name = o.name;
-          o.content = sector_list[o.start].data.slice(0, o.size);
-        } else {
-        o.storage = 'minifat';
-        if (o.size < 0) o.size = 0;else if (minifat_store !== ENDOFCHAIN && o.start !== ENDOFCHAIN && sector_list[minifat_store]) {
-          o.content = get_mfat_entry(o, sector_list[minifat_store].data, (sector_list[mini] || {}).data);
-        }
-      }
-
-      if (o.content) prep_blob(o.content, 0);
-      files[name] = o;
-      FileIndex.push(o);
-    }
-  }
-
-  function read_date(blob, offset) {
-    return new Date((__readUInt32LE(blob, offset + 4) / 1e7 * Math.pow(2, 32) + __readUInt32LE(blob, offset) / 1e7 - 11644473600) * 1000);
-  }
-
-  function read_file(filename, options) {
-    get_fs();
-    return parse(fs.readFileSync(filename), options);
-  }
-
-  function read(blob, options) {
-    switch (options && options.type || "base64") {
-      case "file":
-        return read_file(blob, options);
-
-      case "base64":
-        return parse(s2a(Base64.decode(blob)), options);
-
-      case "binary":
-        return parse(s2a(blob), options);
-    }
-
-    return parse(blob, options);
-  }
-
-  function init_cfb(cfb, opts) {
-    var o = opts || {},
-        root = o.root || "Root Entry";
-    if (!cfb.FullPaths) cfb.FullPaths = [];
-    if (!cfb.FileIndex) cfb.FileIndex = [];
-    if (cfb.FullPaths.length !== cfb.FileIndex.length) throw new Error("inconsistent CFB structure");
-
-    if (cfb.FullPaths.length === 0) {
-      cfb.FullPaths[0] = root + "/";
-      cfb.FileIndex[0] = {
-        name: root,
-        type: 5
-      };
-    }
-
-    if (o.CLSID) cfb.FileIndex[0].clsid = o.CLSID;
-    seed_cfb(cfb);
-  }
-
-  function seed_cfb(cfb) {
-    var nm = "\u0001Sh33tJ5";
-    if (CFB.find(cfb, "/" + nm)) return;
-    var p = new_buf(4);
-    p[0] = 55;
-    p[1] = p[3] = 50;
-    p[2] = 54;
-    cfb.FileIndex.push({
-      name: nm,
-      type: 2,
-      content: p,
-      size: 4,
-      L: 69,
-      R: 69,
-      C: 69
-    });
-    cfb.FullPaths.push(cfb.FullPaths[0] + nm);
-    rebuild_cfb(cfb);
-  }
-
-  function rebuild_cfb(cfb, f) {
-    init_cfb(cfb);
-    var gc = false,
-        s = false;
-
-    for (var i = cfb.FullPaths.length - 1; i >= 0; --i) {
-      var _file = cfb.FileIndex[i];
-
-      switch (_file.type) {
-        case 0:
-          if (s) gc = true;else {
-            cfb.FileIndex.pop();
-            cfb.FullPaths.pop();
-          }
-          break;
-
-        case 1:
-        case 2:
-        case 5:
-          s = true;
-          if (isNaN(_file.R * _file.L * _file.C)) gc = true;
-          if (_file.R > -1 && _file.L > -1 && _file.R == _file.L) gc = true;
-          break;
-
-        default:
-          gc = true;
-          break;
-      }
-    }
-
-    if (!gc && !f) return;
-    var now = new Date(1987, 1, 19),
-        j = 0;
-    var data = [];
-
-    for (i = 0; i < cfb.FullPaths.length; ++i) {
-      if (cfb.FileIndex[i].type === 0) continue;
-      data.push([cfb.FullPaths[i], cfb.FileIndex[i]]);
-    }
-
-    for (i = 0; i < data.length; ++i) {
-      var dad = dirname(data[i][0]);
-      s = false;
-
-      for (j = 0; j < data.length; ++j) if (data[j][0] === dad) s = true;
-
-      if (!s) data.push([dad, {
-        name: filename(dad).replace("/", ""),
-        type: 1,
-        clsid: HEADER_CLSID,
-        ct: now,
-        mt: now,
-        content: null
-      }]);
-    }
-
-    data.sort(function (x, y) {
-      return namecmp(x[0], y[0]);
-    });
-    cfb.FullPaths = [];
-    cfb.FileIndex = [];
-
-    for (i = 0; i < data.length; ++i) {
-      cfb.FullPaths[i] = data[i][0];
-      cfb.FileIndex[i] = data[i][1];
-    }
-
-    for (i = 0; i < data.length; ++i) {
-      var elt = cfb.FileIndex[i];
-      var nm = cfb.FullPaths[i];
-      elt.name = filename(nm).replace("/", "");
-      elt.L = elt.R = elt.C = -(elt.color = 1);
-      elt.size = elt.content ? elt.content.length : 0;
-      elt.start = 0;
-      elt.clsid = elt.clsid || HEADER_CLSID;
-
-      if (i === 0) {
-        elt.C = data.length > 1 ? 1 : -1;
-        elt.size = 0;
-        elt.type = 5;
-      } else if (nm.slice(-1) == "/") {
-        for (j = i + 1; j < data.length; ++j) if (dirname(cfb.FullPaths[j]) == nm) break;
-
-        elt.C = j >= data.length ? -1 : j;
-
-        for (j = i + 1; j < data.length; ++j) if (dirname(cfb.FullPaths[j]) == dirname(nm)) break;
-
-        elt.R = j >= data.length ? -1 : j;
-        elt.type = 1;
-      } else {
-        if (dirname(cfb.FullPaths[i + 1] || "") == dirname(nm)) elt.R = i + 1;
-        elt.type = 2;
-      }
-    }
-  }
-
-  function _write(cfb, options) {
-    var _opts = options || {};
-    /* MAD is order-sensitive, skip rebuild and sort */
-
-
-    if (_opts.fileType == 'mad') return write_mad(cfb, _opts);
-    rebuild_cfb(cfb);
-
-    switch (_opts.fileType) {
-      case 'zip':
-        return write_zip(cfb, _opts);
-      //case 'mad': return write_mad(cfb, _opts);
-    }
-
-    var L = function (cfb) {
-      var mini_size = 0,
-          fat_size = 0;
-
-      for (var i = 0; i < cfb.FileIndex.length; ++i) {
-        var file = cfb.FileIndex[i];
-        if (!file.content) continue;
-        var flen = file.content.length;
-
-        if (flen > 0) {
-          if (flen < 0x1000) mini_size += flen + 0x3F >> 6;else fat_size += flen + 0x01FF >> 9;
-        }
-      }
-
-      var dir_cnt = cfb.FullPaths.length + 3 >> 2;
-      var mini_cnt = mini_size + 7 >> 3;
-      var mfat_cnt = mini_size + 0x7F >> 7;
-      var fat_base = mini_cnt + fat_size + dir_cnt + mfat_cnt;
-      var fat_cnt = fat_base + 0x7F >> 7;
-      var difat_cnt = fat_cnt <= 109 ? 0 : Math.ceil((fat_cnt - 109) / 0x7F);
-
-      while (fat_base + fat_cnt + difat_cnt + 0x7F >> 7 > fat_cnt) difat_cnt = ++fat_cnt <= 109 ? 0 : Math.ceil((fat_cnt - 109) / 0x7F);
-
-      var L = [1, difat_cnt, fat_cnt, mfat_cnt, dir_cnt, fat_size, mini_size, 0];
-      cfb.FileIndex[0].size = mini_size << 6;
-      L[7] = (cfb.FileIndex[0].start = L[0] + L[1] + L[2] + L[3] + L[4] + L[5]) + (L[6] + 7 >> 3);
-      return L;
-    }(cfb);
-
-    var o = new_buf(L[7] << 9);
-    var i = 0,
-        T = 0;
-    {
-      for (i = 0; i < 8; ++i) o.write_shift(1, HEADER_SIG[i]);
-
-      for (i = 0; i < 8; ++i) o.write_shift(2, 0);
-
-      o.write_shift(2, 0x003E);
-      o.write_shift(2, 0x0003);
-      o.write_shift(2, 0xFFFE);
-      o.write_shift(2, 0x0009);
-      o.write_shift(2, 0x0006);
-
-      for (i = 0; i < 3; ++i) o.write_shift(2, 0);
-
-      o.write_shift(4, 0);
-      o.write_shift(4, L[2]);
-      o.write_shift(4, L[0] + L[1] + L[2] + L[3] - 1);
-      o.write_shift(4, 0);
-      o.write_shift(4, 1 << 12);
-      o.write_shift(4, L[3] ? L[0] + L[1] + L[2] - 1 : ENDOFCHAIN);
-      o.write_shift(4, L[3]);
-      o.write_shift(-4, L[1] ? L[0] - 1 : ENDOFCHAIN);
-      o.write_shift(4, L[1]);
-
-      for (i = 0; i < 109; ++i) o.write_shift(-4, i < L[2] ? L[1] + i : -1);
-    }
-
-    if (L[1]) {
-      for (T = 0; T < L[1]; ++T) {
-        for (; i < 236 + T * 127; ++i) o.write_shift(-4, i < L[2] ? L[1] + i : -1);
-
-        o.write_shift(-4, T === L[1] - 1 ? ENDOFCHAIN : T + 1);
-      }
-    }
-
-    var chainit = function (w) {
-      for (T += w; i < T - 1; ++i) o.write_shift(-4, i + 1);
-
-      if (w) {
-        ++i;
-        o.write_shift(-4, ENDOFCHAIN);
-      }
-    };
-
-    T = i = 0;
-
-    for (T += L[1]; i < T; ++i) o.write_shift(-4, consts.DIFSECT);
-
-    for (T += L[2]; i < T; ++i) o.write_shift(-4, consts.FATSECT);
-
-    chainit(L[3]);
-    chainit(L[4]);
-    var j = 0,
-        flen = 0;
-    var file = cfb.FileIndex[0];
-
-    for (; j < cfb.FileIndex.length; ++j) {
-      file = cfb.FileIndex[j];
-      if (!file.content) continue;
-      flen = file.content.length;
-      if (flen < 0x1000) continue;
-      file.start = T;
-      chainit(flen + 0x01FF >> 9);
-    }
-
-    chainit(L[6] + 7 >> 3);
-
-    while (o.l & 0x1FF) o.write_shift(-4, consts.ENDOFCHAIN);
-
-    T = i = 0;
-
-    for (j = 0; j < cfb.FileIndex.length; ++j) {
-      file = cfb.FileIndex[j];
-      if (!file.content) continue;
-      flen = file.content.length;
-      if (!flen || flen >= 0x1000) continue;
-      file.start = T;
-      chainit(flen + 0x3F >> 6);
-    }
-
-    while (o.l & 0x1FF) o.write_shift(-4, consts.ENDOFCHAIN);
-
-    for (i = 0; i < L[4] << 2; ++i) {
-      var nm = cfb.FullPaths[i];
-
-      if (!nm || nm.length === 0) {
-        for (j = 0; j < 17; ++j) o.write_shift(4, 0);
-
-        for (j = 0; j < 3; ++j) o.write_shift(4, -1);
-
-        for (j = 0; j < 12; ++j) o.write_shift(4, 0);
-
-        continue;
-      }
-
-      file = cfb.FileIndex[i];
-      if (i === 0) file.start = file.size ? file.start - 1 : ENDOFCHAIN;
-
-      var _nm = i === 0 && _opts.root || file.name;
-
-      flen = 2 * (_nm.length + 1);
-      o.write_shift(64, _nm, "utf16le");
-      o.write_shift(2, flen);
-      o.write_shift(1, file.type);
-      o.write_shift(1, file.color);
-      o.write_shift(-4, file.L);
-      o.write_shift(-4, file.R);
-      o.write_shift(-4, file.C);
-      if (!file.clsid) for (j = 0; j < 4; ++j) o.write_shift(4, 0);else o.write_shift(16, file.clsid, "hex");
-      o.write_shift(4, file.state || 0);
-      o.write_shift(4, 0);
-      o.write_shift(4, 0);
-      o.write_shift(4, 0);
-      o.write_shift(4, 0);
-      o.write_shift(4, file.start);
-      o.write_shift(4, file.size);
-      o.write_shift(4, 0);
-    }
-
-    for (i = 1; i < cfb.FileIndex.length; ++i) {
-      file = cfb.FileIndex[i];
-
-      if (file.size >= 0x1000) {
-        o.l = file.start + 1 << 9;
-
-        for (j = 0; j < file.size; ++j) o.write_shift(1, file.content[j]);
-
-        for (; j & 0x1FF; ++j) o.write_shift(1, 0);
-      }
-    }
-
-    for (i = 1; i < cfb.FileIndex.length; ++i) {
-      file = cfb.FileIndex[i];
-
-      if (file.size > 0 && file.size < 0x1000) {
-        for (j = 0; j < file.size; ++j) o.write_shift(1, file.content[j]);
-
-        for (; j & 0x3F; ++j) o.write_shift(1, 0);
-      }
-    }
-
-    while (o.l < o.length) o.write_shift(1, 0);
-
-    return o;
-  }
-  /* [MS-CFB] 2.6.4 (Unicode 3.0.1 case conversion) */
-
-
-  function find(cfb, path) {
-    var UCFullPaths = cfb.FullPaths.map(function (x) {
-      return x.toUpperCase();
-    });
-    var UCPaths = UCFullPaths.map(function (x) {
-      var y = x.split("/");
-      return y[y.length - (x.slice(-1) == "/" ? 2 : 1)];
-    });
-    var k = false;
-
-    if (path.charCodeAt(0) === 47
-    /* "/" */
-    ) {
-        k = true;
-        path = UCFullPaths[0].slice(0, -1) + path;
-      } else k = path.indexOf("/") !== -1;
-
-    var UCPath = path.toUpperCase();
-    var w = k === true ? UCFullPaths.indexOf(UCPath) : UCPaths.indexOf(UCPath);
-    if (w !== -1) return cfb.FileIndex[w];
-    var m = !UCPath.match(chr1);
-    UCPath = UCPath.replace(chr0, '');
-    if (m) UCPath = UCPath.replace(chr1, '!');
-
-    for (w = 0; w < UCFullPaths.length; ++w) {
-      if ((m ? UCFullPaths[w].replace(chr1, '!') : UCFullPaths[w]).replace(chr0, '') == UCPath) return cfb.FileIndex[w];
-      if ((m ? UCPaths[w].replace(chr1, '!') : UCPaths[w]).replace(chr0, '') == UCPath) return cfb.FileIndex[w];
-    }
-
-    return null;
-  }
-  /** CFB Constants */
-
-
-  var MSSZ = 64;
-  /* Mini Sector Size = 1<<6 */
-  //var MSCSZ = 4096; /* Mini Stream Cutoff Size */
-
-  /* 2.1 Compound File Sector Numbers and Types */
-
-  var ENDOFCHAIN = -2;
-  /* 2.2 Compound File Header */
-
-  var HEADER_SIGNATURE = 'd0cf11e0a1b11ae1';
-  var HEADER_SIG = [0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1];
-  var HEADER_CLSID = '00000000000000000000000000000000';
-  var consts = {
-    /* 2.1 Compund File Sector Numbers and Types */
-    MAXREGSECT: -6,
-    DIFSECT: -4,
-    FATSECT: -3,
-    ENDOFCHAIN: ENDOFCHAIN,
-    FREESECT: -1,
-
-    /* 2.2 Compound File Header */
-    HEADER_SIGNATURE: HEADER_SIGNATURE,
-    HEADER_MINOR_VERSION: '3e00',
-    MAXREGSID: -6,
-    NOSTREAM: -1,
-    HEADER_CLSID: HEADER_CLSID,
-
-    /* 2.6.1 Compound File Directory Entry */
-    EntryTypes: ['unknown', 'storage', 'stream', 'lockbytes', 'property', 'root']
-  };
-
-  function write_file(cfb, filename, options) {
-    get_fs();
-
-    var o = _write(cfb, options);
-
-    fs.writeFileSync(filename, o);
-  }
-
-  function a2s(o) {
-    var out = new Array(o.length);
-
-    for (var i = 0; i < o.length; ++i) out[i] = String.fromCharCode(o[i]);
-
-    return out.join("");
-  }
-
-  function write(cfb, options) {
-    var o = _write(cfb, options);
-
-    switch (options && options.type || "buffer") {
-      case "file":
-        get_fs();
-        fs.writeFileSync(options.filename, o);
-        return o;
-
-      case "binary":
-        return typeof o == "string" ? o : a2s(o);
-
-      case "base64":
-        return Base64.encode(typeof o == "string" ? o : a2s(o));
-
-      case "buffer":
-        if (has_buf) return Buffer.isBuffer(o) ? o : Buffer_from(o);
-
-      /* falls through */
-
-      case "array":
-        return typeof o == "string" ? s2a(o) : o;
-    }
-
-    return o;
-  }
-  /* node < 8.1 zlib does not expose bytesRead, so default to pure JS */
-
-
-  var _zlib;
-
-  function use_zlib(zlib) {
-    try {
-      var InflateRaw = zlib.InflateRaw;
-      var InflRaw = new InflateRaw();
-
-      InflRaw._processChunk(new Uint8Array([3, 0]), InflRaw._finishFlushFlag);
-
-      if (InflRaw.bytesRead) _zlib = zlib;else throw new Error("zlib does not expose bytesRead");
-    } catch (e) {
-      console.error("cannot use native zlib: " + (e.message || e));
-    }
-  }
-
-  function _inflateRawSync(payload, usz) {
-    if (!_zlib) return _inflate(payload, usz);
-    var InflateRaw = _zlib.InflateRaw;
-    var InflRaw = new InflateRaw();
-
-    var out = InflRaw._processChunk(payload.slice(payload.l), InflRaw._finishFlushFlag);
-
-    payload.l += InflRaw.bytesRead;
-    return out;
-  }
-
-  function _deflateRawSync(payload) {
-    return _zlib ? _zlib.deflateRawSync(payload) : _deflate(payload);
-  }
-
-  var CLEN_ORDER = [16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15];
-  /*  LEN_ID = [ 257, 258, 259, 260, 261, 262, 263, 264, 265, 266, 267, 268, 269, 270, 271, 272, 273, 274, 275, 276, 277, 278, 279, 280, 281, 282, 283, 284, 285 ]; */
-
-  var LEN_LN = [3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 15, 17, 19, 23, 27, 31, 35, 43, 51, 59, 67, 83, 99, 115, 131, 163, 195, 227, 258];
-  /*  DST_ID = [  0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13,  14,  15,  16,  17,  18,  19,   20,   21,   22,   23,   24,   25,   26,    27,    28,    29 ]; */
-
-  var DST_LN = [1, 2, 3, 4, 5, 7, 9, 13, 17, 25, 33, 49, 65, 97, 129, 193, 257, 385, 513, 769, 1025, 1537, 2049, 3073, 4097, 6145, 8193, 12289, 16385, 24577];
-
-  function bit_swap_8(n) {
-    var t = (n << 1 | n << 11) & 0x22110 | (n << 5 | n << 15) & 0x88440;
-    return (t >> 16 | t >> 8 | t) & 0xFF;
-  }
-
-  var use_typed_arrays = typeof Uint8Array !== 'undefined';
-  var bitswap8 = use_typed_arrays ? new Uint8Array(1 << 8) : [];
-
-  for (var q = 0; q < 1 << 8; ++q) bitswap8[q] = bit_swap_8(q);
-
-  function bit_swap_n(n, b) {
-    var rev = bitswap8[n & 0xFF];
-    if (b <= 8) return rev >>> 8 - b;
-    rev = rev << 8 | bitswap8[n >> 8 & 0xFF];
-    if (b <= 16) return rev >>> 16 - b;
-    rev = rev << 8 | bitswap8[n >> 16 & 0xFF];
-    return rev >>> 24 - b;
-  }
-  /* helpers for unaligned bit reads */
-
-
-  function read_bits_2(buf, bl) {
-    var w = bl & 7,
-        h = bl >>> 3;
-    return (buf[h] | (w <= 6 ? 0 : buf[h + 1] << 8)) >>> w & 0x03;
-  }
-
-  function read_bits_3(buf, bl) {
-    var w = bl & 7,
-        h = bl >>> 3;
-    return (buf[h] | (w <= 5 ? 0 : buf[h + 1] << 8)) >>> w & 0x07;
-  }
-
-  function read_bits_4(buf, bl) {
-    var w = bl & 7,
-        h = bl >>> 3;
-    return (buf[h] | (w <= 4 ? 0 : buf[h + 1] << 8)) >>> w & 0x0F;
-  }
-
-  function read_bits_5(buf, bl) {
-    var w = bl & 7,
-        h = bl >>> 3;
-    return (buf[h] | (w <= 3 ? 0 : buf[h + 1] << 8)) >>> w & 0x1F;
-  }
-
-  function read_bits_7(buf, bl) {
-    var w = bl & 7,
-        h = bl >>> 3;
-    return (buf[h] | (w <= 1 ? 0 : buf[h + 1] << 8)) >>> w & 0x7F;
-  }
-  /* works up to n = 3 * 8 + 1 = 25 */
-
-
-  function read_bits_n(buf, bl, n) {
-    var w = bl & 7,
-        h = bl >>> 3,
-        f = (1 << n) - 1;
-    var v = buf[h] >>> w;
-    if (n < 8 - w) return v & f;
-    v |= buf[h + 1] << 8 - w;
-    if (n < 16 - w) return v & f;
-    v |= buf[h + 2] << 16 - w;
-    if (n < 24 - w) return v & f;
-    v |= buf[h + 3] << 24 - w;
-    return v & f;
-  }
-  /* until ArrayBuffer#realloc is a thing, fake a realloc */
-
-
-  function realloc(b, sz) {
-    var L = b.length,
-        M = 2 * L > sz ? 2 * L : sz + 5,
-        i = 0;
-    if (L >= sz) return b;
-
-    if (has_buf) {
-      var o = new_unsafe_buf(M); // $FlowIgnore
-
-      if (b.copy) b.copy(o);else for (; i < b.length; ++i) o[i] = b[i];
-      return o;
-    } else if (use_typed_arrays) {
-      var a = new Uint8Array(M);
-      if (a.set) a.set(b);else for (; i < b.length; ++i) a[i] = b[i];
-      return a;
-    }
-
-    b.length = M;
-    return b;
-  }
-  /* zero-filled arrays for older browsers */
-
-
-  function zero_fill_array(n) {
-    var o = new Array(n);
-
-    for (var i = 0; i < n; ++i) o[i] = 0;
-
-    return o;
-  }
-
-  var _deflate = function () {
-    var _deflateRaw = function () {
-      return function deflateRaw(data, out) {
-        var boff = 0;
-
-        while (boff < data.length) {
-          var L = Math.min(0xFFFF, data.length - boff);
-          var h = boff + L == data.length;
-          /* TODO: this is only type 0 stored */
-
-          out.write_shift(1, +h);
-          out.write_shift(2, L);
-          out.write_shift(2, ~L & 0xFFFF);
-
-          while (L-- > 0) out[out.l++] = data[boff++];
-        }
-
-        return out.l;
-      };
-    }();
-
-    return function (data) {
-      var buf = new_buf(50 + Math.floor(data.length * 1.1));
-
-      var off = _deflateRaw(data, buf);
-
-      return buf.slice(0, off);
-    };
-  }();
-  /* modified inflate function also moves original read head */
-
-  /* build tree (used for literals and lengths) */
-
-
-  function build_tree(clens, cmap, MAX) {
-    var maxlen = 1,
-        w = 0,
-        i = 0,
-        j = 0,
-        ccode = 0,
-        L = clens.length;
-    var bl_count = use_typed_arrays ? new Uint16Array(32) : zero_fill_array(32);
-
-    for (i = 0; i < 32; ++i) bl_count[i] = 0;
-
-    for (i = L; i < MAX; ++i) clens[i] = 0;
-
-    L = clens.length;
-    var ctree = use_typed_arrays ? new Uint16Array(L) : zero_fill_array(L); // []
-
-    /* build code tree */
-
-    for (i = 0; i < L; ++i) {
-      bl_count[w = clens[i]]++;
-      if (maxlen < w) maxlen = w;
-      ctree[i] = 0;
-    }
-
-    bl_count[0] = 0;
-
-    for (i = 1; i <= maxlen; ++i) bl_count[i + 16] = ccode = ccode + bl_count[i - 1] << 1;
-
-    for (i = 0; i < L; ++i) {
-      ccode = clens[i];
-      if (ccode != 0) ctree[i] = bl_count[ccode + 16]++;
-    }
-    /* cmap[maxlen + 4 bits] = (off&15) + (lit<<4) reverse mapping */
-
-
-    var cleni = 0;
-
-    for (i = 0; i < L; ++i) {
-      cleni = clens[i];
-
-      if (cleni != 0) {
-        ccode = bit_swap_n(ctree[i], maxlen) >> maxlen - cleni;
-
-        for (j = (1 << maxlen + 4 - cleni) - 1; j >= 0; --j) cmap[ccode | j << cleni] = cleni & 15 | i << 4;
-      }
-    }
-
-    return maxlen;
-  }
-
-  var fix_lmap = use_typed_arrays ? new Uint16Array(512) : zero_fill_array(512);
-  var fix_dmap = use_typed_arrays ? new Uint16Array(32) : zero_fill_array(32);
-
-  if (!use_typed_arrays) {
-    for (var i = 0; i < 512; ++i) fix_lmap[i] = 0;
-
-    for (i = 0; i < 32; ++i) fix_dmap[i] = 0;
-  }
-
-  (function () {
-    var dlens = [];
-    var i = 0;
-
-    for (; i < 32; i++) dlens.push(5);
-
-    build_tree(dlens, fix_dmap, 32);
-    var clens = [];
-    i = 0;
-
-    for (; i <= 143; i++) clens.push(8);
-
-    for (; i <= 255; i++) clens.push(9);
-
-    for (; i <= 279; i++) clens.push(7);
-
-    for (; i <= 287; i++) clens.push(8);
-
-    build_tree(clens, fix_lmap, 288);
-  })();
-
-  var dyn_lmap = use_typed_arrays ? new Uint16Array(32768) : zero_fill_array(32768);
-  var dyn_dmap = use_typed_arrays ? new Uint16Array(32768) : zero_fill_array(32768);
-  var dyn_cmap = use_typed_arrays ? new Uint16Array(128) : zero_fill_array(128);
-  var dyn_len_1 = 1,
-      dyn_len_2 = 1;
-  /* 5.5.3 Expanding Huffman Codes */
-
-  function dyn(data, boff) {
-    /* nomenclature from RFC1951 refers to bit values; these are offset by the implicit constant */
-    var _HLIT = read_bits_5(data, boff) + 257;
-
-    boff += 5;
-
-    var _HDIST = read_bits_5(data, boff) + 1;
-
-    boff += 5;
-
-    var _HCLEN = read_bits_4(data, boff) + 4;
-
-    boff += 4;
-    var w = 0;
-    /* grab and store code lengths */
-
-    var clens = use_typed_arrays ? new Uint8Array(19) : zero_fill_array(19);
-    var ctree = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    var maxlen = 1;
-    var bl_count = use_typed_arrays ? new Uint8Array(8) : zero_fill_array(8);
-    var next_code = use_typed_arrays ? new Uint8Array(8) : zero_fill_array(8);
-    var L = clens.length;
-    /* 19 */
-
-    for (var i = 0; i < _HCLEN; ++i) {
-      clens[CLEN_ORDER[i]] = w = read_bits_3(data, boff);
-      if (maxlen < w) maxlen = w;
-      bl_count[w]++;
-      boff += 3;
-    }
-    /* build code tree */
-
-
-    var ccode = 0;
-    bl_count[0] = 0;
-
-    for (i = 1; i <= maxlen; ++i) next_code[i] = ccode = ccode + bl_count[i - 1] << 1;
-
-    for (i = 0; i < L; ++i) if ((ccode = clens[i]) != 0) ctree[i] = next_code[ccode]++;
-    /* cmap[7 bits from stream] = (off&7) + (lit<<3) */
-
-
-    var cleni = 0;
-
-    for (i = 0; i < L; ++i) {
-      cleni = clens[i];
-
-      if (cleni != 0) {
-        ccode = bitswap8[ctree[i]] >> 8 - cleni;
-
-        for (var j = (1 << 7 - cleni) - 1; j >= 0; --j) dyn_cmap[ccode | j << cleni] = cleni & 7 | i << 3;
-      }
-    }
-    /* read literal and dist codes at once */
-
-
-    var hcodes = [];
-    maxlen = 1;
-
-    for (; hcodes.length < _HLIT + _HDIST;) {
-      ccode = dyn_cmap[read_bits_7(data, boff)];
-      boff += ccode & 7;
-
-      switch (ccode >>>= 3) {
-        case 16:
-          w = 3 + read_bits_2(data, boff);
-          boff += 2;
-          ccode = hcodes[hcodes.length - 1];
-
-          while (w-- > 0) hcodes.push(ccode);
-
-          break;
-
-        case 17:
-          w = 3 + read_bits_3(data, boff);
-          boff += 3;
-
-          while (w-- > 0) hcodes.push(0);
-
-          break;
-
-        case 18:
-          w = 11 + read_bits_7(data, boff);
-          boff += 7;
-
-          while (w-- > 0) hcodes.push(0);
-
-          break;
-
-        default:
-          hcodes.push(ccode);
-          if (maxlen < ccode) maxlen = ccode;
-          break;
-      }
-    }
-    /* build literal / length trees */
-
-
-    var h1 = hcodes.slice(0, _HLIT),
-        h2 = hcodes.slice(_HLIT);
-
-    for (i = _HLIT; i < 286; ++i) h1[i] = 0;
-
-    for (i = _HDIST; i < 30; ++i) h2[i] = 0;
-
-    dyn_len_1 = build_tree(h1, dyn_lmap, 286);
-    dyn_len_2 = build_tree(h2, dyn_dmap, 30);
-    return boff;
-  }
-  /* return [ data, bytesRead ] */
-
-
-  function inflate(data, usz) {
-    /* shortcircuit for empty buffer [0x03, 0x00] */
-    if (data[0] == 3 && !(data[1] & 0x3)) {
-      return [new_raw_buf(usz), 2];
-    }
-    /* bit offset */
-
-
-    var boff = 0;
-    /* header includes final bit and type bits */
-
-    var header = 0;
-    var outbuf = new_unsafe_buf(usz ? usz : 1 << 18);
-    var woff = 0;
-    var OL = outbuf.length >>> 0;
-    var max_len_1 = 0,
-        max_len_2 = 0;
-
-    while ((header & 1) == 0) {
-      header = read_bits_3(data, boff);
-      boff += 3;
-
-      if (header >>> 1 == 0) {
-        /* Stored block */
-        if (boff & 7) boff += 8 - (boff & 7);
-        /* 2 bytes sz, 2 bytes bit inverse */
-
-        var sz = data[boff >>> 3] | data[(boff >>> 3) + 1] << 8;
-        boff += 32;
-        /* push sz bytes */
-
-        if (!usz && OL < woff + sz) {
-          outbuf = realloc(outbuf, woff + sz);
-          OL = outbuf.length;
-        }
-
-        if (typeof data.copy === 'function') {
-          // $FlowIgnore
-          data.copy(outbuf, woff, boff >>> 3, (boff >>> 3) + sz);
-          woff += sz;
-          boff += 8 * sz;
-        } else while (sz-- > 0) {
-          outbuf[woff++] = data[boff >>> 3];
-          boff += 8;
-        }
-
-        continue;
-      } else if (header >>> 1 == 1) {
-        /* Fixed Huffman */
-        max_len_1 = 9;
-        max_len_2 = 5;
-      } else {
-        /* Dynamic Huffman */
-        boff = dyn(data, boff);
-        max_len_1 = dyn_len_1;
-        max_len_2 = dyn_len_2;
-      }
-
-      if (!usz && OL < woff + 32767) {
-        outbuf = realloc(outbuf, woff + 32767);
-        OL = outbuf.length;
-      }
-
-      for (;;) {
-        // while(true) is apparently out of vogue in modern JS circles
-
-        /* ingest code and move read head */
-        var bits = read_bits_n(data, boff, max_len_1);
-        var code = header >>> 1 == 1 ? fix_lmap[bits] : dyn_lmap[bits];
-        boff += code & 15;
-        code >>>= 4;
-        /* 0-255 are literals, 256 is end of block token, 257+ are copy tokens */
-
-        if ((code >>> 8 & 0xFF) === 0) outbuf[woff++] = code;else if (code == 256) break;else {
-          code -= 257;
-          var len_eb = code < 8 ? 0 : code - 4 >> 2;
-          if (len_eb > 5) len_eb = 0;
-          var tgt = woff + LEN_LN[code];
-          /* length extra bits */
-
-          if (len_eb > 0) {
-            tgt += read_bits_n(data, boff, len_eb);
-            boff += len_eb;
-          }
-          /* dist code */
-
-
-          bits = read_bits_n(data, boff, max_len_2);
-          code = header >>> 1 == 1 ? fix_dmap[bits] : dyn_dmap[bits];
-          boff += code & 15;
-          code >>>= 4;
-          var dst_eb = code < 4 ? 0 : code - 2 >> 1;
-          var dst = DST_LN[code];
-          /* dist extra bits */
-
-          if (dst_eb > 0) {
-            dst += read_bits_n(data, boff, dst_eb);
-            boff += dst_eb;
-          }
-          /* in the common case, manual byte copy is faster than TA set / Buffer copy */
-
-
-          if (!usz && OL < tgt) {
-            outbuf = realloc(outbuf, tgt);
-            OL = outbuf.length;
-          }
-
-          while (woff < tgt) {
-            outbuf[woff] = outbuf[woff - dst];
-            ++woff;
-          }
-        }
-      }
-    }
-
-    return [usz ? outbuf : outbuf.slice(0, woff), boff + 7 >>> 3];
-  }
-
-  function _inflate(payload, usz) {
-    var data = payload.slice(payload.l || 0);
-    var out = inflate(data, usz);
-    payload.l += out[1];
-    return out[0];
-  }
-
-  function warn_or_throw(wrn, msg) {
-    if (wrn) {
-      if (typeof console !== 'undefined') console.error(msg);
-    } else throw new Error(msg);
-  }
-
-  function parse_zip(file, options) {
-    var blob = file;
-    prep_blob(blob, 0);
-    var FileIndex = [],
-        FullPaths = [];
-    var o = {
-      FileIndex: FileIndex,
-      FullPaths: FullPaths
-    };
-    init_cfb(o, {
-      root: options.root
-    });
-    /* find end of central directory, start just after signature */
-
-    var i = blob.length - 4;
-
-    while ((blob[i] != 0x50 || blob[i + 1] != 0x4b || blob[i + 2] != 0x05 || blob[i + 3] != 0x06) && i >= 0) --i;
-
-    blob.l = i + 4;
-    /* parse end of central directory */
-
-    blob.l += 4;
-    var fcnt = blob.read_shift(2);
-    blob.l += 6;
-    var start_cd = blob.read_shift(4);
-    /* parse central directory */
-
-    blob.l = start_cd;
-
-    for (i = 0; i < fcnt; ++i) {
-      /* trust local file header instead of CD entry */
-      blob.l += 20;
-      var csz = blob.read_shift(4);
-      var usz = blob.read_shift(4);
-      var namelen = blob.read_shift(2);
-      var efsz = blob.read_shift(2);
-      var fcsz = blob.read_shift(2);
-      blob.l += 8;
-      var offset = blob.read_shift(4);
-      var EF = parse_extra_field(blob.slice(blob.l + namelen, blob.l + namelen + efsz));
-      blob.l += namelen + efsz + fcsz;
-      var L = blob.l;
-      blob.l = offset + 4;
-      parse_local_file(blob, csz, usz, o, EF);
-      blob.l = L;
-    }
-
-    return o;
-  }
-  /* head starts just after local file header signature */
-
-
-  function parse_local_file(blob, csz, usz, o, EF) {
-    /* [local file header] */
-    blob.l += 2;
-    var flags = blob.read_shift(2);
-    var meth = blob.read_shift(2);
-    var date = parse_dos_date(blob);
-    if (flags & 0x2041) throw new Error("Unsupported ZIP encryption");
-    var crc32 = blob.read_shift(4);
-
-    var _csz = blob.read_shift(4);
-
-    var _usz = blob.read_shift(4);
-
-    var namelen = blob.read_shift(2);
-    var efsz = blob.read_shift(2); // TODO: flags & (1<<11) // UTF8
-
-    var name = "";
-
-    for (var i = 0; i < namelen; ++i) name += String.fromCharCode(blob[blob.l++]);
-
-    if (efsz) {
-      var ef = parse_extra_field(blob.slice(blob.l, blob.l + efsz));
-      if ((ef[0x5455] || {}).mt) date = ef[0x5455].mt;
-      if (((EF || {})[0x5455] || {}).mt) date = EF[0x5455].mt;
-    }
-
-    blob.l += efsz;
-    /* [encryption header] */
-
-    /* [file data] */
-
-    var data = blob.slice(blob.l, blob.l + _csz);
-
-    switch (meth) {
-      case 8:
-        data = _inflateRawSync(blob, _usz);
-        break;
-
-      case 0:
-        break;
-
-      default:
-        throw new Error("Unsupported ZIP Compression method " + meth);
-    }
-    /* [data descriptor] */
-
-
-    var wrn = false;
-
-    if (flags & 8) {
-      crc32 = blob.read_shift(4);
-
-      if (crc32 == 0x08074b50) {
-        crc32 = blob.read_shift(4);
-        wrn = true;
-      }
-
-      _csz = blob.read_shift(4);
-      _usz = blob.read_shift(4);
-    }
-
-    if (_csz != csz) warn_or_throw(wrn, "Bad compressed size: " + csz + " != " + _csz);
-    if (_usz != usz) warn_or_throw(wrn, "Bad uncompressed size: " + usz + " != " + _usz);
-
-    var _crc32 = CRC32.buf(data, 0);
-
-    if (crc32 >> 0 != _crc32 >> 0) warn_or_throw(wrn, "Bad CRC32 checksum: " + crc32 + " != " + _crc32);
-    cfb_add(o, name, data, {
-      unsafe: true,
-      mt: date
-    });
-  }
-
-  function write_zip(cfb, options) {
-    var _opts = options || {};
-
-    var out = [],
-        cdirs = [];
-    var o = new_buf(1);
-    var method = _opts.compression ? 8 : 0,
-        flags = 0;
-    var i = 0,
-        j = 0;
-    var start_cd = 0,
-        fcnt = 0;
-    var root = cfb.FullPaths[0],
-        fp = root,
-        fi = cfb.FileIndex[0];
-    var crcs = [];
-    var sz_cd = 0;
-
-    for (i = 1; i < cfb.FullPaths.length; ++i) {
-      fp = cfb.FullPaths[i].slice(root.length);
-      fi = cfb.FileIndex[i];
-      if (!fi.size || !fi.content || fp == "\u0001Sh33tJ5") continue;
-      var start = start_cd;
-      /* TODO: CP437 filename */
-
-      var namebuf = new_buf(fp.length);
-
-      for (j = 0; j < fp.length; ++j) namebuf.write_shift(1, fp.charCodeAt(j) & 0x7F);
-
-      namebuf = namebuf.slice(0, namebuf.l);
-      crcs[fcnt] = CRC32.buf(fi.content, 0);
-      var outbuf = fi.content;
-      if (method == 8) outbuf = _deflateRawSync(outbuf);
-      /* local file header */
-
-      o = new_buf(30);
-      o.write_shift(4, 0x04034b50);
-      o.write_shift(2, 20);
-      o.write_shift(2, flags);
-      o.write_shift(2, method);
-      /* TODO: last mod file time/date */
-
-      if (fi.mt) write_dos_date(o, fi.mt);else o.write_shift(4, 0);
-      o.write_shift(-4,  crcs[fcnt]);
-      o.write_shift(4,  outbuf.length);
-      o.write_shift(4,  fi.content.length);
-      o.write_shift(2, namebuf.length);
-      o.write_shift(2, 0);
-      start_cd += o.length;
-      out.push(o);
-      start_cd += namebuf.length;
-      out.push(namebuf);
-      /* TODO: encryption header ? */
-
-      start_cd += outbuf.length;
-      out.push(outbuf);
-      /* central directory */
-
-
-      o = new_buf(46);
-      o.write_shift(4, 0x02014b50);
-      o.write_shift(2, 0);
-      o.write_shift(2, 20);
-      o.write_shift(2, flags);
-      o.write_shift(2, method);
-      o.write_shift(4, 0);
-      /* TODO: last mod file time/date */
-
-      o.write_shift(-4, crcs[fcnt]);
-      o.write_shift(4, outbuf.length);
-      o.write_shift(4, fi.content.length);
-      o.write_shift(2, namebuf.length);
-      o.write_shift(2, 0);
-      o.write_shift(2, 0);
-      o.write_shift(2, 0);
-      o.write_shift(2, 0);
-      o.write_shift(4, 0);
-      o.write_shift(4, start);
-      sz_cd += o.l;
-      cdirs.push(o);
-      sz_cd += namebuf.length;
-      cdirs.push(namebuf);
-      ++fcnt;
-    }
-    /* end of central directory */
-
-
-    o = new_buf(22);
-    o.write_shift(4, 0x06054b50);
-    o.write_shift(2, 0);
-    o.write_shift(2, 0);
-    o.write_shift(2, fcnt);
-    o.write_shift(2, fcnt);
-    o.write_shift(4, sz_cd);
-    o.write_shift(4, start_cd);
-    o.write_shift(2, 0);
-    return bconcat([bconcat(out), bconcat(cdirs), o]);
-  }
-
-  var ContentTypeMap = {
-    "htm": "text/html",
-    "xml": "text/xml",
-    "gif": "image/gif",
-    "jpg": "image/jpeg",
-    "png": "image/png",
-    "mso": "application/x-mso",
-    "thmx": "application/vnd.ms-officetheme",
-    "sh33tj5": "application/octet-stream"
-  };
-
-  function get_content_type(fi, fp) {
-    if (fi.ctype) return fi.ctype;
-    var ext = fi.name || "",
-        m = ext.match(/\.([^\.]+)$/);
-    if (m && ContentTypeMap[m[1]]) return ContentTypeMap[m[1]];
-
-    if (fp) {
-      m = (ext = fp).match(/[\.\\]([^\.\\])+$/);
-      if (m && ContentTypeMap[m[1]]) return ContentTypeMap[m[1]];
-    }
-
-    return "application/octet-stream";
-  }
-  /* 76 character chunks TODO: intertwine encoding */
-
-
-  function write_base64_76(bstr) {
-    var data = Base64.encode(bstr);
-    var o = [];
-
-    for (var i = 0; i < data.length; i += 76) o.push(data.slice(i, i + 76));
-
-    return o.join("\r\n") + "\r\n";
-  }
-  /*
-  Rules for QP:
-  	- escape =## applies for all non-display characters and literal "="
-  	- space or tab at end of line must be encoded
-  	- \r\n newlines can be preserved, but bare \r and \n must be escaped
-  	- lines must not exceed 76 characters, use soft breaks =\r\n
-  
-  TODO: Some files from word appear to write line extensions with bare equals:
-  
-  ```
-  <table class=3DMsoTableGrid border=3D1 cellspacing=3D0 cellpadding=3D0 width=
-  ="70%"
-  ```
-  */
-
-
-  function write_quoted_printable(text) {
-    var encoded = text.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7E-\xFF=]/g, function (c) {
-      var w = c.charCodeAt(0).toString(16).toUpperCase();
-      return "=" + (w.length == 1 ? "0" + w : w);
-    });
-    encoded = encoded.replace(/ $/mg, "=20").replace(/\t$/mg, "=09");
-    if (encoded.charAt(0) == "\n") encoded = "=0D" + encoded.slice(1);
-    encoded = encoded.replace(/\r(?!\n)/mg, "=0D").replace(/\n\n/mg, "\n=0A").replace(/([^\r\n])\n/mg, "$1=0A");
-    var o = [],
-        split = encoded.split("\r\n");
-
-    for (var si = 0; si < split.length; ++si) {
-      var str = split[si];
-
-      if (str.length == 0) {
-        o.push("");
-        continue;
-      }
-
-      for (var i = 0; i < str.length;) {
-        var end = 76;
-        var tmp = str.slice(i, i + end);
-        if (tmp.charAt(end - 1) == "=") end--;else if (tmp.charAt(end - 2) == "=") end -= 2;else if (tmp.charAt(end - 3) == "=") end -= 3;
-        tmp = str.slice(i, i + end);
-        i += end;
-        if (i < str.length) tmp += "=";
-        o.push(tmp);
-      }
-    }
-
-    return o.join("\r\n");
-  }
-
-  function parse_quoted_printable(data) {
-    var o = [];
-    /* unify long lines */
-
-    for (var di = 0; di < data.length; ++di) {
-      var line = data[di];
-
-      while (di <= data.length && line.charAt(line.length - 1) == "=") line = line.slice(0, line.length - 1) + data[++di];
-
-      o.push(line);
-    }
-    /* decode */
-
-
-    for (var oi = 0; oi < o.length; ++oi) o[oi] = o[oi].replace(/=[0-9A-Fa-f]{2}/g, function ($$) {
-      return String.fromCharCode(parseInt($$.slice(1), 16));
-    });
-
-    return s2a(o.join("\r\n"));
-  }
-
-  function parse_mime(cfb, data, root) {
-    var fname = "",
-        cte = "",
-        ctype = "",
-        fdata;
-    var di = 0;
-
-    for (; di < 10; ++di) {
-      var line = data[di];
-      if (!line || line.match(/^\s*$/)) break;
-      var m = line.match(/^(.*?):\s*([^\s].*)$/);
-      if (m) switch (m[1].toLowerCase()) {
-        case "content-location":
-          fname = m[2].trim();
-          break;
-
-        case "content-type":
-          ctype = m[2].trim();
-          break;
-
-        case "content-transfer-encoding":
-          cte = m[2].trim();
-          break;
-      }
-    }
-
-    ++di;
-
-    switch (cte.toLowerCase()) {
-      case 'base64':
-        fdata = s2a(Base64.decode(data.slice(di).join("")));
-        break;
-
-      case 'quoted-printable':
-        fdata = parse_quoted_printable(data.slice(di));
-        break;
-
-      default:
-        throw new Error("Unsupported Content-Transfer-Encoding " + cte);
-    }
-
-    var file = cfb_add(cfb, fname.slice(root.length), fdata, {
-      unsafe: true
-    });
-    if (ctype) file.ctype = ctype;
-  }
-
-  function parse_mad(file, options) {
-    if (a2s(file.slice(0, 13)).toLowerCase() != "mime-version:") throw new Error("Unsupported MAD header");
-    var root = options && options.root || ""; // $FlowIgnore
-
-    var data = (has_buf && Buffer.isBuffer(file) ? file.toString("binary") : a2s(file)).split("\r\n");
-    var di = 0,
-        row = "";
-    /* if root is not specified, scan for the common prefix */
-
-    for (di = 0; di < data.length; ++di) {
-      row = data[di];
-      if (!/^Content-Location:/i.test(row)) continue;
-      row = row.slice(row.indexOf("file"));
-      if (!root) root = row.slice(0, row.lastIndexOf("/") + 1);
-      if (row.slice(0, root.length) == root) continue;
-
-      while (root.length > 0) {
-        root = root.slice(0, root.length - 1);
-        root = root.slice(0, root.lastIndexOf("/") + 1);
-        if (row.slice(0, root.length) == root) break;
-      }
-    }
-
-    var mboundary = (data[1] || "").match(/boundary="(.*?)"/);
-    if (!mboundary) throw new Error("MAD cannot find boundary");
-    var boundary = "--" + (mboundary[1] || "");
-    var FileIndex = [],
-        FullPaths = [];
-    var o = {
-      FileIndex: FileIndex,
-      FullPaths: FullPaths
-    };
-    init_cfb(o);
-    var start_di,
-        fcnt = 0;
-
-    for (di = 0; di < data.length; ++di) {
-      var line = data[di];
-      if (line !== boundary && line !== boundary + "--") continue;
-      if (fcnt++) parse_mime(o, data.slice(start_di, di), root);
-      start_di = di;
-    }
-
-    return o;
-  }
-
-  function write_mad(cfb, options) {
-    var opts = options || {};
-    var boundary = opts.boundary || "SheetJS";
-    boundary = '------=' + boundary;
-    var out = ['MIME-Version: 1.0', 'Content-Type: multipart/related; boundary="' + boundary.slice(2) + '"', '', '', ''];
-    var root = cfb.FullPaths[0],
-        fp = root,
-        fi = cfb.FileIndex[0];
-
-    for (var i = 1; i < cfb.FullPaths.length; ++i) {
-      fp = cfb.FullPaths[i].slice(root.length);
-      fi = cfb.FileIndex[i];
-      if (!fi.size || !fi.content || fp == "\u0001Sh33tJ5") continue;
-      /* Normalize filename */
-
-      fp = fp.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7E-\xFF]/g, function (c) {
-        return "_x" + c.charCodeAt(0).toString(16) + "_";
-      }).replace(/[\u0080-\uFFFF]/g, function (u) {
-        return "_u" + u.charCodeAt(0).toString(16) + "_";
-      });
-      /* Extract content as binary string */
-
-      var ca = fi.content; // $FlowIgnore
-
-      var cstr = has_buf && Buffer.isBuffer(ca) ? ca.toString("binary") : a2s(ca);
-      /* 4/5 of first 1024 chars ascii -> quoted printable, else base64 */
-
-      var dispcnt = 0,
-          L = Math.min(1024, cstr.length),
-          cc = 0;
-
-      for (var csl = 0; csl <= L; ++csl) if ((cc = cstr.charCodeAt(csl)) >= 0x20 && cc < 0x80) ++dispcnt;
-
-      var qp = dispcnt >= L * 4 / 5;
-      out.push(boundary);
-      out.push('Content-Location: ' + (opts.root || 'file:///C:/SheetJS/') + fp);
-      out.push('Content-Transfer-Encoding: ' + (qp ? 'quoted-printable' : 'base64'));
-      out.push('Content-Type: ' + get_content_type(fi, fp));
-      out.push('');
-      out.push(qp ? write_quoted_printable(cstr) : write_base64_76(cstr));
-    }
-
-    out.push(boundary + '--\r\n');
-    return out.join("\r\n");
-  }
-
-  function cfb_new(opts) {
-    var o = {};
-    init_cfb(o, opts);
-    return o;
-  }
-
-  function cfb_add(cfb, name, content, opts) {
-    var unsafe = opts && opts.unsafe;
-    if (!unsafe) init_cfb(cfb);
-    var file = !unsafe && CFB.find(cfb, name);
-
-    if (!file) {
-      var fpath = cfb.FullPaths[0];
-      if (name.slice(0, fpath.length) == fpath) fpath = name;else {
-        if (fpath.slice(-1) != "/") fpath += "/";
-        fpath = (fpath + name).replace("//", "/");
-      }
-      file = {
-        name: filename(name),
-        type: 2
-      };
-      cfb.FileIndex.push(file);
-      cfb.FullPaths.push(fpath);
-      if (!unsafe) CFB.utils.cfb_gc(cfb);
-    }
-
-    file.content = content;
-    file.size = content ? content.length : 0;
-
-    if (opts) {
-      if (opts.CLSID) file.clsid = opts.CLSID;
-      if (opts.mt) file.mt = opts.mt;
-      if (opts.ct) file.ct = opts.ct;
-    }
-
-    return file;
-  }
-
-  function cfb_del(cfb, name) {
-    init_cfb(cfb);
-    var file = CFB.find(cfb, name);
-    if (file) for (var j = 0; j < cfb.FileIndex.length; ++j) if (cfb.FileIndex[j] == file) {
-      cfb.FileIndex.splice(j, 1);
-      cfb.FullPaths.splice(j, 1);
-      return true;
-    }
-    return false;
-  }
-
-  function cfb_mov(cfb, old_name, new_name) {
-    init_cfb(cfb);
-    var file = CFB.find(cfb, old_name);
-    if (file) for (var j = 0; j < cfb.FileIndex.length; ++j) if (cfb.FileIndex[j] == file) {
-      cfb.FileIndex[j].name = filename(new_name);
-      cfb.FullPaths[j] = new_name;
-      return true;
-    }
-    return false;
-  }
-
-  function cfb_gc(cfb) {
-    rebuild_cfb(cfb, true);
-  }
-
-  exports.find = find;
-  exports.read = read;
-  exports.parse = parse;
-  exports.write = write;
-  exports.writeFile = write_file;
-  exports.utils = {
-    cfb_new: cfb_new,
-    cfb_add: cfb_add,
-    cfb_del: cfb_del,
-    cfb_mov: cfb_mov,
-    cfb_gc: cfb_gc,
-    ReadShift: ReadShift,
-    CheckField: CheckField,
-    prep_blob: prep_blob,
-    bconcat: bconcat,
-    use_zlib: use_zlib,
-    _deflateRaw: _deflate,
-    _inflateRaw: _inflate,
-    consts: consts
-  };
-  return exports;
-}();
-
-if (typeof commonjsRequire !== 'undefined' && 'object' !== 'undefined' && typeof DO_NOT_EXPORT_CFB === 'undefined') {
-  module.exports = CFB;
-}
-});
-
-var cfb$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.assign(/*#__PURE__*/Object.create(null), cfb, {
-  'default': cfb
-}));
-
-/**
- * wrapper around SheetJS CFB to produce FAT-like compound file
- * terminology:
- * 'storage': directory in the cfb
- * 'stream' : file in the cfb
- * */
-
-let CFBStorage = /*#__PURE__*/function () {
-  /** underlying cfb container */
-
-  /** the current path all new storages and streams will be added to*/
-  function CFBStorage(cfb$1) {
-    _classCallCheck(this, CFBStorage);
-
-    _defineProperty(this, "_cfb", void 0);
-
-    _defineProperty(this, "_path", void 0);
-
-    this._cfb = cfb$1 || cfb.utils.cfb_new();
-    this._path = '';
-  }
-  /**
-   * add substorage to this (doesn't modify the underlying CFBContainer)
-   * @param name {string} name of the subdir
-   * @returns {CFBStorage} a storage that will add storage and streams to the subdir
-   * */
-
-
-  _createClass(CFBStorage, [{
-    key: "addStorage",
-    value: function addStorage(name) {
-      const child = new CFBStorage(this._cfb);
-      child._path = this._path + '/' + name;
-      return child;
-    }
-    /**
-     *
-     */
-
-  }, {
-    key: "getStorage",
-    value: function getStorage(name) {
-      return this.addStorage(name);
-    }
-    /**
-     * add a stream (file) to the cfb at the current _path. creates all parent dirs if they don't exist yet
-     * should the stream already exist, this will replace the contents.
-     * @param name {string} the name of the new stream
-     * @param content {Uint8Array} the contents of the stream
-     * @return {void}
-     * */
-
-  }, {
-    key: "addStream",
-    value: function addStream(name, content) {
-      const entryIndex = this._getEntryIndex(name);
-
-      if (entryIndex < 0) {
-        cfb.utils.cfb_add(this._cfb, this._path + '/' + name, content);
-      } else {
-        this._cfb.FileIndex[entryIndex].content = content;
-      }
-    }
-    /**
-     * get the contents of a stream or an empty array
-     * @param name {string} the name of the stream
-     * @return {Uint8Array} the contents of the named stream, empty if it wasn't found
-     * TODO: should this be absolute?
-     */
-
-  }, {
-    key: "getStream",
-    value: function getStream(name) {
-      const entryIndex = this._getEntryIndex(name);
-
-      return entryIndex < 0 ? Uint8Array.of() : Uint8Array.from(this._cfb.FileIndex[entryIndex].content);
-    }
-    /** write the contents of the cfb container to a byte array */
-
-  }, {
-    key: "toBytes",
-    value: function toBytes() {
-      return Uint8Array.from(cfb.write(this._cfb));
-    }
-  }, {
-    key: "_getEntryIndex",
-    value: function _getEntryIndex(name) {
-      return this._cfb.FullPaths.findIndex(p => p === this._path + "/" + name);
-    }
-  }]);
-
-  return CFBStorage;
-}();
 
 const MessageImportance = Object.freeze({
   IMPORTANCE_LOW: 0,
@@ -6232,38 +3396,15 @@ const PropertyTags = Object.freeze({
   }
 });
 
-/** https://stackoverflow.com/a/15550284
- * Convert a Microsoft OADate to ECMAScript Date
- * Treat all values as local.
- * OADate = number of days since 30 dec 1899 as a double value
- * @param {string|number} oaDate - OADate value
- * @returns {Date}
- */
-function oADateToDate(oaDate) {
-  // Treat integer part as whole days
-  const days = parseInt(oaDate); // Treat decimal part as part of 24hr day, always +ve
+var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
-  const ms = Math.abs((oaDate - days) * 8.64e7); // Add days and add ms
-
-  return new Date(1899, 11, 30 + days, 0, 0, 0, ms);
+function createCommonjsModule(fn) {
+  var module = { exports: {} };
+	return fn(module, module.exports), module.exports;
 }
 
-const FILE_TIME_UNIX_EPOCH_DIFF_MS = 11644473600n; // $FlowIgnore[bigint-unsupported]
-
-const MS_TO_100_NS = 10000n; // Date: milliseconds since 1. January 1970 (UTC)
-// FileTime: unsigned 64 Bit, 100ns units since 1. January 1601 (UTC)
-// ms between 01.01.1970 and 01.01.1601: 11644473600
-// $FlowIgnore[bigint-unsupported]
-
-function fileTimeToDate(fileTime) {
-  const filetimeMillis = fileTime / MS_TO_100_NS;
-  const unixtime = filetimeMillis - FILE_TIME_UNIX_EPOCH_DIFF_MS;
-  return new Date(Number(unixtime));
-} // $FlowIgnore[bigint-unsupported]
-
-function dateToFileTime(date) {
-  const unixtime = BigInt(date.getTime());
-  return (unixtime + FILE_TIME_UNIX_EPOCH_DIFF_MS) * MS_TO_100_NS;
+function commonjsRequire (target) {
+	throw new Error('Could not dynamically require "' + target + '". Please configure the dynamicRequireTargets option of @rollup/plugin-commonjs appropriately for this require call to behave properly.');
 }
 
 /*
@@ -7466,7 +4607,7 @@ var long = createCommonjsModule(function (module) {
  */
 var bytebufferNode = function () {
 
-  var buffer = require$$0$1,
+  var buffer = require$$0,
       Buffer = buffer["Buffer"],
       Long = long,
       memcpy = null;
@@ -11246,14 +8387,6 @@ const localeToLcid = invertDict(lcidToLocale);
 function Xp(n, p) {
   return n.toString(16).padStart(p, '0').toUpperCase();
 }
-
-function xp(n, p) {
-  return n.toString(16).padStart(p, '0');
-}
-
-function x2(n) {
-  return xp(n, 2);
-}
 /**
  * get an uppercase hex string of a number zero-padded to 4 digits
  * @param n {number} the number
@@ -11302,6 +8435,17 @@ function stringToUtf8Array(str) {
 function stringToUtf16LeArray(str) {
   const u16 = Uint16Array.from(str.split('').map(c => c.charCodeAt(0)));
   return new Uint8Array(u16.buffer, u16.byteOffset, u16.byteLength);
+}
+/**
+ * convert UTF-16LE Uint8Array to string
+ * @param u8 {Uint8Array} raw bytes
+ * @returns {string}
+ */
+
+function utf16LeArrayToString(u8) {
+  const u16 = new Uint16Array(u8.buffer, u8.byteOffset, u8.byteLength); // mapping directly over u16 insists on converting the result to Uint16Array again.
+
+  return Array.from(u16).map(c => String.fromCharCode(c)).join('');
 }
 /**
  * convert a string to a Uint8Array with terminating 0 byte
@@ -11433,6 +8577,2858 @@ function invertDict(dict) {
 function getDictKeyFromValue(dict, value) {
   return invertDict(dict)[value];
 }
+
+/** https://stackoverflow.com/a/15550284
+ * Convert a Microsoft OADate to ECMAScript Date
+ * Treat all values as local.
+ * OADate = number of days since 30 dec 1899 as a double value
+ * @param {string|number} oaDate - OADate value
+ * @returns {Date}
+ */
+
+const FT_TICKS_PER_MS = 10000n;
+const FILE_TIME_ZERO = new Date(Date.parse("1601-01-01T00:00:00")); // Date: milliseconds since 1. January 1970 (UTC)
+// FileTime: unsigned 64 Bit, 100ns units since 1. January 1601 (UTC)
+// ms between 01.01.1970 and 01.01.1601: 11644473600
+// $FlowIgnore[bigint-unsupported]
+
+function fileTimeToDate(fileTime) {
+  return new Date(FILE_TIME_ZERO.getTime() + Number(fileTime / FT_TICKS_PER_MS));
+} // $FlowIgnore[bigint-unsupported]
+
+function dateToFileTime(date) {
+  console.log("input", date);
+  const msSinceFileTimeEpoch = BigInt(date.getTime()) - BigInt(FILE_TIME_ZERO.getTime());
+  console.log("intermediate", msSinceFileTimeEpoch);
+  const result = msSinceFileTimeEpoch * FT_TICKS_PER_MS;
+  console.log("output", result);
+  return result;
+}
+
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+function _defineProperties(target, props) {
+  for (var i = 0; i < props.length; i++) {
+    var descriptor = props[i];
+    descriptor.enumerable = descriptor.enumerable || false;
+    descriptor.configurable = true;
+    if ("value" in descriptor) descriptor.writable = true;
+    Object.defineProperty(target, descriptor.key, descriptor);
+  }
+}
+
+function _createClass(Constructor, protoProps, staticProps) {
+  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+  if (staticProps) _defineProperties(Constructor, staticProps);
+  return Constructor;
+}
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function _inherits(subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function");
+  }
+
+  subClass.prototype = Object.create(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      writable: true,
+      configurable: true
+    }
+  });
+  if (superClass) _setPrototypeOf(subClass, superClass);
+}
+
+function _getPrototypeOf(o) {
+  _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
+    return o.__proto__ || Object.getPrototypeOf(o);
+  };
+  return _getPrototypeOf(o);
+}
+
+function _setPrototypeOf(o, p) {
+  _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
+    o.__proto__ = p;
+    return o;
+  };
+
+  return _setPrototypeOf(o, p);
+}
+
+function _isNativeReflectConstruct() {
+  if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+  if (Reflect.construct.sham) return false;
+  if (typeof Proxy === "function") return true;
+
+  try {
+    Date.prototype.toString.call(Reflect.construct(Date, [], function () {}));
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+function _construct(Parent, args, Class) {
+  if (_isNativeReflectConstruct()) {
+    _construct = Reflect.construct;
+  } else {
+    _construct = function _construct(Parent, args, Class) {
+      var a = [null];
+      a.push.apply(a, args);
+      var Constructor = Function.bind.apply(Parent, a);
+      var instance = new Constructor();
+      if (Class) _setPrototypeOf(instance, Class.prototype);
+      return instance;
+    };
+  }
+
+  return _construct.apply(null, arguments);
+}
+
+function _isNativeFunction(fn) {
+  return Function.toString.call(fn).indexOf("[native code]") !== -1;
+}
+
+function _wrapNativeSuper(Class) {
+  var _cache = typeof Map === "function" ? new Map() : undefined;
+
+  _wrapNativeSuper = function _wrapNativeSuper(Class) {
+    if (Class === null || !_isNativeFunction(Class)) return Class;
+
+    if (typeof Class !== "function") {
+      throw new TypeError("Super expression must either be null or a function");
+    }
+
+    if (typeof _cache !== "undefined") {
+      if (_cache.has(Class)) return _cache.get(Class);
+
+      _cache.set(Class, Wrapper);
+    }
+
+    function Wrapper() {
+      return _construct(Class, arguments, _getPrototypeOf(this).constructor);
+    }
+
+    Wrapper.prototype = Object.create(Class.prototype, {
+      constructor: {
+        value: Wrapper,
+        enumerable: false,
+        writable: true,
+        configurable: true
+      }
+    });
+    return _setPrototypeOf(Wrapper, Class);
+  };
+
+  return _wrapNativeSuper(Class);
+}
+
+function _assertThisInitialized(self) {
+  if (self === void 0) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
+
+  return self;
+}
+
+function _possibleConstructorReturn(self, call) {
+  if (call && (typeof call === "object" || typeof call === "function")) {
+    return call;
+  }
+
+  return _assertThisInitialized(self);
+}
+
+function _createSuper(Derived) {
+  var hasNativeReflectConstruct = _isNativeReflectConstruct();
+
+  return function _createSuperInternal() {
+    var Super = _getPrototypeOf(Derived),
+        result;
+
+    if (hasNativeReflectConstruct) {
+      var NewTarget = _getPrototypeOf(this).constructor;
+
+      result = Reflect.construct(Super, arguments, NewTarget);
+    } else {
+      result = Super.apply(this, arguments);
+    }
+
+    return _possibleConstructorReturn(this, result);
+  };
+}
+
+function _superPropBase(object, property) {
+  while (!Object.prototype.hasOwnProperty.call(object, property)) {
+    object = _getPrototypeOf(object);
+    if (object === null) break;
+  }
+
+  return object;
+}
+
+function _get(target, property, receiver) {
+  if (typeof Reflect !== "undefined" && Reflect.get) {
+    _get = Reflect.get;
+  } else {
+    _get = function _get(target, property, receiver) {
+      var base = _superPropBase(target, property);
+
+      if (!base) return;
+      var desc = Object.getOwnPropertyDescriptor(base, property);
+
+      if (desc.get) {
+        return desc.get.call(receiver);
+      }
+
+      return desc.value;
+    };
+  }
+
+  return _get(target, property, receiver || target);
+}
+
+/* cfb.js (C) 2013-present SheetJS -- http://sheetjs.com */
+
+var cfb = createCommonjsModule(function (module) {
+/* vim: set ts=2: */
+
+/*jshint eqnull:true */
+
+/*exported CFB */
+
+/*global module, require:false, process:false, Buffer:false, Uint8Array:false, Uint16Array:false */
+var Base64 = function make_b64() {
+  var map = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+  return {
+    encode: function (input) {
+      var o = "";
+      var c1 = 0,
+          c2 = 0,
+          c3 = 0,
+          e1 = 0,
+          e2 = 0,
+          e3 = 0,
+          e4 = 0;
+
+      for (var i = 0; i < input.length;) {
+        c1 = input.charCodeAt(i++);
+        e1 = c1 >> 2;
+        c2 = input.charCodeAt(i++);
+        e2 = (c1 & 3) << 4 | c2 >> 4;
+        c3 = input.charCodeAt(i++);
+        e3 = (c2 & 15) << 2 | c3 >> 6;
+        e4 = c3 & 63;
+
+        if (isNaN(c2)) {
+          e3 = e4 = 64;
+        } else if (isNaN(c3)) {
+          e4 = 64;
+        }
+
+        o += map.charAt(e1) + map.charAt(e2) + map.charAt(e3) + map.charAt(e4);
+      }
+
+      return o;
+    },
+    decode: function b64_decode(input) {
+      var o = "";
+      var c1 = 0,
+          c2 = 0,
+          c3 = 0,
+          e1 = 0,
+          e2 = 0,
+          e3 = 0,
+          e4 = 0;
+      input = input.replace(/[^\w\+\/\=]/g, "");
+
+      for (var i = 0; i < input.length;) {
+        e1 = map.indexOf(input.charAt(i++));
+        e2 = map.indexOf(input.charAt(i++));
+        c1 = e1 << 2 | e2 >> 4;
+        o += String.fromCharCode(c1);
+        e3 = map.indexOf(input.charAt(i++));
+        c2 = (e2 & 15) << 4 | e3 >> 2;
+
+        if (e3 !== 64) {
+          o += String.fromCharCode(c2);
+        }
+
+        e4 = map.indexOf(input.charAt(i++));
+        c3 = (e3 & 3) << 6 | e4;
+
+        if (e4 !== 64) {
+          o += String.fromCharCode(c3);
+        }
+      }
+
+      return o;
+    }
+  };
+}();
+
+var has_buf = typeof Buffer !== 'undefined' && typeof process !== 'undefined' && typeof process.versions !== 'undefined' && process.versions.node;
+
+var Buffer_from = function () {};
+
+if (typeof Buffer !== 'undefined') {
+  var nbfs = !Buffer.from;
+  if (!nbfs) try {
+    Buffer.from("foo", "utf8");
+  } catch (e) {
+    nbfs = true;
+  }
+  Buffer_from = nbfs ? function (buf, enc) {
+    return enc ? new Buffer(buf, enc) : new Buffer(buf);
+  } : Buffer.from.bind(Buffer); // $FlowIgnore
+
+  if (!Buffer.alloc) Buffer.alloc = function (n) {
+    return new Buffer(n);
+  }; // $FlowIgnore
+
+  if (!Buffer.allocUnsafe) Buffer.allocUnsafe = function (n) {
+    return new Buffer(n);
+  };
+}
+
+function new_raw_buf(len) {
+  /* jshint -W056 */
+  return has_buf ? Buffer.alloc(len) : new Array(len);
+  /* jshint +W056 */
+}
+
+function new_unsafe_buf(len) {
+  /* jshint -W056 */
+  return has_buf ? Buffer.allocUnsafe(len) : new Array(len);
+  /* jshint +W056 */
+}
+
+var s2a = function s2a(s) {
+  if (has_buf) return Buffer_from(s, "binary");
+  return s.split("").map(function (x) {
+    return x.charCodeAt(0) & 0xff;
+  });
+};
+
+var chr0 = /\u0000/g,
+    chr1 = /[\u0001-\u0006]/g;
+
+var __toBuffer = function (bufs) {
+  var x = [];
+
+  for (var i = 0; i < bufs[0].length; ++i) {
+    x.push.apply(x, bufs[0][i]);
+  }
+
+  return x;
+};
+
+var ___toBuffer = __toBuffer;
+
+var __utf16le = function (b, s, e) {
+  var ss = [];
+
+  for (var i = s; i < e; i += 2) ss.push(String.fromCharCode(__readUInt16LE(b, i)));
+
+  return ss.join("").replace(chr0, '');
+};
+
+var ___utf16le = __utf16le;
+
+var __hexlify = function (b, s, l) {
+  var ss = [];
+
+  for (var i = s; i < s + l; ++i) ss.push(("0" + b[i].toString(16)).slice(-2));
+
+  return ss.join("");
+};
+
+var ___hexlify = __hexlify;
+
+var __bconcat = function (bufs) {
+  if (Array.isArray(bufs[0])) return [].concat.apply([], bufs);
+  var maxlen = 0,
+      i = 0;
+
+  for (i = 0; i < bufs.length; ++i) maxlen += bufs[i].length;
+
+  var o = new Uint8Array(maxlen);
+
+  for (i = 0, maxlen = 0; i < bufs.length; maxlen += bufs[i].length, ++i) o.set(bufs[i], maxlen);
+
+  return o;
+};
+
+var bconcat = __bconcat;
+
+if (has_buf) {
+  __utf16le = function (b, s, e) {
+    if (!Buffer.isBuffer(b)) return ___utf16le(b, s, e);
+    return b.toString('utf16le', s, e).replace(chr0, '')
+    /*.replace(chr1,'!')*/
+    ;
+  };
+
+  __hexlify = function (b, s, l) {
+    return Buffer.isBuffer(b) ? b.toString('hex', s, s + l) : ___hexlify(b, s, l);
+  };
+
+  __toBuffer = function (bufs) {
+    return bufs[0].length > 0 && Buffer.isBuffer(bufs[0][0]) ? Buffer.concat(bufs[0]) : ___toBuffer(bufs);
+  };
+
+  s2a = function (s) {
+    return Buffer_from(s, "binary");
+  };
+
+  bconcat = function (bufs) {
+    return Buffer.isBuffer(bufs[0]) ? Buffer.concat(bufs) : __bconcat(bufs);
+  };
+}
+
+var __readUInt8 = function (b, idx) {
+  return b[idx];
+};
+
+var __readUInt16LE = function (b, idx) {
+  return b[idx + 1] * (1 << 8) + b[idx];
+};
+
+var __readInt16LE = function (b, idx) {
+  var u = b[idx + 1] * (1 << 8) + b[idx];
+  return u < 0x8000 ? u : (0xffff - u + 1) * -1;
+};
+
+var __readUInt32LE = function (b, idx) {
+  return b[idx + 3] * (1 << 24) + (b[idx + 2] << 16) + (b[idx + 1] << 8) + b[idx];
+};
+
+var __readInt32LE = function (b, idx) {
+  return (b[idx + 3] << 24) + (b[idx + 2] << 16) + (b[idx + 1] << 8) + b[idx];
+};
+
+function ReadShift(size, t) {
+  var oI,
+      oS,
+      type = 0;
+
+  switch (size) {
+    case 1:
+      oI = __readUInt8(this, this.l);
+      break;
+
+    case 2:
+      oI = (t !== 'i' ? __readUInt16LE : __readInt16LE)(this, this.l);
+      break;
+
+    case 4:
+      oI = __readInt32LE(this, this.l);
+      break;
+
+    case 16:
+      type = 2;
+      oS = __hexlify(this, this.l, size);
+  }
+
+  this.l += size;
+  if (type === 0) return oI;
+  return oS;
+}
+
+var __writeUInt32LE = function (b, val, idx) {
+  b[idx] = val & 0xFF;
+  b[idx + 1] = val >>> 8 & 0xFF;
+  b[idx + 2] = val >>> 16 & 0xFF;
+  b[idx + 3] = val >>> 24 & 0xFF;
+};
+
+var __writeInt32LE = function (b, val, idx) {
+  b[idx] = val & 0xFF;
+  b[idx + 1] = val >> 8 & 0xFF;
+  b[idx + 2] = val >> 16 & 0xFF;
+  b[idx + 3] = val >> 24 & 0xFF;
+};
+
+function WriteShift(t, val, f) {
+  var size = 0,
+      i = 0;
+
+  switch (f) {
+    case "hex":
+      for (; i < t; ++i) {
+        this[this.l++] = parseInt(val.slice(2 * i, 2 * i + 2), 16) || 0;
+      }
+
+      return this;
+
+    case "utf16le":
+      var end = this.l + t;
+
+      for (i = 0; i < Math.min(val.length, t); ++i) {
+        var cc = val.charCodeAt(i);
+        this[this.l++] = cc & 0xff;
+        this[this.l++] = cc >> 8;
+      }
+
+      while (this.l < end) this[this.l++] = 0;
+
+      return this;
+  }
+
+  switch (t) {
+    case 1:
+      size = 1;
+      this[this.l] = val & 0xFF;
+      break;
+
+    case 2:
+      size = 2;
+      this[this.l] = val & 0xFF;
+      val >>>= 8;
+      this[this.l + 1] = val & 0xFF;
+      break;
+
+    case 4:
+      size = 4;
+
+      __writeUInt32LE(this, val, this.l);
+
+      break;
+
+    case -4:
+      size = 4;
+
+      __writeInt32LE(this, val, this.l);
+
+      break;
+  }
+
+  this.l += size;
+  return this;
+}
+
+function CheckField(hexstr, fld) {
+  var m = __hexlify(this, this.l, hexstr.length >> 1);
+
+  if (m !== hexstr) throw new Error(fld + 'Expected ' + hexstr + ' saw ' + m);
+  this.l += hexstr.length >> 1;
+}
+
+function prep_blob(blob, pos) {
+  blob.l = pos;
+  blob.read_shift = ReadShift;
+  blob.chk = CheckField;
+  blob.write_shift = WriteShift;
+}
+
+function new_buf(sz) {
+  var o = new_raw_buf(sz);
+  prep_blob(o, 0);
+  return o;
+}
+/* crc32.js (C) 2014-present SheetJS -- http://sheetjs.com */
+
+/* vim: set ts=2: */
+
+/*exported CRC32 */
+
+
+var CRC32;
+
+(function (factory) {
+  /*jshint ignore:start */
+
+  /*eslint-disable */
+  factory(CRC32 = {});
+  /*eslint-enable */
+
+  /*jshint ignore:end */
+})(function (CRC32) {
+  CRC32.version = '1.2.0';
+  /* see perf/crc32table.js */
+
+  /*global Int32Array */
+
+  function signed_crc_table() {
+    var c = 0,
+        table = new Array(256);
+
+    for (var n = 0; n != 256; ++n) {
+      c = n;
+      c = c & 1 ? -306674912 ^ c >>> 1 : c >>> 1;
+      c = c & 1 ? -306674912 ^ c >>> 1 : c >>> 1;
+      c = c & 1 ? -306674912 ^ c >>> 1 : c >>> 1;
+      c = c & 1 ? -306674912 ^ c >>> 1 : c >>> 1;
+      c = c & 1 ? -306674912 ^ c >>> 1 : c >>> 1;
+      c = c & 1 ? -306674912 ^ c >>> 1 : c >>> 1;
+      c = c & 1 ? -306674912 ^ c >>> 1 : c >>> 1;
+      c = c & 1 ? -306674912 ^ c >>> 1 : c >>> 1;
+      table[n] = c;
+    }
+
+    return typeof Int32Array !== 'undefined' ? new Int32Array(table) : table;
+  }
+
+  var T = signed_crc_table();
+
+  function crc32_bstr(bstr, seed) {
+    var C = seed ^ -1,
+        L = bstr.length - 1;
+
+    for (var i = 0; i < L;) {
+      C = C >>> 8 ^ T[(C ^ bstr.charCodeAt(i++)) & 0xFF];
+      C = C >>> 8 ^ T[(C ^ bstr.charCodeAt(i++)) & 0xFF];
+    }
+
+    if (i === L) C = C >>> 8 ^ T[(C ^ bstr.charCodeAt(i)) & 0xFF];
+    return C ^ -1;
+  }
+
+  function crc32_buf(buf, seed) {
+    if (buf.length > 10000) return crc32_buf_8(buf, seed);
+    var C = seed ^ -1,
+        L = buf.length - 3;
+
+    for (var i = 0; i < L;) {
+      C = C >>> 8 ^ T[(C ^ buf[i++]) & 0xFF];
+      C = C >>> 8 ^ T[(C ^ buf[i++]) & 0xFF];
+      C = C >>> 8 ^ T[(C ^ buf[i++]) & 0xFF];
+      C = C >>> 8 ^ T[(C ^ buf[i++]) & 0xFF];
+    }
+
+    while (i < L + 3) C = C >>> 8 ^ T[(C ^ buf[i++]) & 0xFF];
+
+    return C ^ -1;
+  }
+
+  function crc32_buf_8(buf, seed) {
+    var C = seed ^ -1,
+        L = buf.length - 7;
+
+    for (var i = 0; i < L;) {
+      C = C >>> 8 ^ T[(C ^ buf[i++]) & 0xFF];
+      C = C >>> 8 ^ T[(C ^ buf[i++]) & 0xFF];
+      C = C >>> 8 ^ T[(C ^ buf[i++]) & 0xFF];
+      C = C >>> 8 ^ T[(C ^ buf[i++]) & 0xFF];
+      C = C >>> 8 ^ T[(C ^ buf[i++]) & 0xFF];
+      C = C >>> 8 ^ T[(C ^ buf[i++]) & 0xFF];
+      C = C >>> 8 ^ T[(C ^ buf[i++]) & 0xFF];
+      C = C >>> 8 ^ T[(C ^ buf[i++]) & 0xFF];
+    }
+
+    while (i < L + 7) C = C >>> 8 ^ T[(C ^ buf[i++]) & 0xFF];
+
+    return C ^ -1;
+  }
+
+  function crc32_str(str, seed) {
+    var C = seed ^ -1;
+
+    for (var i = 0, L = str.length, c, d; i < L;) {
+      c = str.charCodeAt(i++);
+
+      if (c < 0x80) {
+        C = C >>> 8 ^ T[(C ^ c) & 0xFF];
+      } else if (c < 0x800) {
+        C = C >>> 8 ^ T[(C ^ (192 | c >> 6 & 31)) & 0xFF];
+        C = C >>> 8 ^ T[(C ^ (128 | c & 63)) & 0xFF];
+      } else if (c >= 0xD800 && c < 0xE000) {
+        c = (c & 1023) + 64;
+        d = str.charCodeAt(i++) & 1023;
+        C = C >>> 8 ^ T[(C ^ (240 | c >> 8 & 7)) & 0xFF];
+        C = C >>> 8 ^ T[(C ^ (128 | c >> 2 & 63)) & 0xFF];
+        C = C >>> 8 ^ T[(C ^ (128 | d >> 6 & 15 | (c & 3) << 4)) & 0xFF];
+        C = C >>> 8 ^ T[(C ^ (128 | d & 63)) & 0xFF];
+      } else {
+        C = C >>> 8 ^ T[(C ^ (224 | c >> 12 & 15)) & 0xFF];
+        C = C >>> 8 ^ T[(C ^ (128 | c >> 6 & 63)) & 0xFF];
+        C = C >>> 8 ^ T[(C ^ (128 | c & 63)) & 0xFF];
+      }
+    }
+
+    return C ^ -1;
+  }
+
+  CRC32.table = T;
+  CRC32.bstr = crc32_bstr;
+  CRC32.buf = crc32_buf;
+  CRC32.str = crc32_str;
+});
+/* [MS-CFB] v20171201 */
+
+
+var CFB = function _CFB() {
+  var exports = {};
+  exports.version = '1.2.0';
+  /* [MS-CFB] 2.6.4 */
+
+  function namecmp(l, r) {
+    var L = l.split("/"),
+        R = r.split("/");
+
+    for (var i = 0, c = 0, Z = Math.min(L.length, R.length); i < Z; ++i) {
+      if (c = L[i].length - R[i].length) return c;
+      if (L[i] != R[i]) return L[i] < R[i] ? -1 : 1;
+    }
+
+    return L.length - R.length;
+  }
+
+  function dirname(p) {
+    if (p.charAt(p.length - 1) == "/") return p.slice(0, -1).indexOf("/") === -1 ? p : dirname(p.slice(0, -1));
+    var c = p.lastIndexOf("/");
+    return c === -1 ? p : p.slice(0, c + 1);
+  }
+
+  function filename(p) {
+    if (p.charAt(p.length - 1) == "/") return filename(p.slice(0, -1));
+    var c = p.lastIndexOf("/");
+    return c === -1 ? p : p.slice(c + 1);
+  }
+  /* -------------------------------------------------------------------------- */
+
+  /* DOS Date format:
+     high|YYYYYYYm.mmmddddd.HHHHHMMM.MMMSSSSS|low
+     add 1980 to stored year
+     stored second should be doubled
+  */
+
+  /* write JS date to buf as a DOS date */
+
+
+  function write_dos_date(buf, date) {
+    if (typeof date === "string") date = new Date(date);
+    var hms = date.getHours();
+    hms = hms << 6 | date.getMinutes();
+    hms = hms << 5 | date.getSeconds() >>> 1;
+    buf.write_shift(2, hms);
+    var ymd = date.getFullYear() - 1980;
+    ymd = ymd << 4 | date.getMonth() + 1;
+    ymd = ymd << 5 | date.getDate();
+    buf.write_shift(2, ymd);
+  }
+  /* read four bytes from buf and interpret as a DOS date */
+
+
+  function parse_dos_date(buf) {
+    var hms = buf.read_shift(2) & 0xFFFF;
+    var ymd = buf.read_shift(2) & 0xFFFF;
+    var val = new Date();
+    var d = ymd & 0x1F;
+    ymd >>>= 5;
+    var m = ymd & 0x0F;
+    ymd >>>= 4;
+    val.setMilliseconds(0);
+    val.setFullYear(ymd + 1980);
+    val.setMonth(m - 1);
+    val.setDate(d);
+    var S = hms & 0x1F;
+    hms >>>= 5;
+    var M = hms & 0x3F;
+    hms >>>= 6;
+    val.setHours(hms);
+    val.setMinutes(M);
+    val.setSeconds(S << 1);
+    return val;
+  }
+
+  function parse_extra_field(blob) {
+    prep_blob(blob, 0);
+    var o = {};
+    var flags = 0;
+
+    while (blob.l <= blob.length - 4) {
+      var type = blob.read_shift(2);
+      var sz = blob.read_shift(2),
+          tgt = blob.l + sz;
+      var p = {};
+
+      switch (type) {
+        /* UNIX-style Timestamps */
+        case 0x5455:
+          {
+            flags = blob.read_shift(1);
+            if (flags & 1) p.mtime = blob.read_shift(4);
+            /* for some reason, CD flag corresponds to LFH */
+
+            if (sz > 5) {
+              if (flags & 2) p.atime = blob.read_shift(4);
+              if (flags & 4) p.ctime = blob.read_shift(4);
+            }
+
+            if (p.mtime) p.mt = new Date(p.mtime * 1000);
+          }
+          break;
+      }
+
+      blob.l = tgt;
+      o[type] = p;
+    }
+
+    return o;
+  }
+
+  var fs;
+
+  function get_fs() {
+    return fs || (fs = require$$0$1);
+  }
+
+  function parse(file, options) {
+    if (file[0] == 0x50 && file[1] == 0x4b) return parse_zip(file, options);
+    if ((file[0] | 0x20) == 0x6d && (file[1] | 0x20) == 0x69) return parse_mad(file, options);
+    if (file.length < 512) throw new Error("CFB file size " + file.length + " < 512");
+    var mver = 3;
+    var ssz = 512;
+    var nmfs = 0; // number of mini FAT sectors
+
+    var difat_sec_cnt = 0;
+    var dir_start = 0;
+    var minifat_start = 0;
+    var difat_start = 0;
+    var fat_addrs = []; // locations of FAT sectors
+
+    /* [MS-CFB] 2.2 Compound File Header */
+
+    var blob = file.slice(0, 512);
+    prep_blob(blob, 0);
+    /* major version */
+
+    var mv = check_get_mver(blob);
+    mver = mv[0];
+
+    switch (mver) {
+      case 3:
+        ssz = 512;
+        break;
+
+      case 4:
+        ssz = 4096;
+        break;
+
+      case 0:
+        if (mv[1] == 0) return parse_zip(file, options);
+
+      /* falls through */
+
+      default:
+        throw new Error("Major Version: Expected 3 or 4 saw " + mver);
+    }
+    /* reprocess header */
+
+
+    if (ssz !== 512) {
+      blob = file.slice(0, ssz);
+      prep_blob(blob, 28
+      /* blob.l */
+      );
+    }
+    /* Save header for final object */
+
+
+    var header = file.slice(0, ssz);
+    check_shifts(blob, mver); // Number of Directory Sectors
+
+    var dir_cnt = blob.read_shift(4, 'i');
+    if (mver === 3 && dir_cnt !== 0) throw new Error('# Directory Sectors: Expected 0 saw ' + dir_cnt); // Number of FAT Sectors
+
+    blob.l += 4; // First Directory Sector Location
+
+    dir_start = blob.read_shift(4, 'i'); // Transaction Signature
+
+    blob.l += 4; // Mini Stream Cutoff Size
+
+    blob.chk('00100000', 'Mini Stream Cutoff Size: '); // First Mini FAT Sector Location
+
+    minifat_start = blob.read_shift(4, 'i'); // Number of Mini FAT Sectors
+
+    nmfs = blob.read_shift(4, 'i'); // First DIFAT sector location
+
+    difat_start = blob.read_shift(4, 'i'); // Number of DIFAT Sectors
+
+    difat_sec_cnt = blob.read_shift(4, 'i'); // Grab FAT Sector Locations
+
+    for (var q = -1, j = 0; j < 109; ++j) {
+      /* 109 = (512 - blob.l)>>>2; */
+      q = blob.read_shift(4, 'i');
+      if (q < 0) break;
+      fat_addrs[j] = q;
+    }
+    /** Break the file up into sectors */
+
+
+    var sectors = sectorify(file, ssz);
+    sleuth_fat(difat_start, difat_sec_cnt, sectors, ssz, fat_addrs);
+    /** Chains */
+
+    var sector_list = make_sector_list(sectors, dir_start, fat_addrs, ssz);
+    sector_list[dir_start].name = "!Directory";
+    if (nmfs > 0 && minifat_start !== ENDOFCHAIN) sector_list[minifat_start].name = "!MiniFAT";
+    sector_list[fat_addrs[0]].name = "!FAT";
+    sector_list.fat_addrs = fat_addrs;
+    sector_list.ssz = ssz;
+    /* [MS-CFB] 2.6.1 Compound File Directory Entry */
+
+    var files = {},
+        Paths = [],
+        FileIndex = [],
+        FullPaths = [];
+    read_directory(dir_start, sector_list, sectors, Paths, nmfs, files, FileIndex, minifat_start);
+    build_full_paths(FileIndex, FullPaths, Paths);
+    Paths.shift();
+    var o = {
+      FileIndex: FileIndex,
+      FullPaths: FullPaths
+    }; // $FlowIgnore
+
+    if (options && options.raw) o.raw = {
+      header: header,
+      sectors: sectors
+    };
+    return o;
+  } // parse
+
+  /* [MS-CFB] 2.2 Compound File Header -- read up to major version */
+
+
+  function check_get_mver(blob) {
+    if (blob[blob.l] == 0x50 && blob[blob.l + 1] == 0x4b) return [0, 0]; // header signature 8
+
+    blob.chk(HEADER_SIGNATURE, 'Header Signature: '); // clsid 16
+    //blob.chk(HEADER_CLSID, 'CLSID: ');
+
+    blob.l += 16; // minor version 2
+
+    var mver = blob.read_shift(2, 'u');
+    return [blob.read_shift(2, 'u'), mver];
+  }
+
+  function check_shifts(blob, mver) {
+    var shift = 0x09; // Byte Order
+    //blob.chk('feff', 'Byte Order: '); // note: some writers put 0xffff
+
+    blob.l += 2; // Sector Shift
+
+    switch (shift = blob.read_shift(2)) {
+      case 0x09:
+        if (mver != 3) throw new Error('Sector Shift: Expected 9 saw ' + shift);
+        break;
+
+      case 0x0c:
+        if (mver != 4) throw new Error('Sector Shift: Expected 12 saw ' + shift);
+        break;
+
+      default:
+        throw new Error('Sector Shift: Expected 9 or 12 saw ' + shift);
+    } // Mini Sector Shift
+
+
+    blob.chk('0600', 'Mini Sector Shift: '); // Reserved
+
+    blob.chk('000000000000', 'Reserved: ');
+  }
+  /** Break the file up into sectors */
+
+
+  function sectorify(file, ssz) {
+    var nsectors = Math.ceil(file.length / ssz) - 1;
+    var sectors = [];
+
+    for (var i = 1; i < nsectors; ++i) sectors[i - 1] = file.slice(i * ssz, (i + 1) * ssz);
+
+    sectors[nsectors - 1] = file.slice(nsectors * ssz);
+    return sectors;
+  }
+  /* [MS-CFB] 2.6.4 Red-Black Tree */
+
+
+  function build_full_paths(FI, FP, Paths) {
+    var i = 0,
+        L = 0,
+        R = 0,
+        C = 0,
+        j = 0,
+        pl = Paths.length;
+    var dad = [],
+        q = [];
+
+    for (; i < pl; ++i) {
+      dad[i] = q[i] = i;
+      FP[i] = Paths[i];
+    }
+
+    for (; j < q.length; ++j) {
+      i = q[j];
+      L = FI[i].L;
+      R = FI[i].R;
+      C = FI[i].C;
+
+      if (dad[i] === i) {
+        if (L !== -1
+        /*NOSTREAM*/
+        && dad[L] !== L) dad[i] = dad[L];
+        if (R !== -1 && dad[R] !== R) dad[i] = dad[R];
+      }
+
+      if (C !== -1
+      /*NOSTREAM*/
+      ) dad[C] = i;
+
+      if (L !== -1 && i != dad[i]) {
+        dad[L] = dad[i];
+        if (q.lastIndexOf(L) < j) q.push(L);
+      }
+
+      if (R !== -1 && i != dad[i]) {
+        dad[R] = dad[i];
+        if (q.lastIndexOf(R) < j) q.push(R);
+      }
+    }
+
+    for (i = 1; i < pl; ++i) if (dad[i] === i) {
+      if (R !== -1
+      /*NOSTREAM*/
+      && dad[R] !== R) dad[i] = dad[R];else if (L !== -1 && dad[L] !== L) dad[i] = dad[L];
+    }
+
+    for (i = 1; i < pl; ++i) {
+      if (FI[i].type === 0
+      /* unknown */
+      ) continue;
+      j = i;
+      if (j != dad[j]) do {
+        j = dad[j];
+        FP[i] = FP[j] + "/" + FP[i];
+      } while (j !== 0 && -1 !== dad[j] && j != dad[j]);
+      dad[i] = -1;
+    }
+
+    FP[0] += "/";
+
+    for (i = 1; i < pl; ++i) {
+      if (FI[i].type !== 2
+      /* stream */
+      ) FP[i] += "/";
+    }
+  }
+
+  function get_mfat_entry(entry, payload, mini) {
+    var start = entry.start,
+        size = entry.size; //return (payload.slice(start*MSSZ, start*MSSZ + size));
+
+    var o = [];
+    var idx = start;
+
+    while (mini && size > 0 && idx >= 0) {
+      o.push(payload.slice(idx * MSSZ, idx * MSSZ + MSSZ));
+      size -= MSSZ;
+      idx = __readInt32LE(mini, idx * 4);
+    }
+
+    if (o.length === 0) return new_buf(0);
+    return bconcat(o).slice(0, entry.size);
+  }
+  /** Chase down the rest of the DIFAT chain to build a comprehensive list
+      DIFAT chains by storing the next sector number as the last 32 bits */
+
+
+  function sleuth_fat(idx, cnt, sectors, ssz, fat_addrs) {
+    var q = ENDOFCHAIN;
+
+    if (idx === ENDOFCHAIN) {
+      if (cnt !== 0) throw new Error("DIFAT chain shorter than expected");
+    } else if (idx !== -1
+    /*FREESECT*/
+    ) {
+        var sector = sectors[idx],
+            m = (ssz >>> 2) - 1;
+        if (!sector) return;
+
+        for (var i = 0; i < m; ++i) {
+          if ((q = __readInt32LE(sector, i * 4)) === ENDOFCHAIN) break;
+          fat_addrs.push(q);
+        }
+
+        sleuth_fat(__readInt32LE(sector, ssz - 4), cnt - 1, sectors, ssz, fat_addrs);
+      }
+  }
+  /** Follow the linked list of sectors for a given starting point */
+
+
+  function get_sector_list(sectors, start, fat_addrs, ssz, chkd) {
+    var buf = [],
+        buf_chain = [];
+    if (!chkd) chkd = [];
+    var modulus = ssz - 1,
+        j = 0,
+        jj = 0;
+
+    for (j = start; j >= 0;) {
+      chkd[j] = true;
+      buf[buf.length] = j;
+      buf_chain.push(sectors[j]);
+      var addr = fat_addrs[Math.floor(j * 4 / ssz)];
+      jj = j * 4 & modulus;
+      if (ssz < 4 + jj) throw new Error("FAT boundary crossed: " + j + " 4 " + ssz);
+      if (!sectors[addr]) break;
+      j = __readInt32LE(sectors[addr], jj);
+    }
+
+    return {
+      nodes: buf,
+      data: __toBuffer([buf_chain])
+    };
+  }
+  /** Chase down the sector linked lists */
+
+
+  function make_sector_list(sectors, dir_start, fat_addrs, ssz) {
+    var sl = sectors.length,
+        sector_list = [];
+    var chkd = [],
+        buf = [],
+        buf_chain = [];
+    var modulus = ssz - 1,
+        i = 0,
+        j = 0,
+        k = 0,
+        jj = 0;
+
+    for (i = 0; i < sl; ++i) {
+      buf = [];
+      k = i + dir_start;
+      if (k >= sl) k -= sl;
+      if (chkd[k]) continue;
+      buf_chain = [];
+      var seen = [];
+
+      for (j = k; j >= 0;) {
+        seen[j] = true;
+        chkd[j] = true;
+        buf[buf.length] = j;
+        buf_chain.push(sectors[j]);
+        var addr = fat_addrs[Math.floor(j * 4 / ssz)];
+        jj = j * 4 & modulus;
+        if (ssz < 4 + jj) throw new Error("FAT boundary crossed: " + j + " 4 " + ssz);
+        if (!sectors[addr]) break;
+        j = __readInt32LE(sectors[addr], jj);
+        if (seen[j]) break;
+      }
+
+      sector_list[k] = {
+        nodes: buf,
+        data: __toBuffer([buf_chain])
+      };
+    }
+
+    return sector_list;
+  }
+  /* [MS-CFB] 2.6.1 Compound File Directory Entry */
+
+
+  function read_directory(dir_start, sector_list, sectors, Paths, nmfs, files, FileIndex, mini) {
+    var minifat_store = 0,
+        pl = Paths.length ? 2 : 0;
+    var sector = sector_list[dir_start].data;
+    var i = 0,
+        namelen = 0,
+        name;
+
+    for (; i < sector.length; i += 128) {
+      var blob = sector.slice(i, i + 128);
+      prep_blob(blob, 64);
+      namelen = blob.read_shift(2);
+      name = __utf16le(blob, 0, namelen - pl);
+      Paths.push(name);
+      var o = {
+        name: name,
+        type: blob.read_shift(1),
+        color: blob.read_shift(1),
+        L: blob.read_shift(4, 'i'),
+        R: blob.read_shift(4, 'i'),
+        C: blob.read_shift(4, 'i'),
+        clsid: blob.read_shift(16),
+        state: blob.read_shift(4, 'i'),
+        start: 0,
+        size: 0
+      };
+      var ctime = blob.read_shift(2) + blob.read_shift(2) + blob.read_shift(2) + blob.read_shift(2);
+      if (ctime !== 0) o.ct = read_date(blob, blob.l - 8);
+      var mtime = blob.read_shift(2) + blob.read_shift(2) + blob.read_shift(2) + blob.read_shift(2);
+      if (mtime !== 0) o.mt = read_date(blob, blob.l - 8);
+      o.start = blob.read_shift(4, 'i');
+      o.size = blob.read_shift(4, 'i');
+
+      if (o.size < 0 && o.start < 0) {
+        o.size = o.type = 0;
+        o.start = ENDOFCHAIN;
+        o.name = "";
+      }
+
+      if (o.type === 5) {
+        /* root */
+        minifat_store = o.start;
+        if (nmfs > 0 && minifat_store !== ENDOFCHAIN) sector_list[minifat_store].name = "!StreamData";
+        /*minifat_size = o.size;*/
+      } else if (o.size >= 4096
+      /* MSCSZ */
+      ) {
+          o.storage = 'fat';
+          if (sector_list[o.start] === undefined) sector_list[o.start] = get_sector_list(sectors, o.start, sector_list.fat_addrs, sector_list.ssz);
+          sector_list[o.start].name = o.name;
+          o.content = sector_list[o.start].data.slice(0, o.size);
+        } else {
+        o.storage = 'minifat';
+        if (o.size < 0) o.size = 0;else if (minifat_store !== ENDOFCHAIN && o.start !== ENDOFCHAIN && sector_list[minifat_store]) {
+          o.content = get_mfat_entry(o, sector_list[minifat_store].data, (sector_list[mini] || {}).data);
+        }
+      }
+
+      if (o.content) prep_blob(o.content, 0);
+      files[name] = o;
+      FileIndex.push(o);
+    }
+  }
+
+  function read_date(blob, offset) {
+    return new Date((__readUInt32LE(blob, offset + 4) / 1e7 * Math.pow(2, 32) + __readUInt32LE(blob, offset) / 1e7 - 11644473600) * 1000);
+  }
+
+  function read_file(filename, options) {
+    get_fs();
+    return parse(fs.readFileSync(filename), options);
+  }
+
+  function read(blob, options) {
+    switch (options && options.type || "base64") {
+      case "file":
+        return read_file(blob, options);
+
+      case "base64":
+        return parse(s2a(Base64.decode(blob)), options);
+
+      case "binary":
+        return parse(s2a(blob), options);
+    }
+
+    return parse(blob, options);
+  }
+
+  function init_cfb(cfb, opts) {
+    var o = opts || {},
+        root = o.root || "Root Entry";
+    if (!cfb.FullPaths) cfb.FullPaths = [];
+    if (!cfb.FileIndex) cfb.FileIndex = [];
+    if (cfb.FullPaths.length !== cfb.FileIndex.length) throw new Error("inconsistent CFB structure");
+
+    if (cfb.FullPaths.length === 0) {
+      cfb.FullPaths[0] = root + "/";
+      cfb.FileIndex[0] = {
+        name: root,
+        type: 5
+      };
+    }
+
+    if (o.CLSID) cfb.FileIndex[0].clsid = o.CLSID;
+    seed_cfb(cfb);
+  }
+
+  function seed_cfb(cfb) {
+    var nm = "\u0001Sh33tJ5";
+    if (CFB.find(cfb, "/" + nm)) return;
+    var p = new_buf(4);
+    p[0] = 55;
+    p[1] = p[3] = 50;
+    p[2] = 54;
+    cfb.FileIndex.push({
+      name: nm,
+      type: 2,
+      content: p,
+      size: 4,
+      L: 69,
+      R: 69,
+      C: 69
+    });
+    cfb.FullPaths.push(cfb.FullPaths[0] + nm);
+    rebuild_cfb(cfb);
+  }
+
+  function rebuild_cfb(cfb, f) {
+    init_cfb(cfb);
+    var gc = false,
+        s = false;
+
+    for (var i = cfb.FullPaths.length - 1; i >= 0; --i) {
+      var _file = cfb.FileIndex[i];
+
+      switch (_file.type) {
+        case 0:
+          if (s) gc = true;else {
+            cfb.FileIndex.pop();
+            cfb.FullPaths.pop();
+          }
+          break;
+
+        case 1:
+        case 2:
+        case 5:
+          s = true;
+          if (isNaN(_file.R * _file.L * _file.C)) gc = true;
+          if (_file.R > -1 && _file.L > -1 && _file.R == _file.L) gc = true;
+          break;
+
+        default:
+          gc = true;
+          break;
+      }
+    }
+
+    if (!gc && !f) return;
+    var now = new Date(1987, 1, 19),
+        j = 0;
+    var data = [];
+
+    for (i = 0; i < cfb.FullPaths.length; ++i) {
+      if (cfb.FileIndex[i].type === 0) continue;
+      data.push([cfb.FullPaths[i], cfb.FileIndex[i]]);
+    }
+
+    for (i = 0; i < data.length; ++i) {
+      var dad = dirname(data[i][0]);
+      s = false;
+
+      for (j = 0; j < data.length; ++j) if (data[j][0] === dad) s = true;
+
+      if (!s) data.push([dad, {
+        name: filename(dad).replace("/", ""),
+        type: 1,
+        clsid: HEADER_CLSID,
+        ct: now,
+        mt: now,
+        content: null
+      }]);
+    }
+
+    data.sort(function (x, y) {
+      return namecmp(x[0], y[0]);
+    });
+    cfb.FullPaths = [];
+    cfb.FileIndex = [];
+
+    for (i = 0; i < data.length; ++i) {
+      cfb.FullPaths[i] = data[i][0];
+      cfb.FileIndex[i] = data[i][1];
+    }
+
+    for (i = 0; i < data.length; ++i) {
+      var elt = cfb.FileIndex[i];
+      var nm = cfb.FullPaths[i];
+      elt.name = filename(nm).replace("/", "");
+      elt.L = elt.R = elt.C = -(elt.color = 1);
+      elt.size = elt.content ? elt.content.length : 0;
+      elt.start = 0;
+      elt.clsid = elt.clsid || HEADER_CLSID;
+
+      if (i === 0) {
+        elt.C = data.length > 1 ? 1 : -1;
+        elt.size = 0;
+        elt.type = 5;
+      } else if (nm.slice(-1) == "/") {
+        for (j = i + 1; j < data.length; ++j) if (dirname(cfb.FullPaths[j]) == nm) break;
+
+        elt.C = j >= data.length ? -1 : j;
+
+        for (j = i + 1; j < data.length; ++j) if (dirname(cfb.FullPaths[j]) == dirname(nm)) break;
+
+        elt.R = j >= data.length ? -1 : j;
+        elt.type = 1;
+      } else {
+        if (dirname(cfb.FullPaths[i + 1] || "") == dirname(nm)) elt.R = i + 1;
+        elt.type = 2;
+      }
+    }
+  }
+
+  function _write(cfb, options) {
+    var _opts = options || {};
+    /* MAD is order-sensitive, skip rebuild and sort */
+
+
+    if (_opts.fileType == 'mad') return write_mad(cfb, _opts);
+    rebuild_cfb(cfb);
+
+    switch (_opts.fileType) {
+      case 'zip':
+        return write_zip(cfb, _opts);
+      //case 'mad': return write_mad(cfb, _opts);
+    }
+
+    var L = function (cfb) {
+      var mini_size = 0,
+          fat_size = 0;
+
+      for (var i = 0; i < cfb.FileIndex.length; ++i) {
+        var file = cfb.FileIndex[i];
+        if (!file.content) continue;
+        var flen = file.content.length;
+
+        if (flen > 0) {
+          if (flen < 0x1000) mini_size += flen + 0x3F >> 6;else fat_size += flen + 0x01FF >> 9;
+        }
+      }
+
+      var dir_cnt = cfb.FullPaths.length + 3 >> 2;
+      var mini_cnt = mini_size + 7 >> 3;
+      var mfat_cnt = mini_size + 0x7F >> 7;
+      var fat_base = mini_cnt + fat_size + dir_cnt + mfat_cnt;
+      var fat_cnt = fat_base + 0x7F >> 7;
+      var difat_cnt = fat_cnt <= 109 ? 0 : Math.ceil((fat_cnt - 109) / 0x7F);
+
+      while (fat_base + fat_cnt + difat_cnt + 0x7F >> 7 > fat_cnt) difat_cnt = ++fat_cnt <= 109 ? 0 : Math.ceil((fat_cnt - 109) / 0x7F);
+
+      var L = [1, difat_cnt, fat_cnt, mfat_cnt, dir_cnt, fat_size, mini_size, 0];
+      cfb.FileIndex[0].size = mini_size << 6;
+      L[7] = (cfb.FileIndex[0].start = L[0] + L[1] + L[2] + L[3] + L[4] + L[5]) + (L[6] + 7 >> 3);
+      return L;
+    }(cfb);
+
+    var o = new_buf(L[7] << 9);
+    var i = 0,
+        T = 0;
+    {
+      for (i = 0; i < 8; ++i) o.write_shift(1, HEADER_SIG[i]);
+
+      for (i = 0; i < 8; ++i) o.write_shift(2, 0);
+
+      o.write_shift(2, 0x003E);
+      o.write_shift(2, 0x0003);
+      o.write_shift(2, 0xFFFE);
+      o.write_shift(2, 0x0009);
+      o.write_shift(2, 0x0006);
+
+      for (i = 0; i < 3; ++i) o.write_shift(2, 0);
+
+      o.write_shift(4, 0);
+      o.write_shift(4, L[2]);
+      o.write_shift(4, L[0] + L[1] + L[2] + L[3] - 1);
+      o.write_shift(4, 0);
+      o.write_shift(4, 1 << 12);
+      o.write_shift(4, L[3] ? L[0] + L[1] + L[2] - 1 : ENDOFCHAIN);
+      o.write_shift(4, L[3]);
+      o.write_shift(-4, L[1] ? L[0] - 1 : ENDOFCHAIN);
+      o.write_shift(4, L[1]);
+
+      for (i = 0; i < 109; ++i) o.write_shift(-4, i < L[2] ? L[1] + i : -1);
+    }
+
+    if (L[1]) {
+      for (T = 0; T < L[1]; ++T) {
+        for (; i < 236 + T * 127; ++i) o.write_shift(-4, i < L[2] ? L[1] + i : -1);
+
+        o.write_shift(-4, T === L[1] - 1 ? ENDOFCHAIN : T + 1);
+      }
+    }
+
+    var chainit = function (w) {
+      for (T += w; i < T - 1; ++i) o.write_shift(-4, i + 1);
+
+      if (w) {
+        ++i;
+        o.write_shift(-4, ENDOFCHAIN);
+      }
+    };
+
+    T = i = 0;
+
+    for (T += L[1]; i < T; ++i) o.write_shift(-4, consts.DIFSECT);
+
+    for (T += L[2]; i < T; ++i) o.write_shift(-4, consts.FATSECT);
+
+    chainit(L[3]);
+    chainit(L[4]);
+    var j = 0,
+        flen = 0;
+    var file = cfb.FileIndex[0];
+
+    for (; j < cfb.FileIndex.length; ++j) {
+      file = cfb.FileIndex[j];
+      if (!file.content) continue;
+      flen = file.content.length;
+      if (flen < 0x1000) continue;
+      file.start = T;
+      chainit(flen + 0x01FF >> 9);
+    }
+
+    chainit(L[6] + 7 >> 3);
+
+    while (o.l & 0x1FF) o.write_shift(-4, consts.ENDOFCHAIN);
+
+    T = i = 0;
+
+    for (j = 0; j < cfb.FileIndex.length; ++j) {
+      file = cfb.FileIndex[j];
+      if (!file.content) continue;
+      flen = file.content.length;
+      if (!flen || flen >= 0x1000) continue;
+      file.start = T;
+      chainit(flen + 0x3F >> 6);
+    }
+
+    while (o.l & 0x1FF) o.write_shift(-4, consts.ENDOFCHAIN);
+
+    for (i = 0; i < L[4] << 2; ++i) {
+      var nm = cfb.FullPaths[i];
+
+      if (!nm || nm.length === 0) {
+        for (j = 0; j < 17; ++j) o.write_shift(4, 0);
+
+        for (j = 0; j < 3; ++j) o.write_shift(4, -1);
+
+        for (j = 0; j < 12; ++j) o.write_shift(4, 0);
+
+        continue;
+      }
+
+      file = cfb.FileIndex[i];
+      if (i === 0) file.start = file.size ? file.start - 1 : ENDOFCHAIN;
+
+      var _nm = i === 0 && _opts.root || file.name;
+
+      flen = 2 * (_nm.length + 1);
+      o.write_shift(64, _nm, "utf16le");
+      o.write_shift(2, flen);
+      o.write_shift(1, file.type);
+      o.write_shift(1, file.color);
+      o.write_shift(-4, file.L);
+      o.write_shift(-4, file.R);
+      o.write_shift(-4, file.C);
+      if (!file.clsid) for (j = 0; j < 4; ++j) o.write_shift(4, 0);else o.write_shift(16, file.clsid, "hex");
+      o.write_shift(4, file.state || 0);
+      o.write_shift(4, 0);
+      o.write_shift(4, 0);
+      o.write_shift(4, 0);
+      o.write_shift(4, 0);
+      o.write_shift(4, file.start);
+      o.write_shift(4, file.size);
+      o.write_shift(4, 0);
+    }
+
+    for (i = 1; i < cfb.FileIndex.length; ++i) {
+      file = cfb.FileIndex[i];
+
+      if (file.size >= 0x1000) {
+        o.l = file.start + 1 << 9;
+
+        for (j = 0; j < file.size; ++j) o.write_shift(1, file.content[j]);
+
+        for (; j & 0x1FF; ++j) o.write_shift(1, 0);
+      }
+    }
+
+    for (i = 1; i < cfb.FileIndex.length; ++i) {
+      file = cfb.FileIndex[i];
+
+      if (file.size > 0 && file.size < 0x1000) {
+        for (j = 0; j < file.size; ++j) o.write_shift(1, file.content[j]);
+
+        for (; j & 0x3F; ++j) o.write_shift(1, 0);
+      }
+    }
+
+    while (o.l < o.length) o.write_shift(1, 0);
+
+    return o;
+  }
+  /* [MS-CFB] 2.6.4 (Unicode 3.0.1 case conversion) */
+
+
+  function find(cfb, path) {
+    var UCFullPaths = cfb.FullPaths.map(function (x) {
+      return x.toUpperCase();
+    });
+    var UCPaths = UCFullPaths.map(function (x) {
+      var y = x.split("/");
+      return y[y.length - (x.slice(-1) == "/" ? 2 : 1)];
+    });
+    var k = false;
+
+    if (path.charCodeAt(0) === 47
+    /* "/" */
+    ) {
+        k = true;
+        path = UCFullPaths[0].slice(0, -1) + path;
+      } else k = path.indexOf("/") !== -1;
+
+    var UCPath = path.toUpperCase();
+    var w = k === true ? UCFullPaths.indexOf(UCPath) : UCPaths.indexOf(UCPath);
+    if (w !== -1) return cfb.FileIndex[w];
+    var m = !UCPath.match(chr1);
+    UCPath = UCPath.replace(chr0, '');
+    if (m) UCPath = UCPath.replace(chr1, '!');
+
+    for (w = 0; w < UCFullPaths.length; ++w) {
+      if ((m ? UCFullPaths[w].replace(chr1, '!') : UCFullPaths[w]).replace(chr0, '') == UCPath) return cfb.FileIndex[w];
+      if ((m ? UCPaths[w].replace(chr1, '!') : UCPaths[w]).replace(chr0, '') == UCPath) return cfb.FileIndex[w];
+    }
+
+    return null;
+  }
+  /** CFB Constants */
+
+
+  var MSSZ = 64;
+  /* Mini Sector Size = 1<<6 */
+  //var MSCSZ = 4096; /* Mini Stream Cutoff Size */
+
+  /* 2.1 Compound File Sector Numbers and Types */
+
+  var ENDOFCHAIN = -2;
+  /* 2.2 Compound File Header */
+
+  var HEADER_SIGNATURE = 'd0cf11e0a1b11ae1';
+  var HEADER_SIG = [0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1];
+  var HEADER_CLSID = '00000000000000000000000000000000';
+  var consts = {
+    /* 2.1 Compund File Sector Numbers and Types */
+    MAXREGSECT: -6,
+    DIFSECT: -4,
+    FATSECT: -3,
+    ENDOFCHAIN: ENDOFCHAIN,
+    FREESECT: -1,
+
+    /* 2.2 Compound File Header */
+    HEADER_SIGNATURE: HEADER_SIGNATURE,
+    HEADER_MINOR_VERSION: '3e00',
+    MAXREGSID: -6,
+    NOSTREAM: -1,
+    HEADER_CLSID: HEADER_CLSID,
+
+    /* 2.6.1 Compound File Directory Entry */
+    EntryTypes: ['unknown', 'storage', 'stream', 'lockbytes', 'property', 'root']
+  };
+
+  function write_file(cfb, filename, options) {
+    get_fs();
+
+    var o = _write(cfb, options);
+
+    fs.writeFileSync(filename, o);
+  }
+
+  function a2s(o) {
+    var out = new Array(o.length);
+
+    for (var i = 0; i < o.length; ++i) out[i] = String.fromCharCode(o[i]);
+
+    return out.join("");
+  }
+
+  function write(cfb, options) {
+    var o = _write(cfb, options);
+
+    switch (options && options.type || "buffer") {
+      case "file":
+        get_fs();
+        fs.writeFileSync(options.filename, o);
+        return o;
+
+      case "binary":
+        return typeof o == "string" ? o : a2s(o);
+
+      case "base64":
+        return Base64.encode(typeof o == "string" ? o : a2s(o));
+
+      case "buffer":
+        if (has_buf) return Buffer.isBuffer(o) ? o : Buffer_from(o);
+
+      /* falls through */
+
+      case "array":
+        return typeof o == "string" ? s2a(o) : o;
+    }
+
+    return o;
+  }
+  /* node < 8.1 zlib does not expose bytesRead, so default to pure JS */
+
+
+  var _zlib;
+
+  function use_zlib(zlib) {
+    try {
+      var InflateRaw = zlib.InflateRaw;
+      var InflRaw = new InflateRaw();
+
+      InflRaw._processChunk(new Uint8Array([3, 0]), InflRaw._finishFlushFlag);
+
+      if (InflRaw.bytesRead) _zlib = zlib;else throw new Error("zlib does not expose bytesRead");
+    } catch (e) {
+      console.error("cannot use native zlib: " + (e.message || e));
+    }
+  }
+
+  function _inflateRawSync(payload, usz) {
+    if (!_zlib) return _inflate(payload, usz);
+    var InflateRaw = _zlib.InflateRaw;
+    var InflRaw = new InflateRaw();
+
+    var out = InflRaw._processChunk(payload.slice(payload.l), InflRaw._finishFlushFlag);
+
+    payload.l += InflRaw.bytesRead;
+    return out;
+  }
+
+  function _deflateRawSync(payload) {
+    return _zlib ? _zlib.deflateRawSync(payload) : _deflate(payload);
+  }
+
+  var CLEN_ORDER = [16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15];
+  /*  LEN_ID = [ 257, 258, 259, 260, 261, 262, 263, 264, 265, 266, 267, 268, 269, 270, 271, 272, 273, 274, 275, 276, 277, 278, 279, 280, 281, 282, 283, 284, 285 ]; */
+
+  var LEN_LN = [3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 15, 17, 19, 23, 27, 31, 35, 43, 51, 59, 67, 83, 99, 115, 131, 163, 195, 227, 258];
+  /*  DST_ID = [  0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13,  14,  15,  16,  17,  18,  19,   20,   21,   22,   23,   24,   25,   26,    27,    28,    29 ]; */
+
+  var DST_LN = [1, 2, 3, 4, 5, 7, 9, 13, 17, 25, 33, 49, 65, 97, 129, 193, 257, 385, 513, 769, 1025, 1537, 2049, 3073, 4097, 6145, 8193, 12289, 16385, 24577];
+
+  function bit_swap_8(n) {
+    var t = (n << 1 | n << 11) & 0x22110 | (n << 5 | n << 15) & 0x88440;
+    return (t >> 16 | t >> 8 | t) & 0xFF;
+  }
+
+  var use_typed_arrays = typeof Uint8Array !== 'undefined';
+  var bitswap8 = use_typed_arrays ? new Uint8Array(1 << 8) : [];
+
+  for (var q = 0; q < 1 << 8; ++q) bitswap8[q] = bit_swap_8(q);
+
+  function bit_swap_n(n, b) {
+    var rev = bitswap8[n & 0xFF];
+    if (b <= 8) return rev >>> 8 - b;
+    rev = rev << 8 | bitswap8[n >> 8 & 0xFF];
+    if (b <= 16) return rev >>> 16 - b;
+    rev = rev << 8 | bitswap8[n >> 16 & 0xFF];
+    return rev >>> 24 - b;
+  }
+  /* helpers for unaligned bit reads */
+
+
+  function read_bits_2(buf, bl) {
+    var w = bl & 7,
+        h = bl >>> 3;
+    return (buf[h] | (w <= 6 ? 0 : buf[h + 1] << 8)) >>> w & 0x03;
+  }
+
+  function read_bits_3(buf, bl) {
+    var w = bl & 7,
+        h = bl >>> 3;
+    return (buf[h] | (w <= 5 ? 0 : buf[h + 1] << 8)) >>> w & 0x07;
+  }
+
+  function read_bits_4(buf, bl) {
+    var w = bl & 7,
+        h = bl >>> 3;
+    return (buf[h] | (w <= 4 ? 0 : buf[h + 1] << 8)) >>> w & 0x0F;
+  }
+
+  function read_bits_5(buf, bl) {
+    var w = bl & 7,
+        h = bl >>> 3;
+    return (buf[h] | (w <= 3 ? 0 : buf[h + 1] << 8)) >>> w & 0x1F;
+  }
+
+  function read_bits_7(buf, bl) {
+    var w = bl & 7,
+        h = bl >>> 3;
+    return (buf[h] | (w <= 1 ? 0 : buf[h + 1] << 8)) >>> w & 0x7F;
+  }
+  /* works up to n = 3 * 8 + 1 = 25 */
+
+
+  function read_bits_n(buf, bl, n) {
+    var w = bl & 7,
+        h = bl >>> 3,
+        f = (1 << n) - 1;
+    var v = buf[h] >>> w;
+    if (n < 8 - w) return v & f;
+    v |= buf[h + 1] << 8 - w;
+    if (n < 16 - w) return v & f;
+    v |= buf[h + 2] << 16 - w;
+    if (n < 24 - w) return v & f;
+    v |= buf[h + 3] << 24 - w;
+    return v & f;
+  }
+  /* until ArrayBuffer#realloc is a thing, fake a realloc */
+
+
+  function realloc(b, sz) {
+    var L = b.length,
+        M = 2 * L > sz ? 2 * L : sz + 5,
+        i = 0;
+    if (L >= sz) return b;
+
+    if (has_buf) {
+      var o = new_unsafe_buf(M); // $FlowIgnore
+
+      if (b.copy) b.copy(o);else for (; i < b.length; ++i) o[i] = b[i];
+      return o;
+    } else if (use_typed_arrays) {
+      var a = new Uint8Array(M);
+      if (a.set) a.set(b);else for (; i < b.length; ++i) a[i] = b[i];
+      return a;
+    }
+
+    b.length = M;
+    return b;
+  }
+  /* zero-filled arrays for older browsers */
+
+
+  function zero_fill_array(n) {
+    var o = new Array(n);
+
+    for (var i = 0; i < n; ++i) o[i] = 0;
+
+    return o;
+  }
+
+  var _deflate = function () {
+    var _deflateRaw = function () {
+      return function deflateRaw(data, out) {
+        var boff = 0;
+
+        while (boff < data.length) {
+          var L = Math.min(0xFFFF, data.length - boff);
+          var h = boff + L == data.length;
+          /* TODO: this is only type 0 stored */
+
+          out.write_shift(1, +h);
+          out.write_shift(2, L);
+          out.write_shift(2, ~L & 0xFFFF);
+
+          while (L-- > 0) out[out.l++] = data[boff++];
+        }
+
+        return out.l;
+      };
+    }();
+
+    return function (data) {
+      var buf = new_buf(50 + Math.floor(data.length * 1.1));
+
+      var off = _deflateRaw(data, buf);
+
+      return buf.slice(0, off);
+    };
+  }();
+  /* modified inflate function also moves original read head */
+
+  /* build tree (used for literals and lengths) */
+
+
+  function build_tree(clens, cmap, MAX) {
+    var maxlen = 1,
+        w = 0,
+        i = 0,
+        j = 0,
+        ccode = 0,
+        L = clens.length;
+    var bl_count = use_typed_arrays ? new Uint16Array(32) : zero_fill_array(32);
+
+    for (i = 0; i < 32; ++i) bl_count[i] = 0;
+
+    for (i = L; i < MAX; ++i) clens[i] = 0;
+
+    L = clens.length;
+    var ctree = use_typed_arrays ? new Uint16Array(L) : zero_fill_array(L); // []
+
+    /* build code tree */
+
+    for (i = 0; i < L; ++i) {
+      bl_count[w = clens[i]]++;
+      if (maxlen < w) maxlen = w;
+      ctree[i] = 0;
+    }
+
+    bl_count[0] = 0;
+
+    for (i = 1; i <= maxlen; ++i) bl_count[i + 16] = ccode = ccode + bl_count[i - 1] << 1;
+
+    for (i = 0; i < L; ++i) {
+      ccode = clens[i];
+      if (ccode != 0) ctree[i] = bl_count[ccode + 16]++;
+    }
+    /* cmap[maxlen + 4 bits] = (off&15) + (lit<<4) reverse mapping */
+
+
+    var cleni = 0;
+
+    for (i = 0; i < L; ++i) {
+      cleni = clens[i];
+
+      if (cleni != 0) {
+        ccode = bit_swap_n(ctree[i], maxlen) >> maxlen - cleni;
+
+        for (j = (1 << maxlen + 4 - cleni) - 1; j >= 0; --j) cmap[ccode | j << cleni] = cleni & 15 | i << 4;
+      }
+    }
+
+    return maxlen;
+  }
+
+  var fix_lmap = use_typed_arrays ? new Uint16Array(512) : zero_fill_array(512);
+  var fix_dmap = use_typed_arrays ? new Uint16Array(32) : zero_fill_array(32);
+
+  if (!use_typed_arrays) {
+    for (var i = 0; i < 512; ++i) fix_lmap[i] = 0;
+
+    for (i = 0; i < 32; ++i) fix_dmap[i] = 0;
+  }
+
+  (function () {
+    var dlens = [];
+    var i = 0;
+
+    for (; i < 32; i++) dlens.push(5);
+
+    build_tree(dlens, fix_dmap, 32);
+    var clens = [];
+    i = 0;
+
+    for (; i <= 143; i++) clens.push(8);
+
+    for (; i <= 255; i++) clens.push(9);
+
+    for (; i <= 279; i++) clens.push(7);
+
+    for (; i <= 287; i++) clens.push(8);
+
+    build_tree(clens, fix_lmap, 288);
+  })();
+
+  var dyn_lmap = use_typed_arrays ? new Uint16Array(32768) : zero_fill_array(32768);
+  var dyn_dmap = use_typed_arrays ? new Uint16Array(32768) : zero_fill_array(32768);
+  var dyn_cmap = use_typed_arrays ? new Uint16Array(128) : zero_fill_array(128);
+  var dyn_len_1 = 1,
+      dyn_len_2 = 1;
+  /* 5.5.3 Expanding Huffman Codes */
+
+  function dyn(data, boff) {
+    /* nomenclature from RFC1951 refers to bit values; these are offset by the implicit constant */
+    var _HLIT = read_bits_5(data, boff) + 257;
+
+    boff += 5;
+
+    var _HDIST = read_bits_5(data, boff) + 1;
+
+    boff += 5;
+
+    var _HCLEN = read_bits_4(data, boff) + 4;
+
+    boff += 4;
+    var w = 0;
+    /* grab and store code lengths */
+
+    var clens = use_typed_arrays ? new Uint8Array(19) : zero_fill_array(19);
+    var ctree = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    var maxlen = 1;
+    var bl_count = use_typed_arrays ? new Uint8Array(8) : zero_fill_array(8);
+    var next_code = use_typed_arrays ? new Uint8Array(8) : zero_fill_array(8);
+    var L = clens.length;
+    /* 19 */
+
+    for (var i = 0; i < _HCLEN; ++i) {
+      clens[CLEN_ORDER[i]] = w = read_bits_3(data, boff);
+      if (maxlen < w) maxlen = w;
+      bl_count[w]++;
+      boff += 3;
+    }
+    /* build code tree */
+
+
+    var ccode = 0;
+    bl_count[0] = 0;
+
+    for (i = 1; i <= maxlen; ++i) next_code[i] = ccode = ccode + bl_count[i - 1] << 1;
+
+    for (i = 0; i < L; ++i) if ((ccode = clens[i]) != 0) ctree[i] = next_code[ccode]++;
+    /* cmap[7 bits from stream] = (off&7) + (lit<<3) */
+
+
+    var cleni = 0;
+
+    for (i = 0; i < L; ++i) {
+      cleni = clens[i];
+
+      if (cleni != 0) {
+        ccode = bitswap8[ctree[i]] >> 8 - cleni;
+
+        for (var j = (1 << 7 - cleni) - 1; j >= 0; --j) dyn_cmap[ccode | j << cleni] = cleni & 7 | i << 3;
+      }
+    }
+    /* read literal and dist codes at once */
+
+
+    var hcodes = [];
+    maxlen = 1;
+
+    for (; hcodes.length < _HLIT + _HDIST;) {
+      ccode = dyn_cmap[read_bits_7(data, boff)];
+      boff += ccode & 7;
+
+      switch (ccode >>>= 3) {
+        case 16:
+          w = 3 + read_bits_2(data, boff);
+          boff += 2;
+          ccode = hcodes[hcodes.length - 1];
+
+          while (w-- > 0) hcodes.push(ccode);
+
+          break;
+
+        case 17:
+          w = 3 + read_bits_3(data, boff);
+          boff += 3;
+
+          while (w-- > 0) hcodes.push(0);
+
+          break;
+
+        case 18:
+          w = 11 + read_bits_7(data, boff);
+          boff += 7;
+
+          while (w-- > 0) hcodes.push(0);
+
+          break;
+
+        default:
+          hcodes.push(ccode);
+          if (maxlen < ccode) maxlen = ccode;
+          break;
+      }
+    }
+    /* build literal / length trees */
+
+
+    var h1 = hcodes.slice(0, _HLIT),
+        h2 = hcodes.slice(_HLIT);
+
+    for (i = _HLIT; i < 286; ++i) h1[i] = 0;
+
+    for (i = _HDIST; i < 30; ++i) h2[i] = 0;
+
+    dyn_len_1 = build_tree(h1, dyn_lmap, 286);
+    dyn_len_2 = build_tree(h2, dyn_dmap, 30);
+    return boff;
+  }
+  /* return [ data, bytesRead ] */
+
+
+  function inflate(data, usz) {
+    /* shortcircuit for empty buffer [0x03, 0x00] */
+    if (data[0] == 3 && !(data[1] & 0x3)) {
+      return [new_raw_buf(usz), 2];
+    }
+    /* bit offset */
+
+
+    var boff = 0;
+    /* header includes final bit and type bits */
+
+    var header = 0;
+    var outbuf = new_unsafe_buf(usz ? usz : 1 << 18);
+    var woff = 0;
+    var OL = outbuf.length >>> 0;
+    var max_len_1 = 0,
+        max_len_2 = 0;
+
+    while ((header & 1) == 0) {
+      header = read_bits_3(data, boff);
+      boff += 3;
+
+      if (header >>> 1 == 0) {
+        /* Stored block */
+        if (boff & 7) boff += 8 - (boff & 7);
+        /* 2 bytes sz, 2 bytes bit inverse */
+
+        var sz = data[boff >>> 3] | data[(boff >>> 3) + 1] << 8;
+        boff += 32;
+        /* push sz bytes */
+
+        if (!usz && OL < woff + sz) {
+          outbuf = realloc(outbuf, woff + sz);
+          OL = outbuf.length;
+        }
+
+        if (typeof data.copy === 'function') {
+          // $FlowIgnore
+          data.copy(outbuf, woff, boff >>> 3, (boff >>> 3) + sz);
+          woff += sz;
+          boff += 8 * sz;
+        } else while (sz-- > 0) {
+          outbuf[woff++] = data[boff >>> 3];
+          boff += 8;
+        }
+
+        continue;
+      } else if (header >>> 1 == 1) {
+        /* Fixed Huffman */
+        max_len_1 = 9;
+        max_len_2 = 5;
+      } else {
+        /* Dynamic Huffman */
+        boff = dyn(data, boff);
+        max_len_1 = dyn_len_1;
+        max_len_2 = dyn_len_2;
+      }
+
+      if (!usz && OL < woff + 32767) {
+        outbuf = realloc(outbuf, woff + 32767);
+        OL = outbuf.length;
+      }
+
+      for (;;) {
+        // while(true) is apparently out of vogue in modern JS circles
+
+        /* ingest code and move read head */
+        var bits = read_bits_n(data, boff, max_len_1);
+        var code = header >>> 1 == 1 ? fix_lmap[bits] : dyn_lmap[bits];
+        boff += code & 15;
+        code >>>= 4;
+        /* 0-255 are literals, 256 is end of block token, 257+ are copy tokens */
+
+        if ((code >>> 8 & 0xFF) === 0) outbuf[woff++] = code;else if (code == 256) break;else {
+          code -= 257;
+          var len_eb = code < 8 ? 0 : code - 4 >> 2;
+          if (len_eb > 5) len_eb = 0;
+          var tgt = woff + LEN_LN[code];
+          /* length extra bits */
+
+          if (len_eb > 0) {
+            tgt += read_bits_n(data, boff, len_eb);
+            boff += len_eb;
+          }
+          /* dist code */
+
+
+          bits = read_bits_n(data, boff, max_len_2);
+          code = header >>> 1 == 1 ? fix_dmap[bits] : dyn_dmap[bits];
+          boff += code & 15;
+          code >>>= 4;
+          var dst_eb = code < 4 ? 0 : code - 2 >> 1;
+          var dst = DST_LN[code];
+          /* dist extra bits */
+
+          if (dst_eb > 0) {
+            dst += read_bits_n(data, boff, dst_eb);
+            boff += dst_eb;
+          }
+          /* in the common case, manual byte copy is faster than TA set / Buffer copy */
+
+
+          if (!usz && OL < tgt) {
+            outbuf = realloc(outbuf, tgt);
+            OL = outbuf.length;
+          }
+
+          while (woff < tgt) {
+            outbuf[woff] = outbuf[woff - dst];
+            ++woff;
+          }
+        }
+      }
+    }
+
+    return [usz ? outbuf : outbuf.slice(0, woff), boff + 7 >>> 3];
+  }
+
+  function _inflate(payload, usz) {
+    var data = payload.slice(payload.l || 0);
+    var out = inflate(data, usz);
+    payload.l += out[1];
+    return out[0];
+  }
+
+  function warn_or_throw(wrn, msg) {
+    if (wrn) {
+      if (typeof console !== 'undefined') console.error(msg);
+    } else throw new Error(msg);
+  }
+
+  function parse_zip(file, options) {
+    var blob = file;
+    prep_blob(blob, 0);
+    var FileIndex = [],
+        FullPaths = [];
+    var o = {
+      FileIndex: FileIndex,
+      FullPaths: FullPaths
+    };
+    init_cfb(o, {
+      root: options.root
+    });
+    /* find end of central directory, start just after signature */
+
+    var i = blob.length - 4;
+
+    while ((blob[i] != 0x50 || blob[i + 1] != 0x4b || blob[i + 2] != 0x05 || blob[i + 3] != 0x06) && i >= 0) --i;
+
+    blob.l = i + 4;
+    /* parse end of central directory */
+
+    blob.l += 4;
+    var fcnt = blob.read_shift(2);
+    blob.l += 6;
+    var start_cd = blob.read_shift(4);
+    /* parse central directory */
+
+    blob.l = start_cd;
+
+    for (i = 0; i < fcnt; ++i) {
+      /* trust local file header instead of CD entry */
+      blob.l += 20;
+      var csz = blob.read_shift(4);
+      var usz = blob.read_shift(4);
+      var namelen = blob.read_shift(2);
+      var efsz = blob.read_shift(2);
+      var fcsz = blob.read_shift(2);
+      blob.l += 8;
+      var offset = blob.read_shift(4);
+      var EF = parse_extra_field(blob.slice(blob.l + namelen, blob.l + namelen + efsz));
+      blob.l += namelen + efsz + fcsz;
+      var L = blob.l;
+      blob.l = offset + 4;
+      parse_local_file(blob, csz, usz, o, EF);
+      blob.l = L;
+    }
+
+    return o;
+  }
+  /* head starts just after local file header signature */
+
+
+  function parse_local_file(blob, csz, usz, o, EF) {
+    /* [local file header] */
+    blob.l += 2;
+    var flags = blob.read_shift(2);
+    var meth = blob.read_shift(2);
+    var date = parse_dos_date(blob);
+    if (flags & 0x2041) throw new Error("Unsupported ZIP encryption");
+    var crc32 = blob.read_shift(4);
+
+    var _csz = blob.read_shift(4);
+
+    var _usz = blob.read_shift(4);
+
+    var namelen = blob.read_shift(2);
+    var efsz = blob.read_shift(2); // TODO: flags & (1<<11) // UTF8
+
+    var name = "";
+
+    for (var i = 0; i < namelen; ++i) name += String.fromCharCode(blob[blob.l++]);
+
+    if (efsz) {
+      var ef = parse_extra_field(blob.slice(blob.l, blob.l + efsz));
+      if ((ef[0x5455] || {}).mt) date = ef[0x5455].mt;
+      if (((EF || {})[0x5455] || {}).mt) date = EF[0x5455].mt;
+    }
+
+    blob.l += efsz;
+    /* [encryption header] */
+
+    /* [file data] */
+
+    var data = blob.slice(blob.l, blob.l + _csz);
+
+    switch (meth) {
+      case 8:
+        data = _inflateRawSync(blob, _usz);
+        break;
+
+      case 0:
+        break;
+
+      default:
+        throw new Error("Unsupported ZIP Compression method " + meth);
+    }
+    /* [data descriptor] */
+
+
+    var wrn = false;
+
+    if (flags & 8) {
+      crc32 = blob.read_shift(4);
+
+      if (crc32 == 0x08074b50) {
+        crc32 = blob.read_shift(4);
+        wrn = true;
+      }
+
+      _csz = blob.read_shift(4);
+      _usz = blob.read_shift(4);
+    }
+
+    if (_csz != csz) warn_or_throw(wrn, "Bad compressed size: " + csz + " != " + _csz);
+    if (_usz != usz) warn_or_throw(wrn, "Bad uncompressed size: " + usz + " != " + _usz);
+
+    var _crc32 = CRC32.buf(data, 0);
+
+    if (crc32 >> 0 != _crc32 >> 0) warn_or_throw(wrn, "Bad CRC32 checksum: " + crc32 + " != " + _crc32);
+    cfb_add(o, name, data, {
+      unsafe: true,
+      mt: date
+    });
+  }
+
+  function write_zip(cfb, options) {
+    var _opts = options || {};
+
+    var out = [],
+        cdirs = [];
+    var o = new_buf(1);
+    var method = _opts.compression ? 8 : 0,
+        flags = 0;
+    var i = 0,
+        j = 0;
+    var start_cd = 0,
+        fcnt = 0;
+    var root = cfb.FullPaths[0],
+        fp = root,
+        fi = cfb.FileIndex[0];
+    var crcs = [];
+    var sz_cd = 0;
+
+    for (i = 1; i < cfb.FullPaths.length; ++i) {
+      fp = cfb.FullPaths[i].slice(root.length);
+      fi = cfb.FileIndex[i];
+      if (!fi.size || !fi.content || fp == "\u0001Sh33tJ5") continue;
+      var start = start_cd;
+      /* TODO: CP437 filename */
+
+      var namebuf = new_buf(fp.length);
+
+      for (j = 0; j < fp.length; ++j) namebuf.write_shift(1, fp.charCodeAt(j) & 0x7F);
+
+      namebuf = namebuf.slice(0, namebuf.l);
+      crcs[fcnt] = CRC32.buf(fi.content, 0);
+      var outbuf = fi.content;
+      if (method == 8) outbuf = _deflateRawSync(outbuf);
+      /* local file header */
+
+      o = new_buf(30);
+      o.write_shift(4, 0x04034b50);
+      o.write_shift(2, 20);
+      o.write_shift(2, flags);
+      o.write_shift(2, method);
+      /* TODO: last mod file time/date */
+
+      if (fi.mt) write_dos_date(o, fi.mt);else o.write_shift(4, 0);
+      o.write_shift(-4,  crcs[fcnt]);
+      o.write_shift(4,  outbuf.length);
+      o.write_shift(4,  fi.content.length);
+      o.write_shift(2, namebuf.length);
+      o.write_shift(2, 0);
+      start_cd += o.length;
+      out.push(o);
+      start_cd += namebuf.length;
+      out.push(namebuf);
+      /* TODO: encryption header ? */
+
+      start_cd += outbuf.length;
+      out.push(outbuf);
+      /* central directory */
+
+
+      o = new_buf(46);
+      o.write_shift(4, 0x02014b50);
+      o.write_shift(2, 0);
+      o.write_shift(2, 20);
+      o.write_shift(2, flags);
+      o.write_shift(2, method);
+      o.write_shift(4, 0);
+      /* TODO: last mod file time/date */
+
+      o.write_shift(-4, crcs[fcnt]);
+      o.write_shift(4, outbuf.length);
+      o.write_shift(4, fi.content.length);
+      o.write_shift(2, namebuf.length);
+      o.write_shift(2, 0);
+      o.write_shift(2, 0);
+      o.write_shift(2, 0);
+      o.write_shift(2, 0);
+      o.write_shift(4, 0);
+      o.write_shift(4, start);
+      sz_cd += o.l;
+      cdirs.push(o);
+      sz_cd += namebuf.length;
+      cdirs.push(namebuf);
+      ++fcnt;
+    }
+    /* end of central directory */
+
+
+    o = new_buf(22);
+    o.write_shift(4, 0x06054b50);
+    o.write_shift(2, 0);
+    o.write_shift(2, 0);
+    o.write_shift(2, fcnt);
+    o.write_shift(2, fcnt);
+    o.write_shift(4, sz_cd);
+    o.write_shift(4, start_cd);
+    o.write_shift(2, 0);
+    return bconcat([bconcat(out), bconcat(cdirs), o]);
+  }
+
+  var ContentTypeMap = {
+    "htm": "text/html",
+    "xml": "text/xml",
+    "gif": "image/gif",
+    "jpg": "image/jpeg",
+    "png": "image/png",
+    "mso": "application/x-mso",
+    "thmx": "application/vnd.ms-officetheme",
+    "sh33tj5": "application/octet-stream"
+  };
+
+  function get_content_type(fi, fp) {
+    if (fi.ctype) return fi.ctype;
+    var ext = fi.name || "",
+        m = ext.match(/\.([^\.]+)$/);
+    if (m && ContentTypeMap[m[1]]) return ContentTypeMap[m[1]];
+
+    if (fp) {
+      m = (ext = fp).match(/[\.\\]([^\.\\])+$/);
+      if (m && ContentTypeMap[m[1]]) return ContentTypeMap[m[1]];
+    }
+
+    return "application/octet-stream";
+  }
+  /* 76 character chunks TODO: intertwine encoding */
+
+
+  function write_base64_76(bstr) {
+    var data = Base64.encode(bstr);
+    var o = [];
+
+    for (var i = 0; i < data.length; i += 76) o.push(data.slice(i, i + 76));
+
+    return o.join("\r\n") + "\r\n";
+  }
+  /*
+  Rules for QP:
+  	- escape =## applies for all non-display characters and literal "="
+  	- space or tab at end of line must be encoded
+  	- \r\n newlines can be preserved, but bare \r and \n must be escaped
+  	- lines must not exceed 76 characters, use soft breaks =\r\n
+  
+  TODO: Some files from word appear to write line extensions with bare equals:
+  
+  ```
+  <table class=3DMsoTableGrid border=3D1 cellspacing=3D0 cellpadding=3D0 width=
+  ="70%"
+  ```
+  */
+
+
+  function write_quoted_printable(text) {
+    var encoded = text.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7E-\xFF=]/g, function (c) {
+      var w = c.charCodeAt(0).toString(16).toUpperCase();
+      return "=" + (w.length == 1 ? "0" + w : w);
+    });
+    encoded = encoded.replace(/ $/mg, "=20").replace(/\t$/mg, "=09");
+    if (encoded.charAt(0) == "\n") encoded = "=0D" + encoded.slice(1);
+    encoded = encoded.replace(/\r(?!\n)/mg, "=0D").replace(/\n\n/mg, "\n=0A").replace(/([^\r\n])\n/mg, "$1=0A");
+    var o = [],
+        split = encoded.split("\r\n");
+
+    for (var si = 0; si < split.length; ++si) {
+      var str = split[si];
+
+      if (str.length == 0) {
+        o.push("");
+        continue;
+      }
+
+      for (var i = 0; i < str.length;) {
+        var end = 76;
+        var tmp = str.slice(i, i + end);
+        if (tmp.charAt(end - 1) == "=") end--;else if (tmp.charAt(end - 2) == "=") end -= 2;else if (tmp.charAt(end - 3) == "=") end -= 3;
+        tmp = str.slice(i, i + end);
+        i += end;
+        if (i < str.length) tmp += "=";
+        o.push(tmp);
+      }
+    }
+
+    return o.join("\r\n");
+  }
+
+  function parse_quoted_printable(data) {
+    var o = [];
+    /* unify long lines */
+
+    for (var di = 0; di < data.length; ++di) {
+      var line = data[di];
+
+      while (di <= data.length && line.charAt(line.length - 1) == "=") line = line.slice(0, line.length - 1) + data[++di];
+
+      o.push(line);
+    }
+    /* decode */
+
+
+    for (var oi = 0; oi < o.length; ++oi) o[oi] = o[oi].replace(/=[0-9A-Fa-f]{2}/g, function ($$) {
+      return String.fromCharCode(parseInt($$.slice(1), 16));
+    });
+
+    return s2a(o.join("\r\n"));
+  }
+
+  function parse_mime(cfb, data, root) {
+    var fname = "",
+        cte = "",
+        ctype = "",
+        fdata;
+    var di = 0;
+
+    for (; di < 10; ++di) {
+      var line = data[di];
+      if (!line || line.match(/^\s*$/)) break;
+      var m = line.match(/^(.*?):\s*([^\s].*)$/);
+      if (m) switch (m[1].toLowerCase()) {
+        case "content-location":
+          fname = m[2].trim();
+          break;
+
+        case "content-type":
+          ctype = m[2].trim();
+          break;
+
+        case "content-transfer-encoding":
+          cte = m[2].trim();
+          break;
+      }
+    }
+
+    ++di;
+
+    switch (cte.toLowerCase()) {
+      case 'base64':
+        fdata = s2a(Base64.decode(data.slice(di).join("")));
+        break;
+
+      case 'quoted-printable':
+        fdata = parse_quoted_printable(data.slice(di));
+        break;
+
+      default:
+        throw new Error("Unsupported Content-Transfer-Encoding " + cte);
+    }
+
+    var file = cfb_add(cfb, fname.slice(root.length), fdata, {
+      unsafe: true
+    });
+    if (ctype) file.ctype = ctype;
+  }
+
+  function parse_mad(file, options) {
+    if (a2s(file.slice(0, 13)).toLowerCase() != "mime-version:") throw new Error("Unsupported MAD header");
+    var root = options && options.root || ""; // $FlowIgnore
+
+    var data = (has_buf && Buffer.isBuffer(file) ? file.toString("binary") : a2s(file)).split("\r\n");
+    var di = 0,
+        row = "";
+    /* if root is not specified, scan for the common prefix */
+
+    for (di = 0; di < data.length; ++di) {
+      row = data[di];
+      if (!/^Content-Location:/i.test(row)) continue;
+      row = row.slice(row.indexOf("file"));
+      if (!root) root = row.slice(0, row.lastIndexOf("/") + 1);
+      if (row.slice(0, root.length) == root) continue;
+
+      while (root.length > 0) {
+        root = root.slice(0, root.length - 1);
+        root = root.slice(0, root.lastIndexOf("/") + 1);
+        if (row.slice(0, root.length) == root) break;
+      }
+    }
+
+    var mboundary = (data[1] || "").match(/boundary="(.*?)"/);
+    if (!mboundary) throw new Error("MAD cannot find boundary");
+    var boundary = "--" + (mboundary[1] || "");
+    var FileIndex = [],
+        FullPaths = [];
+    var o = {
+      FileIndex: FileIndex,
+      FullPaths: FullPaths
+    };
+    init_cfb(o);
+    var start_di,
+        fcnt = 0;
+
+    for (di = 0; di < data.length; ++di) {
+      var line = data[di];
+      if (line !== boundary && line !== boundary + "--") continue;
+      if (fcnt++) parse_mime(o, data.slice(start_di, di), root);
+      start_di = di;
+    }
+
+    return o;
+  }
+
+  function write_mad(cfb, options) {
+    var opts = options || {};
+    var boundary = opts.boundary || "SheetJS";
+    boundary = '------=' + boundary;
+    var out = ['MIME-Version: 1.0', 'Content-Type: multipart/related; boundary="' + boundary.slice(2) + '"', '', '', ''];
+    var root = cfb.FullPaths[0],
+        fp = root,
+        fi = cfb.FileIndex[0];
+
+    for (var i = 1; i < cfb.FullPaths.length; ++i) {
+      fp = cfb.FullPaths[i].slice(root.length);
+      fi = cfb.FileIndex[i];
+      if (!fi.size || !fi.content || fp == "\u0001Sh33tJ5") continue;
+      /* Normalize filename */
+
+      fp = fp.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7E-\xFF]/g, function (c) {
+        return "_x" + c.charCodeAt(0).toString(16) + "_";
+      }).replace(/[\u0080-\uFFFF]/g, function (u) {
+        return "_u" + u.charCodeAt(0).toString(16) + "_";
+      });
+      /* Extract content as binary string */
+
+      var ca = fi.content; // $FlowIgnore
+
+      var cstr = has_buf && Buffer.isBuffer(ca) ? ca.toString("binary") : a2s(ca);
+      /* 4/5 of first 1024 chars ascii -> quoted printable, else base64 */
+
+      var dispcnt = 0,
+          L = Math.min(1024, cstr.length),
+          cc = 0;
+
+      for (var csl = 0; csl <= L; ++csl) if ((cc = cstr.charCodeAt(csl)) >= 0x20 && cc < 0x80) ++dispcnt;
+
+      var qp = dispcnt >= L * 4 / 5;
+      out.push(boundary);
+      out.push('Content-Location: ' + (opts.root || 'file:///C:/SheetJS/') + fp);
+      out.push('Content-Transfer-Encoding: ' + (qp ? 'quoted-printable' : 'base64'));
+      out.push('Content-Type: ' + get_content_type(fi, fp));
+      out.push('');
+      out.push(qp ? write_quoted_printable(cstr) : write_base64_76(cstr));
+    }
+
+    out.push(boundary + '--\r\n');
+    return out.join("\r\n");
+  }
+
+  function cfb_new(opts) {
+    var o = {};
+    init_cfb(o, opts);
+    return o;
+  }
+
+  function cfb_add(cfb, name, content, opts) {
+    var unsafe = opts && opts.unsafe;
+    if (!unsafe) init_cfb(cfb);
+    var file = !unsafe && CFB.find(cfb, name);
+
+    if (!file) {
+      var fpath = cfb.FullPaths[0];
+      if (name.slice(0, fpath.length) == fpath) fpath = name;else {
+        if (fpath.slice(-1) != "/") fpath += "/";
+        fpath = (fpath + name).replace("//", "/");
+      }
+      file = {
+        name: filename(name),
+        type: 2
+      };
+      cfb.FileIndex.push(file);
+      cfb.FullPaths.push(fpath);
+      if (!unsafe) CFB.utils.cfb_gc(cfb);
+    }
+
+    file.content = content;
+    file.size = content ? content.length : 0;
+
+    if (opts) {
+      if (opts.CLSID) file.clsid = opts.CLSID;
+      if (opts.mt) file.mt = opts.mt;
+      if (opts.ct) file.ct = opts.ct;
+    }
+
+    return file;
+  }
+
+  function cfb_del(cfb, name) {
+    init_cfb(cfb);
+    var file = CFB.find(cfb, name);
+    if (file) for (var j = 0; j < cfb.FileIndex.length; ++j) if (cfb.FileIndex[j] == file) {
+      cfb.FileIndex.splice(j, 1);
+      cfb.FullPaths.splice(j, 1);
+      return true;
+    }
+    return false;
+  }
+
+  function cfb_mov(cfb, old_name, new_name) {
+    init_cfb(cfb);
+    var file = CFB.find(cfb, old_name);
+    if (file) for (var j = 0; j < cfb.FileIndex.length; ++j) if (cfb.FileIndex[j] == file) {
+      cfb.FileIndex[j].name = filename(new_name);
+      cfb.FullPaths[j] = new_name;
+      return true;
+    }
+    return false;
+  }
+
+  function cfb_gc(cfb) {
+    rebuild_cfb(cfb, true);
+  }
+
+  exports.find = find;
+  exports.read = read;
+  exports.parse = parse;
+  exports.write = write;
+  exports.writeFile = write_file;
+  exports.utils = {
+    cfb_new: cfb_new,
+    cfb_add: cfb_add,
+    cfb_del: cfb_del,
+    cfb_mov: cfb_mov,
+    cfb_gc: cfb_gc,
+    ReadShift: ReadShift,
+    CheckField: CheckField,
+    prep_blob: prep_blob,
+    bconcat: bconcat,
+    use_zlib: use_zlib,
+    _deflateRaw: _deflate,
+    _inflateRaw: _inflate,
+    consts: consts
+  };
+  return exports;
+}();
+
+if (typeof commonjsRequire !== 'undefined' && 'object' !== 'undefined' && typeof DO_NOT_EXPORT_CFB === 'undefined') {
+  module.exports = CFB;
+}
+});
+
+var cfb$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.assign(/*#__PURE__*/Object.create(null), cfb, {
+	'default': cfb
+}));
+
+/**
+ * wrapper around SheetJS CFB to produce FAT-like compound file
+ * terminology:
+ * 'storage': directory in the cfb
+ * 'stream' : file in the cfb
+ * */
+
+let CFBStorage = /*#__PURE__*/function () {
+  /** underlying cfb container */
+
+  /** the current path all new storages and streams will be added to*/
+  function CFBStorage(cfb$1) {
+    _classCallCheck(this, CFBStorage);
+
+    _defineProperty(this, "_cfb", void 0);
+
+    _defineProperty(this, "_path", void 0);
+
+    this._cfb = cfb$1 || cfb.utils.cfb_new();
+    this._path = '';
+  }
+  /**
+   * add substorage to this (doesn't modify the underlying CFBContainer)
+   * @param name {string} name of the subdir
+   * @returns {CFBStorage} a storage that will add storage and streams to the subdir
+   * */
+
+
+  _createClass(CFBStorage, [{
+    key: "addStorage",
+    value: function addStorage(name) {
+      const child = new CFBStorage(this._cfb);
+      child._path = this._path + '/' + name;
+      return child;
+    }
+    /**
+     *
+     */
+
+  }, {
+    key: "getStorage",
+    value: function getStorage(name) {
+      return this.addStorage(name);
+    }
+    /**
+     * add a stream (file) to the cfb at the current _path. creates all parent dirs if they don't exist yet
+     * should the stream already exist, this will replace the contents.
+     * @param name {string} the name of the new stream
+     * @param content {Uint8Array} the contents of the stream
+     * @return {void}
+     * */
+
+  }, {
+    key: "addStream",
+    value: function addStream(name, content) {
+      const entryIndex = this._getEntryIndex(name);
+
+      if (entryIndex < 0) {
+        cfb.utils.cfb_add(this._cfb, this._path + '/' + name, content);
+      } else {
+        this._cfb.FileIndex[entryIndex].content = content;
+      }
+    }
+    /**
+     * get the contents of a stream or an empty array
+     * @param name {string} the name of the stream
+     * @return {Uint8Array} the contents of the named stream, empty if it wasn't found
+     * TODO: should this be absolute?
+     */
+
+  }, {
+    key: "getStream",
+    value: function getStream(name) {
+      const entryIndex = this._getEntryIndex(name);
+
+      return entryIndex < 0 ? Uint8Array.of() : Uint8Array.from(this._cfb.FileIndex[entryIndex].content);
+    }
+    /** write the contents of the cfb container to a byte array */
+
+  }, {
+    key: "toBytes",
+    value: function toBytes() {
+      return Uint8Array.from(cfb.write(this._cfb));
+    }
+  }, {
+    key: "_getEntryIndex",
+    value: function _getEntryIndex(name) {
+      return this._cfb.FullPaths.findIndex(p => p === this._path + "/" + name);
+    }
+  }]);
+
+  return CFBStorage;
+}();
 
 const rnds8Pool = new Uint8Array(256); // # of random values to pre-allocate
 
@@ -11600,27 +11596,6 @@ let Property = /*#__PURE__*/function () {
       }
     }
   }, {
-    key: "asDateTime",
-    value: function asDateTime() {
-      const view = new DataView(this._data.buffer, 0);
-
-      switch (this.type) {
-        case PropertyType.PT_APPTIME:
-          // msg stores .Net DateTime as OADate, number of days since 30 dec 1899 as a double value
-          const oaDate = view.getFloat64(0, false);
-          return oADateToDate(oaDate);
-
-        case PropertyType.PT_SYSTIME:
-          // https://docs.microsoft.com/de-de/office/client-developer/outlook/mapi/filetime
-          const fileTimeLower = view.getUint32(0, false);
-          const fileTimeUpper = view.getUint32(4, false);
-          return fileTimeToDate(bigInt64FromParts(fileTimeLower, fileTimeUpper));
-
-        default:
-          throw new Error("type is not PT_APPTIME or PT_SYSTIME");
-      }
-    }
-  }, {
     key: "asBool",
     value: function asBool() {
       const view = new DataView(this._data.buffer, 0);
@@ -11771,8 +11746,8 @@ let Properties = /*#__PURE__*/function (_Array) {
             upper,
             lower
           } = bigInt64ToParts(value);
-          view.setInt32(0, value.lower, true);
-          view.setInt32(4, value.upper, true);
+          view.setInt32(0, lower, true);
+          view.setInt32(4, upper, true);
           break;
 
         case PropertyType.PT_SHORT:
@@ -13771,53 +13746,6 @@ let Attachments = /*#__PURE__*/function (_Array) {
   return Attachments;
 }( /*#__PURE__*/_wrapNativeSuper(Array));
 
-let Strings = /*#__PURE__*/function () {
-  function Strings() {
-    _classCallCheck(this, Strings);
-  }
-
-  _createClass(Strings, null, [{
-    key: "escapeRtf",
-
-    /**
-     * returns the str as an escaped RTF string
-     * @param str {string} string to escape
-     */
-    value: function escapeRtf(str) {
-      const rtfEscaped = [];
-      const escapedChars = ['{', '}', '\\'];
-
-      for (const glyph of str) {
-        const charCode = glyph.charCodeAt(0);
-        if (charCode <= 31) continue; // non-printables
-
-        if (charCode <= 127) {
-          // 7-bit ascii
-          if (escapedChars.includes(glyph)) rtfEscaped.push('\\');
-          rtfEscaped.push(glyph);
-        } else if (charCode <= 255) {
-          // 8-bit ascii
-          rtfEscaped.push("\\'" + x2(charCode));
-        } else {
-          // unicode. may consist of multiple code points
-          for (const codepoint of glyph.split('')) {
-            // TODO:
-            // RTF control words generally accept signed 16-bit numbers as arguments.
-            // For this reason, Unicode values greater than 32767 must be expressed as negative numbers.
-            rtfEscaped.push("\\u");
-            rtfEscaped.push(codepoint.charCodeAt(0));
-            rtfEscaped.push('?');
-          }
-        }
-      }
-
-      return "{\\rtf1\\ansi\\ansicpg1252\\fromhtml1 {\\*\\htmltag1 " + rtfEscaped.join("") + " }}";
-    }
-  }]);
-
-  return Strings;
-}();
-
 /**
  * The PidTagReportTag property ([MS-OXPROPS] section 2.917) contains the data that is used to correlate the report
  * and the original message. The property can be absent if the sender does not request a reply or response to the
@@ -13944,228 +13872,6 @@ let ReportTag = /*#__PURE__*/function () {
   return ReportTag;
 }();
 
-const CRC32_TABLE = [0x00000000, 0x77073096, 0xEE0E612C, 0x990951BA, 0x076DC419, 0x706AF48F, 0xE963A535, 0x9E6495A3, 0x0EDB8832, 0x79DCB8A4, 0xE0D5E91E, 0x97D2D988, 0x09B64C2B, 0x7EB17CBD, 0xE7B82D07, 0x90BF1D91, 0x1DB71064, 0x6AB020F2, 0xF3B97148, 0x84BE41DE, 0x1ADAD47D, 0x6DDDE4EB, 0xF4D4B551, 0x83D385C7, 0x136C9856, 0x646BA8C0, 0xFD62F97A, 0x8A65C9EC, 0x14015C4F, 0x63066CD9, 0xFA0F3D63, 0x8D080DF5, 0x3B6E20C8, 0x4C69105E, 0xD56041E4, 0xA2677172, 0x3C03E4D1, 0x4B04D447, 0xD20D85FD, 0xA50AB56B, 0x35B5A8FA, 0x42B2986C, 0xDBBBC9D6, 0xACBCF940, 0x32D86CE3, 0x45DF5C75, 0xDCD60DCF, 0xABD13D59, 0x26D930AC, 0x51DE003A, 0xC8D75180, 0xBFD06116, 0x21B4F4B5, 0x56B3C423, 0xCFBA9599, 0xB8BDA50F, 0x2802B89E, 0x5F058808, 0xC60CD9B2, 0xB10BE924, 0x2F6F7C87, 0x58684C11, 0xC1611DAB, 0xB6662D3D, 0x76DC4190, 0x01DB7106, 0x98D220BC, 0xEFD5102A, 0x71B18589, 0x06B6B51F, 0x9FBFE4A5, 0xE8B8D433, 0x7807C9A2, 0x0F00F934, 0x9609A88E, 0xE10E9818, 0x7F6A0DBB, 0x086D3D2D, 0x91646C97, 0xE6635C01, 0x6B6B51F4, 0x1C6C6162, 0x856530D8, 0xF262004E, 0x6C0695ED, 0x1B01A57B, 0x8208F4C1, 0xF50FC457, 0x65B0D9C6, 0x12B7E950, 0x8BBEB8EA, 0xFCB9887C, 0x62DD1DDF, 0x15DA2D49, 0x8CD37CF3, 0xFBD44C65, 0x4DB26158, 0x3AB551CE, 0xA3BC0074, 0xD4BB30E2, 0x4ADFA541, 0x3DD895D7, 0xA4D1C46D, 0xD3D6F4FB, 0x4369E96A, 0x346ED9FC, 0xAD678846, 0xDA60B8D0, 0x44042D73, 0x33031DE5, 0xAA0A4C5F, 0xDD0D7CC9, 0x5005713C, 0x270241AA, 0xBE0B1010, 0xC90C2086, 0x5768B525, 0x206F85B3, 0xB966D409, 0xCE61E49F, 0x5EDEF90E, 0x29D9C998, 0xB0D09822, 0xC7D7A8B4, 0x59B33D17, 0x2EB40D81, 0xB7BD5C3B, 0xC0BA6CAD, 0xEDB88320, 0x9ABFB3B6, 0x03B6E20C, 0x74B1D29A, 0xEAD54739, 0x9DD277AF, 0x04DB2615, 0x73DC1683, 0xE3630B12, 0x94643B84, 0x0D6D6A3E, 0x7A6A5AA8, 0xE40ECF0B, 0x9309FF9D, 0x0A00AE27, 0x7D079EB1, 0xF00F9344, 0x8708A3D2, 0x1E01F268, 0x6906C2FE, 0xF762575D, 0x806567CB, 0x196C3671, 0x6E6B06E7, 0xFED41B76, 0x89D32BE0, 0x10DA7A5A, 0x67DD4ACC, 0xF9B9DF6F, 0x8EBEEFF9, 0x17B7BE43, 0x60B08ED5, 0xD6D6A3E8, 0xA1D1937E, 0x38D8C2C4, 0x4FDFF252, 0xD1BB67F1, 0xA6BC5767, 0x3FB506DD, 0x48B2364B, 0xD80D2BDA, 0xAF0A1B4C, 0x36034AF6, 0x41047A60, 0xDF60EFC3, 0xA867DF55, 0x316E8EEF, 0x4669BE79, 0xCB61B38C, 0xBC66831A, 0x256FD2A0, 0x5268E236, 0xCC0C7795, 0xBB0B4703, 0x220216B9, 0x5505262F, 0xC5BA3BBE, 0xB2BD0B28, 0x2BB45A92, 0x5CB36A04, 0xC2D7FFA7, 0xB5D0CF31, 0x2CD99E8B, 0x5BDEAE1D, 0x9B64C2B0, 0xEC63F226, 0x756AA39C, 0x026D930A, 0x9C0906A9, 0xEB0E363F, 0x72076785, 0x05005713, 0x95BF4A82, 0xE2B87A14, 0x7BB12BAE, 0x0CB61B38, 0x92D28E9B, 0xE5D5BE0D, 0x7CDCEFB7, 0x0BDBDF21, 0x86D3D2D4, 0xF1D4E242, 0x68DDB3F8, 0x1FDA836E, 0x81BE16CD, 0xF6B9265B, 0x6FB077E1, 0x18B74777, 0x88085AE6, 0xFF0F6A70, 0x66063BCA, 0x11010B5C, 0x8F659EFF, 0xF862AE69, 0x616BFFD3, 0x166CCF45, 0xA00AE278, 0xD70DD2EE, 0x4E048354, 0x3903B3C2, 0xA7672661, 0xD06016F7, 0x4969474D, 0x3E6E77DB, 0xAED16A4A, 0xD9D65ADC, 0x40DF0B66, 0x37D83BF0, 0xA9BCAE53, 0xDEBB9EC5, 0x47B2CF7F, 0x30B5FFE9, 0xBDBDF21C, 0xCABAC28A, 0x53B39330, 0x24B4A3A6, 0xBAD03605, 0xCDD70693, 0x54DE5729, 0x23D967BF, 0xB3667A2E, 0xC4614AB8, 0x5D681B02, 0x2A6F2B94, 0xB40BBE37, 0xC30C8EA1, 0x5A05DF1B, 0x2D02EF8D];
-let Crc32 = /*#__PURE__*/function () {
-  function Crc32() {
-    _classCallCheck(this, Crc32);
-  }
-
-  _createClass(Crc32, null, [{
-    key: "calculate",
-
-    /**
-     * calculates a checksum of a ByteBuffers contents
-     * @param buffer {ByteBuffer}
-     * @returns {number} the crc32 of this buffer's contents between offset and limit
-     */
-    value: function calculate(buffer) {
-      if (buffer.offset >= buffer.limit) return 0;
-      const origOffset = buffer.offset;
-      let result = 0;
-
-      while (buffer.offset < buffer.limit) {
-        const cur = buffer.readUint8();
-        result = CRC32_TABLE[(result ^ cur) & 0xFF] ^ result >>> 8;
-      }
-
-      buffer.offset = origOffset; // unsigned representation. (-1 >>> 0) === 4294967295
-
-      return result >>> 0;
-    }
-  }]);
-
-  return Crc32;
-}();
-
-const INIT_DICT_SIZE = 207;
-const MAX_DICT_SIZE = 4096;
-const COMP_TYPE = "LZFu";
-const HEADER_SIZE = 16;
-
-function getInitialDict() {
-  const builder = [];
-  builder.push('{\\rtf1\\ansi\\mac\\deff0\\deftab720{\\fonttbl;}');
-  builder.push('{\\f0\\fnil \\froman \\fswiss \\fmodern \\fscript ');
-  builder.push('\\fdecor MS Sans SerifSymbolArialTimes New RomanCourier{\\colortbl\\red0\\green0\\blue0');
-  builder.push('\r\n');
-  builder.push('\\par \\pard\\plain\\f0\\fs20\\b\\i\\u\\tab\\tx');
-  const res = builder.join('');
-  let initialDictionary = makeByteBuffer(null, stringToUtf8Array(res));
-  initialDictionary.ensureCapacity(MAX_DICT_SIZE);
-  initialDictionary.limit = MAX_DICT_SIZE;
-  initialDictionary.offset = INIT_DICT_SIZE;
-  return initialDictionary;
-}
-/**
- * find the longest match of the start of the current input in the dictionary.
- * finds the length of the longest match of the start of the current input in the dictionary and
- * the position of it in the dictionary.
- * @param dictionary {ByteBuffer} part of the MS-OXRTFCP spec.
- * @param inputBuffer {ByteBuffer} pointing at the input data
- * @returns {MatchInfo} object containing dictionaryOffset, length
- */
-
-
-function findLongestMatch(dictionary, inputBuffer) {
-  const positionData = {
-    length: 0,
-    dictionaryOffset: 0
-  };
-  if (inputBuffer.offset >= inputBuffer.limit) return positionData;
-  inputBuffer.mark();
-  dictionary.mark(); // previousWriteOffset
-
-  let matchLength = 0;
-  let dictionaryIndex = 0;
-
-  while (true) {
-    const inputCharacter = inputBuffer.readUint8();
-    const dictCharacter = dictionary.readUint8(dictionaryIndex % MAX_DICT_SIZE);
-
-    if (dictCharacter === inputCharacter) {
-      matchLength += 1;
-
-      if (matchLength <= 17 && matchLength > positionData.length) {
-        positionData.dictionaryOffset = dictionaryIndex - matchLength + 1;
-        dictionary.writeUint8(inputCharacter);
-        dictionary.offset = dictionary.offset % MAX_DICT_SIZE;
-        positionData.length = matchLength;
-      }
-
-      if (inputBuffer.offset >= inputBuffer.limit) break;
-    } else {
-      inputBuffer.reset();
-      inputBuffer.mark();
-      matchLength = 0;
-      if (inputBuffer.offset >= inputBuffer.limit) break;
-    }
-
-    dictionaryIndex += 1;
-    if (dictionaryIndex >= dictionary.markedOffset + positionData.length) break;
-  }
-
-  inputBuffer.reset();
-  return positionData;
-}
-/**
- * Takes in input, compresses it using LZFu by Microsoft. Can be viewed in the [MS-OXRTFCP].pdf document.
- * https://msdn.microsoft.com/en-us/library/cc463890(v=exchg.80).aspx. Returns the input as a byte array.
- * @param input {Uint8Array} the input to compress
- * @returns {Uint8Array} compressed input
- */
-
-
-function compress(input) {
-  let matchData = {
-    length: 0,
-    dictionaryOffset: 0
-  };
-  const inputBuffer = makeByteBuffer(null, input);
-  const dictionary = getInitialDict();
-  const tokenBuffer = makeByteBuffer(16);
-  const resultBuffer = makeByteBuffer(17); // The writer MUST set the input cursor to the first byte in the input buffer.
-  // The writer MUST set the output cursor to the 17th byte (to make space for the compressed header).
-
-  resultBuffer.offset = HEADER_SIZE; // (1) The writer MUST (re)initialize the run by setting its
-  // Control Byte to 0 (zero), its control bit to 0x01, and its token offset to 0 (zero).
-
-  let controlByte = 0;
-  let controlBit = 0x01;
-
-  while (true) {
-    // (3) Locate the longest match in the dictionary for the current input cursor,
-    // as specified in section 3.3.4.2.1. Note that the dictionary is updated during this procedure.
-    matchData = findLongestMatch(dictionary, inputBuffer);
-
-    if (inputBuffer.offset >= inputBuffer.limit) {
-      // (2) If there is no more input, the writer MUST exit the compression loop (by advancing to step 8).
-      // (8) A dictionary reference (see section 2.2.1.5) MUST be created from an offset equal
-      // to the current write offset of the dictionary and a length of 0 (zero), and inserted
-      // in the token buffer as a big-endian word at the current token offset. The writer MUST
-      // then advance the token offset by 2. The control bit MUST be ORed into the Control Byte,
-      // thus setting the bit that corresponds to the current token to 1.
-      let dictReference = (dictionary.offset & 0xFFF) << 4;
-      tokenBuffer.writeUint8(dictReference >>> 8 & 0xFF);
-      tokenBuffer.writeUint8(dictReference >>> 0 & 0xFF);
-      controlByte |= controlBit; // (9) The writer MUST write the current run to the output by writing the BYTE Control Byte,
-      // and then copying token offset number of BYTEs from the token buffer to the output.
-      // The output cursor is advanced by token offset + 1 BYTE.
-
-      resultBuffer.writeUint8(controlByte);
-      tokenBuffer.limit = tokenBuffer.offset;
-      tokenBuffer.offset = 0;
-      resultBuffer.append(tokenBuffer);
-      break;
-    }
-
-    if (matchData.length <= 1) {
-      // (4) If the match is 0 (zero) or 1 byte in length, the writer
-      // MUST copy the literal at the input cursor to the Run's token
-      // buffer at token offset. The writer MUST increment the token offset and the input cursor.
-      const inputCharacter = inputBuffer.readUint8();
-
-      if (matchData.length === 0) {
-        dictionary.writeUint8(inputCharacter);
-        dictionary.offset = dictionary.offset % dictionary.limit;
-      }
-
-      tokenBuffer.writeUint8(inputCharacter);
-    } else {
-      // (5) If the match is 2 bytes or longer, the writer MUST create a dictionary
-      // reference (see section 2.2.1.5) from the offset of the match and the length.
-      // (Note: The value stored in the Length field in REFERENCE is length minus 2.)
-      // The writer MUST insert this dictionary reference in the token buffer as a
-      // big-endian word at the current token offset. The control bit MUST be bitwise
-      // ORed into the Control Byte, thus setting the bit that corresponds to the
-      // current token to 1. The writer MUST advance the token offset by 2 and
-      // MUST advance the input cursor by the length of the match.
-      let dictReference = (matchData.dictionaryOffset & 0xFFF) << 4 | matchData.length - 2 & 0xF;
-      controlByte |= controlBit;
-      tokenBuffer.writeUint8(dictReference >>> 8 & 0xFF);
-      tokenBuffer.writeUint8(dictReference >>> 0 & 0xFF);
-      inputBuffer.offset = inputBuffer.offset + matchData.length;
-    }
-
-    matchData.length = 0;
-
-    if (controlBit === 0x80) {
-      // (7) If the control bit is equal to 0x80, the writer MUST write the run
-      // to the output by writing the BYTE Control Byte, and then copying the
-      // token offset number of BYTEs from the token buffer to the output. The
-      // writer MUST advance the output cursor by token offset + 1 BYTEs.
-      // Continue with compression by returning to step (1).
-      resultBuffer.writeUint8(controlByte);
-      tokenBuffer.limit = tokenBuffer.offset;
-      tokenBuffer.offset = 0;
-      resultBuffer.append(tokenBuffer);
-      controlByte = 0;
-      controlBit = 0x01;
-      tokenBuffer.clear();
-      continue;
-    } // (6) If the control bit is not 0x80, the control bit MUST be left-shifted by one bit and compression MUST
-    // continue building the run by returning to step (2).
-
-
-    controlBit <<= 1;
-  } // After the output has been completed by execution of step (9), the writer
-  // MUST complete the output by filling the header, as specified in section 3.3.4.2.2.
-  // The writer MUST fill in the header by using the following process:
-  // 1.Set the COMPSIZE (see section 2.2.1.1) field of the header to the number of CONTENTS bytes in the output buffer plus 12.
-
-
-  resultBuffer.limit = resultBuffer.offset;
-  resultBuffer.writeUint32(resultBuffer.limit - HEADER_SIZE + 12, 0); // 2.Set the RAWSIZE (see section 2.2.1.1) field of the header to the number of bytes read from the input.
-
-  resultBuffer.writeUint32(input.length, 4); // 3.Set the COMPTYPE (see section 2.2.1.1) field of the header to COMPRESSED.
-
-  resultBuffer.writeUTF8String(COMP_TYPE, 8); // 4.Set the CRC (see section 3.1.3.2) field of the header to the CRC (see section 3.1.1.1.2) generated from the CONTENTS bytes.
-
-  resultBuffer.offset = HEADER_SIZE;
-  resultBuffer.writeUint32(Crc32.calculate(resultBuffer), 12);
-  resultBuffer.offset = resultBuffer.limit;
-  return byteBufferAsUint8Array(resultBuffer);
-}
-
 const subjectPrefixRegex = /^(\D{1,3}:\s)(.*)$/;
 let Email = /*#__PURE__*/function (_Message) {
   _inherits(Email, _Message);
@@ -14247,6 +13953,7 @@ let Email = /*#__PURE__*/function (_Message) {
     _this._bodyText = "";
     _this._sentOn = null;
     _this._receivedOn = null;
+    _this.messageEditorFormat = MessageEditorFormat.EDITOR_FORMAT_DONTKNOW;
     return _this;
   }
 
@@ -14467,24 +14174,14 @@ let Email = /*#__PURE__*/function (_Message) {
       let messageFlags = MessageFlags.MSGFLAG_UNMODIFIED;
       if (attachmentCount > 0) messageFlags |= MessageFlags.MSGFLAG_HASATTACH; // int Encoding.UTF8.CodePage == 65001
 
-      this._topLevelProperties.addProperty(PropertyTags.PR_INTERNET_CPID, 65001);
+      this._topLevelProperties.addProperty(PropertyTags.PR_INTERNET_CPID, 65001); // this._topLevelProperties.addProperty(PropertyTags.PR_BODY_W, this._bodyText)
 
-      this._topLevelProperties.addProperty(PropertyTags.PR_BODY_W, this._bodyText);
 
-      if (!isNullOrEmpty(this._bodyHtml) && !this.draft) {
-        this._topLevelProperties.addProperty(PropertyTags.PR_HTML, this._bodyHtml);
+      this._topLevelProperties.addProperty(PropertyTags.PR_HTML, this._bodyHtml);
 
-        this._topLevelProperties.addProperty(PropertyTags.PR_RTF_IN_SYNC, false);
-      } else if (isNullOrWhiteSpace(this._bodyRtf) && !isNullOrWhiteSpace(this._bodyHtml)) {
-        this._bodyRtf = Strings.escapeRtf(this._bodyHtml);
-        this.bodyRtfCompressed = true;
-      }
+      if (!isNullOrEmpty(this._bodyHtml) && !this.draft) ; else if (isNullOrWhiteSpace(this._bodyRtf) && !isNullOrWhiteSpace(this._bodyHtml)) ;
 
-      if (!isNullOrWhiteSpace(this._bodyRtf)) {
-        this._topLevelProperties.addProperty(PropertyTags.PR_RTF_COMPRESSED, compress(stringToUtf8Array(this._bodyRtf)));
-
-        this._topLevelProperties.addProperty(PropertyTags.PR_RTF_IN_SYNC, this.bodyRtfCompressed);
-      }
+      if (!isNullOrWhiteSpace(this._bodyRtf)) ;
 
       if (this.messageEditorFormat !== MessageEditorFormat.EDITOR_FORMAT_DONTKNOW) {
         this._topLevelProperties.addProperty(PropertyTags.PR_MSG_EDITOR_FORMAT, this.messageEditorFormat);
@@ -14613,5 +14310,5 @@ let Email = /*#__PURE__*/function (_Message) {
   return Email;
 }(Message);
 
-export { Attachment, AttachmentType, cfb$1 as CFB, Email, MessageEditorFormat };
+export { Attachment, AttachmentType, cfb$1 as CFB, Email, MessageEditorFormat, bigInt64FromParts, dateToFileTime, fileTimeToDate, utf16LeArrayToString, utf8ArrayToString };
 //# sourceMappingURL=oxmsg.js.map

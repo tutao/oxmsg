@@ -1,4 +1,4 @@
-const PropertyType = Object.freeze({
+export const PropertyType = Object.freeze({
 	// Any: this property type value matches any type; a server MUST return the actual type in its response. Servers
 	// MUST NOT return this type in response to a client request other than NspiGetIDsFromNames or the
 	// RopGetPropertyIdsFromNamesROP request ([MS-OXCROPS] section 2.2.8.1). (PT_UNSPECIFIED)
@@ -75,7 +75,7 @@ const PropertyType = Object.freeze({
 	PT_MV_BINARY: 0x1102,
 })
 
-const tags = Object.freeze({
+export const tags = Object.freeze({
 	//property tag literals were here
 	// Contains the identifier of the mode for message acknowledgment.
 	PR_ACKNOWLEDGEMENT_MODE: {id: 0x0001, type: PropertyType.PT_LONG},
