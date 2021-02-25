@@ -8387,6 +8387,14 @@ const localeToLcid = invertDict(lcidToLocale);
 function Xp(n, p) {
   return n.toString(16).padStart(p, '0').toUpperCase();
 }
+
+function xp(n, p) {
+  return n.toString(16).padStart(p, '0');
+}
+
+function x2(n) {
+  return xp(n, 2);
+}
 /**
  * get an uppercase hex string of a number zero-padded to 4 digits
  * @param n {number} the number
@@ -8585,9 +8593,17 @@ function getDictKeyFromValue(dict, value) {
  * @param {string|number} oaDate - OADate value
  * @returns {Date}
  */
+function oADateToDate(oaDate) {
+  // Treat integer part as whole days
+  const days = parseInt(oaDate); // Treat decimal part as part of 24hr day, always +ve
+
+  const ms = Math.abs((oaDate - days) * 8.64e7); // Add days and add ms
+
+  return new Date(1899, 11, 30 + days, 0, 0, 0, ms);
+}
 
 const FT_TICKS_PER_MS = 10000n;
-const FILE_TIME_ZERO = new Date(Date.parse("1601-01-01T00:00:00")); // Date: milliseconds since 1. January 1970 (UTC)
+const FILE_TIME_ZERO = new Date(Date.parse("01 Jan 1601 00:00:00 UTC")); // Date: milliseconds since 1. January 1970 (UTC)
 // FileTime: unsigned 64 Bit, 100ns units since 1. January 1601 (UTC)
 // ms between 01.01.1970 and 01.01.1601: 11644473600
 // $FlowIgnore[bigint-unsupported]
@@ -8597,11 +8613,8 @@ function fileTimeToDate(fileTime) {
 } // $FlowIgnore[bigint-unsupported]
 
 function dateToFileTime(date) {
-  console.log("input", date);
   const msSinceFileTimeEpoch = BigInt(date.getTime()) - BigInt(FILE_TIME_ZERO.getTime());
-  console.log("intermediate", msSinceFileTimeEpoch);
   const result = msSinceFileTimeEpoch * FT_TICKS_PER_MS;
-  console.log("output", result);
   return result;
 }
 
@@ -11596,6 +11609,27 @@ let Property = /*#__PURE__*/function () {
       }
     }
   }, {
+    key: "asDateTime",
+    value: function asDateTime() {
+      const view = new DataView(this._data.buffer, 0);
+
+      switch (this.type) {
+        case PropertyType.PT_APPTIME:
+          // msg stores .Net DateTime as OADate, number of days since 30 dec 1899 as a double value
+          const oaDate = view.getFloat64(0, false);
+          return oADateToDate(oaDate);
+
+        case PropertyType.PT_SYSTIME:
+          // https://docs.microsoft.com/de-de/office/client-developer/outlook/mapi/filetime
+          const fileTimeLower = view.getUint32(0, false);
+          const fileTimeUpper = view.getUint32(4, false);
+          return fileTimeToDate(bigInt64FromParts(fileTimeLower, fileTimeUpper));
+
+        default:
+          throw new Error("type is not PT_APPTIME or PT_SYSTIME");
+      }
+    }
+  }, {
     key: "asBool",
     value: function asBool() {
       const view = new DataView(this._data.buffer, 0);
@@ -13746,6 +13780,53 @@ let Attachments = /*#__PURE__*/function (_Array) {
   return Attachments;
 }( /*#__PURE__*/_wrapNativeSuper(Array));
 
+let Strings = /*#__PURE__*/function () {
+  function Strings() {
+    _classCallCheck(this, Strings);
+  }
+
+  _createClass(Strings, null, [{
+    key: "escapeRtf",
+
+    /**
+     * returns the str as an escaped RTF string
+     * @param str {string} string to escape
+     */
+    value: function escapeRtf(str) {
+      const rtfEscaped = [];
+      const escapedChars = ['{', '}', '\\'];
+
+      for (const glyph of str) {
+        const charCode = glyph.charCodeAt(0);
+        if (charCode <= 31) continue; // non-printables
+
+        if (charCode <= 127) {
+          // 7-bit ascii
+          if (escapedChars.includes(glyph)) rtfEscaped.push('\\');
+          rtfEscaped.push(glyph);
+        } else if (charCode <= 255) {
+          // 8-bit ascii
+          rtfEscaped.push("\\'" + x2(charCode));
+        } else {
+          // unicode. may consist of multiple code points
+          for (const codepoint of glyph.split('')) {
+            // TODO:
+            // RTF control words generally accept signed 16-bit numbers as arguments.
+            // For this reason, Unicode values greater than 32767 must be expressed as negative numbers.
+            rtfEscaped.push("\\u");
+            rtfEscaped.push(codepoint.charCodeAt(0));
+            rtfEscaped.push('?');
+          }
+        }
+      }
+
+      return "{\\rtf1\\ansi\\ansicpg1252\\fromhtml1 {\\*\\htmltag1 " + rtfEscaped.join("") + " }}";
+    }
+  }]);
+
+  return Strings;
+}();
+
 /**
  * The PidTagReportTag property ([MS-OXPROPS] section 2.917) contains the data that is used to correlate the report
  * and the original message. The property can be absent if the sender does not request a reply or response to the
@@ -13872,6 +13953,228 @@ let ReportTag = /*#__PURE__*/function () {
   return ReportTag;
 }();
 
+const CRC32_TABLE = [0x00000000, 0x77073096, 0xEE0E612C, 0x990951BA, 0x076DC419, 0x706AF48F, 0xE963A535, 0x9E6495A3, 0x0EDB8832, 0x79DCB8A4, 0xE0D5E91E, 0x97D2D988, 0x09B64C2B, 0x7EB17CBD, 0xE7B82D07, 0x90BF1D91, 0x1DB71064, 0x6AB020F2, 0xF3B97148, 0x84BE41DE, 0x1ADAD47D, 0x6DDDE4EB, 0xF4D4B551, 0x83D385C7, 0x136C9856, 0x646BA8C0, 0xFD62F97A, 0x8A65C9EC, 0x14015C4F, 0x63066CD9, 0xFA0F3D63, 0x8D080DF5, 0x3B6E20C8, 0x4C69105E, 0xD56041E4, 0xA2677172, 0x3C03E4D1, 0x4B04D447, 0xD20D85FD, 0xA50AB56B, 0x35B5A8FA, 0x42B2986C, 0xDBBBC9D6, 0xACBCF940, 0x32D86CE3, 0x45DF5C75, 0xDCD60DCF, 0xABD13D59, 0x26D930AC, 0x51DE003A, 0xC8D75180, 0xBFD06116, 0x21B4F4B5, 0x56B3C423, 0xCFBA9599, 0xB8BDA50F, 0x2802B89E, 0x5F058808, 0xC60CD9B2, 0xB10BE924, 0x2F6F7C87, 0x58684C11, 0xC1611DAB, 0xB6662D3D, 0x76DC4190, 0x01DB7106, 0x98D220BC, 0xEFD5102A, 0x71B18589, 0x06B6B51F, 0x9FBFE4A5, 0xE8B8D433, 0x7807C9A2, 0x0F00F934, 0x9609A88E, 0xE10E9818, 0x7F6A0DBB, 0x086D3D2D, 0x91646C97, 0xE6635C01, 0x6B6B51F4, 0x1C6C6162, 0x856530D8, 0xF262004E, 0x6C0695ED, 0x1B01A57B, 0x8208F4C1, 0xF50FC457, 0x65B0D9C6, 0x12B7E950, 0x8BBEB8EA, 0xFCB9887C, 0x62DD1DDF, 0x15DA2D49, 0x8CD37CF3, 0xFBD44C65, 0x4DB26158, 0x3AB551CE, 0xA3BC0074, 0xD4BB30E2, 0x4ADFA541, 0x3DD895D7, 0xA4D1C46D, 0xD3D6F4FB, 0x4369E96A, 0x346ED9FC, 0xAD678846, 0xDA60B8D0, 0x44042D73, 0x33031DE5, 0xAA0A4C5F, 0xDD0D7CC9, 0x5005713C, 0x270241AA, 0xBE0B1010, 0xC90C2086, 0x5768B525, 0x206F85B3, 0xB966D409, 0xCE61E49F, 0x5EDEF90E, 0x29D9C998, 0xB0D09822, 0xC7D7A8B4, 0x59B33D17, 0x2EB40D81, 0xB7BD5C3B, 0xC0BA6CAD, 0xEDB88320, 0x9ABFB3B6, 0x03B6E20C, 0x74B1D29A, 0xEAD54739, 0x9DD277AF, 0x04DB2615, 0x73DC1683, 0xE3630B12, 0x94643B84, 0x0D6D6A3E, 0x7A6A5AA8, 0xE40ECF0B, 0x9309FF9D, 0x0A00AE27, 0x7D079EB1, 0xF00F9344, 0x8708A3D2, 0x1E01F268, 0x6906C2FE, 0xF762575D, 0x806567CB, 0x196C3671, 0x6E6B06E7, 0xFED41B76, 0x89D32BE0, 0x10DA7A5A, 0x67DD4ACC, 0xF9B9DF6F, 0x8EBEEFF9, 0x17B7BE43, 0x60B08ED5, 0xD6D6A3E8, 0xA1D1937E, 0x38D8C2C4, 0x4FDFF252, 0xD1BB67F1, 0xA6BC5767, 0x3FB506DD, 0x48B2364B, 0xD80D2BDA, 0xAF0A1B4C, 0x36034AF6, 0x41047A60, 0xDF60EFC3, 0xA867DF55, 0x316E8EEF, 0x4669BE79, 0xCB61B38C, 0xBC66831A, 0x256FD2A0, 0x5268E236, 0xCC0C7795, 0xBB0B4703, 0x220216B9, 0x5505262F, 0xC5BA3BBE, 0xB2BD0B28, 0x2BB45A92, 0x5CB36A04, 0xC2D7FFA7, 0xB5D0CF31, 0x2CD99E8B, 0x5BDEAE1D, 0x9B64C2B0, 0xEC63F226, 0x756AA39C, 0x026D930A, 0x9C0906A9, 0xEB0E363F, 0x72076785, 0x05005713, 0x95BF4A82, 0xE2B87A14, 0x7BB12BAE, 0x0CB61B38, 0x92D28E9B, 0xE5D5BE0D, 0x7CDCEFB7, 0x0BDBDF21, 0x86D3D2D4, 0xF1D4E242, 0x68DDB3F8, 0x1FDA836E, 0x81BE16CD, 0xF6B9265B, 0x6FB077E1, 0x18B74777, 0x88085AE6, 0xFF0F6A70, 0x66063BCA, 0x11010B5C, 0x8F659EFF, 0xF862AE69, 0x616BFFD3, 0x166CCF45, 0xA00AE278, 0xD70DD2EE, 0x4E048354, 0x3903B3C2, 0xA7672661, 0xD06016F7, 0x4969474D, 0x3E6E77DB, 0xAED16A4A, 0xD9D65ADC, 0x40DF0B66, 0x37D83BF0, 0xA9BCAE53, 0xDEBB9EC5, 0x47B2CF7F, 0x30B5FFE9, 0xBDBDF21C, 0xCABAC28A, 0x53B39330, 0x24B4A3A6, 0xBAD03605, 0xCDD70693, 0x54DE5729, 0x23D967BF, 0xB3667A2E, 0xC4614AB8, 0x5D681B02, 0x2A6F2B94, 0xB40BBE37, 0xC30C8EA1, 0x5A05DF1B, 0x2D02EF8D];
+let Crc32 = /*#__PURE__*/function () {
+  function Crc32() {
+    _classCallCheck(this, Crc32);
+  }
+
+  _createClass(Crc32, null, [{
+    key: "calculate",
+
+    /**
+     * calculates a checksum of a ByteBuffers contents
+     * @param buffer {ByteBuffer}
+     * @returns {number} the crc32 of this buffer's contents between offset and limit
+     */
+    value: function calculate(buffer) {
+      if (buffer.offset >= buffer.limit) return 0;
+      const origOffset = buffer.offset;
+      let result = 0;
+
+      while (buffer.offset < buffer.limit) {
+        const cur = buffer.readUint8();
+        result = CRC32_TABLE[(result ^ cur) & 0xFF] ^ result >>> 8;
+      }
+
+      buffer.offset = origOffset; // unsigned representation. (-1 >>> 0) === 4294967295
+
+      return result >>> 0;
+    }
+  }]);
+
+  return Crc32;
+}();
+
+const INIT_DICT_SIZE = 207;
+const MAX_DICT_SIZE = 4096;
+const COMP_TYPE = "LZFu";
+const HEADER_SIZE = 16;
+
+function getInitialDict() {
+  const builder = [];
+  builder.push('{\\rtf1\\ansi\\mac\\deff0\\deftab720{\\fonttbl;}');
+  builder.push('{\\f0\\fnil \\froman \\fswiss \\fmodern \\fscript ');
+  builder.push('\\fdecor MS Sans SerifSymbolArialTimes New RomanCourier{\\colortbl\\red0\\green0\\blue0');
+  builder.push('\r\n');
+  builder.push('\\par \\pard\\plain\\f0\\fs20\\b\\i\\u\\tab\\tx');
+  const res = builder.join('');
+  let initialDictionary = makeByteBuffer(null, stringToUtf8Array(res));
+  initialDictionary.ensureCapacity(MAX_DICT_SIZE);
+  initialDictionary.limit = MAX_DICT_SIZE;
+  initialDictionary.offset = INIT_DICT_SIZE;
+  return initialDictionary;
+}
+/**
+ * find the longest match of the start of the current input in the dictionary.
+ * finds the length of the longest match of the start of the current input in the dictionary and
+ * the position of it in the dictionary.
+ * @param dictionary {ByteBuffer} part of the MS-OXRTFCP spec.
+ * @param inputBuffer {ByteBuffer} pointing at the input data
+ * @returns {MatchInfo} object containing dictionaryOffset, length
+ */
+
+
+function findLongestMatch(dictionary, inputBuffer) {
+  const positionData = {
+    length: 0,
+    dictionaryOffset: 0
+  };
+  if (inputBuffer.offset >= inputBuffer.limit) return positionData;
+  inputBuffer.mark();
+  dictionary.mark(); // previousWriteOffset
+
+  let matchLength = 0;
+  let dictionaryIndex = 0;
+
+  while (true) {
+    const inputCharacter = inputBuffer.readUint8();
+    const dictCharacter = dictionary.readUint8(dictionaryIndex % MAX_DICT_SIZE);
+
+    if (dictCharacter === inputCharacter) {
+      matchLength += 1;
+
+      if (matchLength <= 17 && matchLength > positionData.length) {
+        positionData.dictionaryOffset = dictionaryIndex - matchLength + 1;
+        dictionary.writeUint8(inputCharacter);
+        dictionary.offset = dictionary.offset % MAX_DICT_SIZE;
+        positionData.length = matchLength;
+      }
+
+      if (inputBuffer.offset >= inputBuffer.limit) break;
+    } else {
+      inputBuffer.reset();
+      inputBuffer.mark();
+      matchLength = 0;
+      if (inputBuffer.offset >= inputBuffer.limit) break;
+    }
+
+    dictionaryIndex += 1;
+    if (dictionaryIndex >= dictionary.markedOffset + positionData.length) break;
+  }
+
+  inputBuffer.reset();
+  return positionData;
+}
+/**
+ * Takes in input, compresses it using LZFu by Microsoft. Can be viewed in the [MS-OXRTFCP].pdf document.
+ * https://msdn.microsoft.com/en-us/library/cc463890(v=exchg.80).aspx. Returns the input as a byte array.
+ * @param input {Uint8Array} the input to compress
+ * @returns {Uint8Array} compressed input
+ */
+
+
+function compress(input) {
+  let matchData = {
+    length: 0,
+    dictionaryOffset: 0
+  };
+  const inputBuffer = makeByteBuffer(null, input);
+  const dictionary = getInitialDict();
+  const tokenBuffer = makeByteBuffer(16);
+  const resultBuffer = makeByteBuffer(17); // The writer MUST set the input cursor to the first byte in the input buffer.
+  // The writer MUST set the output cursor to the 17th byte (to make space for the compressed header).
+
+  resultBuffer.offset = HEADER_SIZE; // (1) The writer MUST (re)initialize the run by setting its
+  // Control Byte to 0 (zero), its control bit to 0x01, and its token offset to 0 (zero).
+
+  let controlByte = 0;
+  let controlBit = 0x01;
+
+  while (true) {
+    // (3) Locate the longest match in the dictionary for the current input cursor,
+    // as specified in section 3.3.4.2.1. Note that the dictionary is updated during this procedure.
+    matchData = findLongestMatch(dictionary, inputBuffer);
+
+    if (inputBuffer.offset >= inputBuffer.limit) {
+      // (2) If there is no more input, the writer MUST exit the compression loop (by advancing to step 8).
+      // (8) A dictionary reference (see section 2.2.1.5) MUST be created from an offset equal
+      // to the current write offset of the dictionary and a length of 0 (zero), and inserted
+      // in the token buffer as a big-endian word at the current token offset. The writer MUST
+      // then advance the token offset by 2. The control bit MUST be ORed into the Control Byte,
+      // thus setting the bit that corresponds to the current token to 1.
+      let dictReference = (dictionary.offset & 0xFFF) << 4;
+      tokenBuffer.writeUint8(dictReference >>> 8 & 0xFF);
+      tokenBuffer.writeUint8(dictReference >>> 0 & 0xFF);
+      controlByte |= controlBit; // (9) The writer MUST write the current run to the output by writing the BYTE Control Byte,
+      // and then copying token offset number of BYTEs from the token buffer to the output.
+      // The output cursor is advanced by token offset + 1 BYTE.
+
+      resultBuffer.writeUint8(controlByte);
+      tokenBuffer.limit = tokenBuffer.offset;
+      tokenBuffer.offset = 0;
+      resultBuffer.append(tokenBuffer);
+      break;
+    }
+
+    if (matchData.length <= 1) {
+      // (4) If the match is 0 (zero) or 1 byte in length, the writer
+      // MUST copy the literal at the input cursor to the Run's token
+      // buffer at token offset. The writer MUST increment the token offset and the input cursor.
+      const inputCharacter = inputBuffer.readUint8();
+
+      if (matchData.length === 0) {
+        dictionary.writeUint8(inputCharacter);
+        dictionary.offset = dictionary.offset % dictionary.limit;
+      }
+
+      tokenBuffer.writeUint8(inputCharacter);
+    } else {
+      // (5) If the match is 2 bytes or longer, the writer MUST create a dictionary
+      // reference (see section 2.2.1.5) from the offset of the match and the length.
+      // (Note: The value stored in the Length field in REFERENCE is length minus 2.)
+      // The writer MUST insert this dictionary reference in the token buffer as a
+      // big-endian word at the current token offset. The control bit MUST be bitwise
+      // ORed into the Control Byte, thus setting the bit that corresponds to the
+      // current token to 1. The writer MUST advance the token offset by 2 and
+      // MUST advance the input cursor by the length of the match.
+      let dictReference = (matchData.dictionaryOffset & 0xFFF) << 4 | matchData.length - 2 & 0xF;
+      controlByte |= controlBit;
+      tokenBuffer.writeUint8(dictReference >>> 8 & 0xFF);
+      tokenBuffer.writeUint8(dictReference >>> 0 & 0xFF);
+      inputBuffer.offset = inputBuffer.offset + matchData.length;
+    }
+
+    matchData.length = 0;
+
+    if (controlBit === 0x80) {
+      // (7) If the control bit is equal to 0x80, the writer MUST write the run
+      // to the output by writing the BYTE Control Byte, and then copying the
+      // token offset number of BYTEs from the token buffer to the output. The
+      // writer MUST advance the output cursor by token offset + 1 BYTEs.
+      // Continue with compression by returning to step (1).
+      resultBuffer.writeUint8(controlByte);
+      tokenBuffer.limit = tokenBuffer.offset;
+      tokenBuffer.offset = 0;
+      resultBuffer.append(tokenBuffer);
+      controlByte = 0;
+      controlBit = 0x01;
+      tokenBuffer.clear();
+      continue;
+    } // (6) If the control bit is not 0x80, the control bit MUST be left-shifted by one bit and compression MUST
+    // continue building the run by returning to step (2).
+
+
+    controlBit <<= 1;
+  } // After the output has been completed by execution of step (9), the writer
+  // MUST complete the output by filling the header, as specified in section 3.3.4.2.2.
+  // The writer MUST fill in the header by using the following process:
+  // 1.Set the COMPSIZE (see section 2.2.1.1) field of the header to the number of CONTENTS bytes in the output buffer plus 12.
+
+
+  resultBuffer.limit = resultBuffer.offset;
+  resultBuffer.writeUint32(resultBuffer.limit - HEADER_SIZE + 12, 0); // 2.Set the RAWSIZE (see section 2.2.1.1) field of the header to the number of bytes read from the input.
+
+  resultBuffer.writeUint32(input.length, 4); // 3.Set the COMPTYPE (see section 2.2.1.1) field of the header to COMPRESSED.
+
+  resultBuffer.writeUTF8String(COMP_TYPE, 8); // 4.Set the CRC (see section 3.1.3.2) field of the header to the CRC (see section 3.1.1.1.2) generated from the CONTENTS bytes.
+
+  resultBuffer.offset = HEADER_SIZE;
+  resultBuffer.writeUint32(Crc32.calculate(resultBuffer), 12);
+  resultBuffer.offset = resultBuffer.limit;
+  return byteBufferAsUint8Array(resultBuffer);
+}
+
 const subjectPrefixRegex = /^(\D{1,3}:\s)(.*)$/;
 let Email = /*#__PURE__*/function (_Message) {
   _inherits(Email, _Message);
@@ -13953,7 +14256,6 @@ let Email = /*#__PURE__*/function (_Message) {
     _this._bodyText = "";
     _this._sentOn = null;
     _this._receivedOn = null;
-    _this.messageEditorFormat = MessageEditorFormat.EDITOR_FORMAT_DONTKNOW;
     return _this;
   }
 
@@ -14174,14 +14476,24 @@ let Email = /*#__PURE__*/function (_Message) {
       let messageFlags = MessageFlags.MSGFLAG_UNMODIFIED;
       if (attachmentCount > 0) messageFlags |= MessageFlags.MSGFLAG_HASATTACH; // int Encoding.UTF8.CodePage == 65001
 
-      this._topLevelProperties.addProperty(PropertyTags.PR_INTERNET_CPID, 65001); // this._topLevelProperties.addProperty(PropertyTags.PR_BODY_W, this._bodyText)
+      this._topLevelProperties.addProperty(PropertyTags.PR_INTERNET_CPID, 65001);
 
+      this._topLevelProperties.addProperty(PropertyTags.PR_BODY_W, this._bodyText);
 
-      this._topLevelProperties.addProperty(PropertyTags.PR_HTML, this._bodyHtml);
+      if (!isNullOrEmpty(this._bodyHtml) && !this.draft) {
+        this._topLevelProperties.addProperty(PropertyTags.PR_HTML, this._bodyHtml);
 
-      if (!isNullOrEmpty(this._bodyHtml) && !this.draft) ; else if (isNullOrWhiteSpace(this._bodyRtf) && !isNullOrWhiteSpace(this._bodyHtml)) ;
+        this._topLevelProperties.addProperty(PropertyTags.PR_RTF_IN_SYNC, false);
+      } else if (isNullOrWhiteSpace(this._bodyRtf) && !isNullOrWhiteSpace(this._bodyHtml)) {
+        this._bodyRtf = Strings.escapeRtf(this._bodyHtml);
+        this.bodyRtfCompressed = true;
+      }
 
-      if (!isNullOrWhiteSpace(this._bodyRtf)) ;
+      if (!isNullOrWhiteSpace(this._bodyRtf)) {
+        this._topLevelProperties.addProperty(PropertyTags.PR_RTF_COMPRESSED, compress(stringToUtf8Array(this._bodyRtf)));
+
+        this._topLevelProperties.addProperty(PropertyTags.PR_RTF_IN_SYNC, this.bodyRtfCompressed);
+      }
 
       if (this.messageEditorFormat !== MessageEditorFormat.EDITOR_FORMAT_DONTKNOW) {
         this._topLevelProperties.addProperty(PropertyTags.PR_MSG_EDITOR_FORMAT, this.messageEditorFormat);
