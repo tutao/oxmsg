@@ -12636,7 +12636,7 @@ let Address = function Address(email, displayName, addressType = 'SMTP') {
   _defineProperty(this, "displayName", void 0);
 
   this.email = email;
-  this.displayName = isNullOrWhiteSpace(this.displayName) ? email : displayName;
+  this.displayName = isNullOrWhiteSpace(displayName) ? email : displayName;
   this.addressType = addressType;
 };
 
@@ -13010,6 +13010,7 @@ let Sender = /*#__PURE__*/function (_Address) {
       stream.addProperty(PropertyTags.PR_SENDER_ENTRYID, senderEntryId.toByteArray());
       stream.addProperty(PropertyTags.PR_SENDER_EMAIL_ADDRESS_W, this.email);
       stream.addProperty(PropertyTags.PR_SENDER_NAME_W, this.displayName);
+      stream.addProperty(PropertyTags.PR_SENT_REPRESENTING_NAME_W, this.displayName);
       stream.addProperty(PropertyTags.PR_SENDER_ADDRTYPE_W, this.addressType);
     }
   }]);
