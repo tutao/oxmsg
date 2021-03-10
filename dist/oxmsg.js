@@ -13682,30 +13682,13 @@ let Attachments = /*#__PURE__*/function (_Array) {
   }
 
   _createClass(Attachments, [{
-    key: "_checkAttachmentFileName",
+    key: "writeToStorage",
 
-    /**
-     * checks if fileName already exists in this object
-     * @param fileName {string} the name to check.
-     * @param contentId {string} the contentId of the file
-     * @private
-     */
-    value: function _checkAttachmentFileName(fileName, contentId) {
-      //const file = Path.GetFileName(fileName).toLowerCase()
-      const cid = contentId.toLowerCase();
-
-      if (this.some(attachment => attachment.fileName.toLowerCase() === fileName && attachment.contentId.toLowerCase() === cid)) {
-        throw new Error("The attachment with the name '" + fileName + "' already exists");
-      }
-    }
     /**
      * Writes the Attachment objects to the given storage and sets all the needed properties
      * @param rootStorage
      * @returns {number} the total size of the written attachment objects and their properties
      */
-
-  }, {
-    key: "writeToStorage",
     value: function writeToStorage(rootStorage) {
       let size = 0;
 
@@ -13721,9 +13704,6 @@ let Attachments = /*#__PURE__*/function (_Array) {
     key: "attach",
     value: function attach(attachment) {
       if (this.length >= 2048) throw new Error("length > 2048 => too many attachments!");
-
-      this._checkAttachmentFileName(attachment.fileName, attachment.contentId);
-
       this.push(attachment);
     }
   }]);
