@@ -23,11 +23,9 @@
   "homepage": "https://github.com/ganthern/oxmsg#readme",
   "dependencies": {
     "address-rfc2822": "^2.0.6",
-    "buffer": "^6.0.3",
     "bytebuffer": "^5.0.1",
     "cfb": "^1.2.0",
     "iconv-lite": "^0.6.2",
-    "text-encoding": "^0.7.0",
     "uuid": "^8.3.1"
   },
   "devDependencies": {

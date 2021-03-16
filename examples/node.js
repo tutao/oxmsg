@@ -1,14 +1,16 @@
-const fs = require('fs')
+import fs from "fs";
 
-const {Email} = require('../build/oxmsg.node.js')
+import {Attachment, Email} from "../dist/oxmsg.js";
+
 const email = new Email()
+const attachment = new Attachment(Uint8Array.from(fs.readFileSync('./test/canvas.png')), 'canvas.png')
 
 email.subject("This is the subject")
-    .bodyText("")
-    .bodyHtml("This is a message")
-    .to("crocodile@neverland.com")
-    .attach(Uint8Array.from(fs.readFileSync('./test/canvas.png')), 'canvas.png', Date.now(), Date.now())
-    .sender("peterpan@neverland.com")
+	 .bodyText("")
+	 .bodyHtml("This is a message")
+	 .to("crocodile@neverland.com")
+	 .attach(attachment)
+	 .sender("peterpan@neverland.com")
 email.iconIndex = 0x00000103
 const content = email.msg()
 
