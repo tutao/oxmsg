@@ -1,6 +1,6 @@
 {
   "name": "@tutao/oxmsg",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "js library for Microsoft Outlook Item files (.msg)",
   "main": "dist/oxmsg.min.js",
   "scripts": {
@@ -10,6 +10,10 @@
     "flow": "flow; test $? -eq 0 -o $? -eq 2",
     "test": "rollup --config rollup_test.config.js && node 'build/test/index.js'"
   },
+  "files": [
+    "lib/*",
+    "dist/*"
+  ],
   "types": "types/index.d.ts",
   "repository": {
     "type": "git",
