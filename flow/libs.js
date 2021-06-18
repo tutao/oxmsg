@@ -6,6 +6,20 @@ declare module 'uuid' {
 }
 
 declare module 'cfb' {
+	declare interface CFBCommonOptions {
+		/** Data encoding */
+		type?: 'base64' | 'binary' | 'buffer' | 'file' | 'array';
+
+		/** If true, throw errors when features are not understood */
+		WTF?: boolean;
+	}
+
+	/** Options for read and readFile */
+	declare interface CFBParsingOptions extends CFBCommonOptions {
+		/** If true, include raw data in output */
+		raw?: boolean;
+	}
+
 	declare type CFBEntry = {
 		/** Case-sensitive internal name */
 		name: string,
@@ -98,7 +112,7 @@ declare interface BigIntType {
 	// $FlowFixMe[bigint-unsupported]
 	valueOf(): bigint;
 
-	[Symbol.toStringTag]: "BigInt";
+	[$SymbolToStringTag]: "BigInt";
 }
 
 declare interface BigIntConstructor {
@@ -228,6 +242,10 @@ type OspecSpy<T> = T & {
 	calls: $ReadOnlyArray<{ this: any, args: $ReadOnlyArray<any> }>,
 	callCount: number,
 }
+
+type ComparisonDescriptor = (string) => void;
+type DoneFn = () => void;
+type TimeoutFn = (number) => void;
 
 interface Ospec {
 	<T>(T): {
