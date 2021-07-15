@@ -18,14 +18,14 @@
   "types": "types/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ganthern/oxmsg.git"
+    "url": "git+https://github.com/tutao/oxmsg.git"
   },
   "bugs": {
-    "url": "https://github.com/ganthern/oxmsg/issues"
+    "url": "https://github.com/tutao/oxmsg/issues"
   },
   "author": "tutao GmbH",
   "license": "MIT",
-  "homepage": "https://github.com/ganthern/oxmsg#readme",
+  "homepage": "https://github.com/tutao/oxmsg#readme",
   "dependencies": {
     "address-rfc2822": "^2.0.6",
     "bytebuffer": "^5.0.1",
