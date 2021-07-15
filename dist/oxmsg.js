@@ -8642,7 +8642,7 @@ function _isNativeReflectConstruct() {
   if (typeof Proxy === "function") return true;
 
   try {
-    Date.prototype.toString.call(Reflect.construct(Date, [], function () {}));
+    Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
     return true;
   } catch (e) {
     return false;
@@ -11666,11 +11666,11 @@ let Properties = /*#__PURE__*/function (_Array) {
 
   _createClass(Properties, [{
     key: "addOrReplaceProperty",
-
+    value:
     /**
      * add a prop it it doesn't exist, otherwise replace it
      */
-    value: function addOrReplaceProperty(tag, obj, flags = PropertyFlag.PROPATTR_READABLE | PropertyFlag.PROPATTR_WRITABLE) {
+    function addOrReplaceProperty(tag, obj, flags = PropertyFlag.PROPATTR_READABLE | PropertyFlag.PROPATTR_WRITABLE) {
       const index = this.findIndex(p => p.id === tag.id);
       if (index >= 0) this.splice(index, 1);
       this.addProperty(tag, obj, flags);
@@ -12030,7 +12030,7 @@ let TopLevelProperties = /*#__PURE__*/function (_Properties) {
 
   _createClass(TopLevelProperties, [{
     key: "writeProperties",
-    // TODO: add constructor to read in existing CFB stream
+    value: // TODO: add constructor to read in existing CFB stream
 
     /**
      *
@@ -12038,7 +12038,7 @@ let TopLevelProperties = /*#__PURE__*/function (_Properties) {
      * @param prefix
      * @param messageSize
      */
-    value: function writeProperties(storage, prefix, messageSize) {
+    function writeProperties(storage, prefix, messageSize) {
       // prefix required by the standard: 32 bytes
       const topLevelPropPrefix = buf => {
         prefix(buf); // Reserved(8 bytes): This field MUST be set to zero when writing a .msg file and MUST be ignored
@@ -12137,40 +12137,11 @@ let EntryStream = /*#__PURE__*/function (_Array) {
  */
 
 let EntryStreamItem = /*#__PURE__*/function () {
-  _createClass(EntryStreamItem, null, [{
-    key: "fromBuffer",
-
-    /**
-     * the Property Kind subfield of the Index and Kind Information field), this value is the LID part of the
-     * PropertyName structure, as specified in [MS-OXCDATA] section 2.6.1. If this property is a string named
-     * property, this value is the offset in bytes into the strings stream where the value of the Name field of
-     * the PropertyName structure is located.
-     * was ushort
-     * */
-
-    /**
-     * The following structure specifies the stream indexes and whether the property is a numerical
-     * named property or a string named property
-     * @type {IndexAndKindInformation}
-     */
-
-    /**
-     * creates this objcet and reads all the properties from the given buffer
-     * @param buf {ByteBuffer}
-     */
-    value: function fromBuffer(buf) {
-      const nameIdentifierOrStringOffset = buf.readUint16();
-      const indexAndKindInformation = IndexAndKindInformation.fromBuffer(buf);
-      return new EntryStreamItem(nameIdentifierOrStringOffset, indexAndKindInformation);
-    }
-    /**
-     * creates this object from the properties
-     * @param nameIdentifierOrStringOffset {number}
-     * @param indexAndKindInformation {IndexAndKindInformation}
-     */
-
-  }]);
-
+  /**
+   * creates this object from the properties
+   * @param nameIdentifierOrStringOffset {number}
+   * @param indexAndKindInformation {IndexAndKindInformation}
+   */
   function EntryStreamItem(nameIdentifierOrStringOffset, indexAndKindInformation) {
     _classCallCheck(this, EntryStreamItem);
 
@@ -12199,25 +12170,37 @@ let EntryStreamItem = /*#__PURE__*/function () {
       buf.writeUint16(this.indexAndKindInformation.propertyIndex); //Doesn't seem to be the case in the spec.
       // Fortunately section 3.2 clears this up.
     }
+  }], [{
+    key: "fromBuffer",
+    value:
+    /**
+     * the Property Kind subfield of the Index and Kind Information field), this value is the LID part of the
+     * PropertyName structure, as specified in [MS-OXCDATA] section 2.6.1. If this property is a string named
+     * property, this value is the offset in bytes into the strings stream where the value of the Name field of
+     * the PropertyName structure is located.
+     * was ushort
+     * */
+
+    /**
+     * The following structure specifies the stream indexes and whether the property is a numerical
+     * named property or a string named property
+     * @type {IndexAndKindInformation}
+     */
+
+    /**
+     * creates this objcet and reads all the properties from the given buffer
+     * @param buf {ByteBuffer}
+     */
+    function fromBuffer(buf) {
+      const nameIdentifierOrStringOffset = buf.readUint16();
+      const indexAndKindInformation = IndexAndKindInformation.fromBuffer(buf);
+      return new EntryStreamItem(nameIdentifierOrStringOffset, indexAndKindInformation);
+    }
   }]);
 
   return EntryStreamItem;
 }();
 let IndexAndKindInformation = /*#__PURE__*/function () {
-  _createClass(IndexAndKindInformation, null, [{
-    key: "fromBuffer",
-    // System.Uint16
-    // 1 byte
-    value: function fromBuffer(buf) {
-      const propertyIndex = buf.readUint16();
-      const packedValue = buf.readUint16();
-      const guidIndex = packedValue >>> 1 & 0xFFFF;
-      const propertyKind = packedValue & 0x07;
-      if (![0xFF, 0x01, 0x00].includes(propertyKind)) throw new Error("invalid propertyKind:" + propertyKind);
-      return new IndexAndKindInformation(propertyIndex, guidIndex, propertyKind);
-    }
-  }]);
-
   function IndexAndKindInformation(propertyIndex, guidIndex, propertyKind) {
     _classCallCheck(this, IndexAndKindInformation);
 
@@ -12237,6 +12220,18 @@ let IndexAndKindInformation = /*#__PURE__*/function () {
     value: function write(buf) {
       buf.writeUint16(this.propertyIndex);
       buf.writeUint32(this.guidIndex + this.propertyKind);
+    }
+  }], [{
+    key: "fromBuffer",
+    value: // System.Uint16
+    // 1 byte
+    function fromBuffer(buf) {
+      const propertyIndex = buf.readUint16();
+      const packedValue = buf.readUint16();
+      const guidIndex = packedValue >>> 1 & 0xFFFF;
+      const propertyKind = packedValue & 0x07;
+      if (![0xFF, 0x01, 0x00].includes(propertyKind)) throw new Error("invalid propertyKind:" + propertyKind);
+      return new IndexAndKindInformation(propertyIndex, guidIndex, propertyKind);
     }
   }]);
 
@@ -12355,38 +12350,6 @@ let StringStream = /*#__PURE__*/function (_Array) {
  */
 
 let StringStreamItem = /*#__PURE__*/function () {
-  _createClass(StringStreamItem, null, [{
-    key: "fromBuffer",
-
-    /**
-     * the length of the following name field in bytes
-     * was uint
-     * @type number
-     */
-
-    /**
-     * A Unicode string that is the name of the property. A new entry MUST always start
-     * on a 4 byte boundary; therefore, if the size of the Name field is not an exact multiple of 4, and
-     * another Name field entry occurs after it, null characters MUST be appended to the stream after it
-     * until the 4-byte boundary is reached.The Name Length field for the next entry will then start at
-     * the beginning of the next 4-byte boundary
-     * @type {string}
-     */
-
-    /**
-     * create a StringStreamItem from a byte buffer
-     * @param buf {ByteBuffer}
-     */
-    value: function fromBuffer(buf) {
-      const length = buf.readUint32(); // Encoding.Unicode.GetString(binaryReader.ReadBytes((int) Length)).Trim('\0');
-
-      const name = buf.readUTF8String(length);
-      const boundary = StringStreamItem.get4BytesBoundary(length);
-      buf.offset = buf.offset + boundary;
-      return new StringStreamItem(name);
-    }
-  }]);
-
   function StringStreamItem(name) {
     _classCallCheck(this, StringStreamItem);
 
@@ -12421,6 +12384,36 @@ let StringStreamItem = /*#__PURE__*/function () {
      */
 
   }], [{
+    key: "fromBuffer",
+    value:
+    /**
+     * the length of the following name field in bytes
+     * was uint
+     * @type number
+     */
+
+    /**
+     * A Unicode string that is the name of the property. A new entry MUST always start
+     * on a 4 byte boundary; therefore, if the size of the Name field is not an exact multiple of 4, and
+     * another Name field entry occurs after it, null characters MUST be appended to the stream after it
+     * until the 4-byte boundary is reached.The Name Length field for the next entry will then start at
+     * the beginning of the next 4-byte boundary
+     * @type {string}
+     */
+
+    /**
+     * create a StringStreamItem from a byte buffer
+     * @param buf {ByteBuffer}
+     */
+    function fromBuffer(buf) {
+      const length = buf.readUint32(); // Encoding.Unicode.GetString(binaryReader.ReadBytes((int) Length)).Trim('\0');
+
+      const name = buf.readUTF8String(length);
+      const boundary = StringStreamItem.get4BytesBoundary(length);
+      buf.offset = buf.offset + boundary;
+      return new StringStreamItem(name);
+    }
+  }, {
     key: "get4BytesBoundary",
     value: function get4BytesBoundary(length) {
       if (length === 0) return 4;
@@ -12755,7 +12748,7 @@ let Recipients = /*#__PURE__*/function (_Array) {
 
   _createClass(Recipients, [{
     key: "addTo",
-
+    value:
     /**
      * add a new To-Recipient to the list
      * @param email email address of the recipient
@@ -12764,7 +12757,7 @@ let Recipients = /*#__PURE__*/function (_Array) {
      * @param objectType mapiObjectType of the recipient (default MAPI_MAILUSER)
      * @param displayType recipientRowDisplayType of the recipient (default MessagingUser)
      */
-    value: function addTo(email, displayName = "", addressType = 'SMTP', objectType = MapiObjectType.MAPI_MAILUSER, displayType = RecipientRowDisplayType.MessagingUser) {
+    function addTo(email, displayName = "", addressType = 'SMTP', objectType = MapiObjectType.MAPI_MAILUSER, displayType = RecipientRowDisplayType.MessagingUser) {
       this.push(new Recipient(this.length, email, displayName, addressType, RecipientType.To, objectType, displayType));
     }
     /**
@@ -13683,13 +13676,13 @@ let Attachments = /*#__PURE__*/function (_Array) {
 
   _createClass(Attachments, [{
     key: "writeToStorage",
-
+    value:
     /**
      * Writes the Attachment objects to the given storage and sets all the needed properties
      * @param rootStorage
      * @returns {number} the total size of the written attachment objects and their properties
      */
-    value: function writeToStorage(rootStorage) {
+    function writeToStorage(rootStorage) {
       let size = 0;
 
       for (let i = 0; i < this.length; i++) {
@@ -13718,12 +13711,12 @@ let Strings = /*#__PURE__*/function () {
 
   _createClass(Strings, null, [{
     key: "escapeRtf",
-
+    value:
     /**
      * returns the str as an escaped RTF string
      * @param str {string} string to escape
      */
-    value: function escapeRtf(str) {
+    function escapeRtf(str) {
       const rtfEscaped = [];
       const escapedChars = ['{', '}', '\\'];
 
@@ -13892,13 +13885,13 @@ let Crc32 = /*#__PURE__*/function () {
 
   _createClass(Crc32, null, [{
     key: "calculate",
-
+    value:
     /**
      * calculates a checksum of a ByteBuffers contents
      * @param buffer {ByteBuffer}
      * @returns {number} the crc32 of this buffer's contents between offset and limit
      */
-    value: function calculate(buffer) {
+    function calculate(buffer) {
       if (buffer.offset >= buffer.limit) return 0;
       const origOffset = buffer.offset;
       let result = 0;
