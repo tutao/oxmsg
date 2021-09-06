@@ -3,8 +3,8 @@ import nodeResolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import json from '@rollup/plugin-json'
 import alias from '@rollup/plugin-alias'
-import {terser} from "rollup-plugin-terser"
 import path from 'path'
+import flowCopySource from "flow-copy-source"
 
 export default {
 	input: 'lib/index.js',
@@ -25,20 +25,24 @@ export default {
 			]
 		}),
 		json(),
+		flowCopySourcePlugin()
 	],
 	output: [
 		{
-			file: 'dist/oxmsg.js',
+			file: 'dist/index.js',
 			format: 'esm',
-			sourcemap: true,
-			name: 'oxmsg'
-		},
-		{
-			file: 'dist/oxmsg.min.js',
-			format: 'esm',
-			plugins: [terser()],
 			sourcemap: true,
 			name: 'oxmsg'
 		}
 	]
+}
+
+/** Copy all sources do dist with .flow extensions */
+function flowCopySourcePlugin() {
+	return {
+		name: "flow-copy-source",
+		writeBundle() {
+			return flowCopySource(["lib"], "dist")
+		}
+	};
 }
