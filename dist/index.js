@@ -14547,4 +14547,4 @@ let Email = /*#__PURE__*/function (_Message) {
 }(Message);
 
 export { Attachment, AttachmentType, cfb$1 as CFB, Email, MessageEditorFormat, bigInt64FromParts, dateToFileTime, fileTimeToDate, utf16LeArrayToString, utf8ArrayToString };
-//# sourceMappingURL=oxmsg.js.map
+//# sourceMappingURL=index.js.map

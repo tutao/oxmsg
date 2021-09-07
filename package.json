@@ -1,8 +1,8 @@
 {
   "name": "@tutao/oxmsg",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "js library for Microsoft Outlook Item files (.msg)",
-  "main": "dist/oxmsg.min.js",
+  "main": "dist/index.js",
   "scripts": {
     "build": "rollup --config rollup.config.js",
     "exec:nodejs": "node examples/node.js",
@@ -44,6 +44,7 @@
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^11.0.1",
     "flow-bin": "0.152.0",
+    "flow-copy-source": "^2.0.9",
     "ospec": "^4.1.1",
     "rollup": "^2.35.1",
     "rollup-plugin-terser": "^7.0.2"
