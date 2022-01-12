@@ -5,7 +5,7 @@ const unitsToMultiplicator = {
     MB: 1024 * 1024,
     GB: 1024 * 1024 * 1024,
     TB: 1024 * 1024 * 1024 * 1024,
-}
+} as const
 
 /**
  * Thanks to http://stackoverflow.com/a/7333402/477854 for inspiration
@@ -31,7 +31,7 @@ export class SizeParser {
             unitLength <= lastChar &&
             sizeWithUnit[lastChar - unitLength] !== " " && // stop when a space
             !SizeParser.isDigit(sizeWithUnit[lastChar - unitLength]) // or digit is found
-        )
+            )
             unitLength++
 
         return sizeWithUnit.substring(sizeWithUnit.length - unitLength).toUpperCase()
@@ -43,7 +43,10 @@ export class SizeParser {
 
     static multiplicatorForUnit(unit: string): number {
         unit = unit.toUpperCase()
-        if (unitsToMultiplicator[unit] == null) throw new Error("illegal or unknown unit:" + unit)
-        return unitsToMultiplicator[unit]
+        if (unit in unitsToMultiplicator) {
+            return unitsToMultiplicator[unit as keyof typeof unitsToMultiplicator]
+        } else {
+            throw new Error("illegal or unknown unit:" + unit)
+        }
     }
 }

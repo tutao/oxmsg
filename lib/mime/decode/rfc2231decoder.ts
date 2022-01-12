@@ -1,9 +1,7 @@
-import {splitAtUnquoted, unquote} from "../../utils/utils"
-import {decode as decodeRfc2047} from "../header/rfc2047"
-export type KeyValueList = Array<{
-    key: string
-    value: string
-}>
+import {splitAtUnquoted, unquote} from "../../utils/utils.js"
+import {decode as decodeRfc2047} from "../header/rfc2047.js"
+
+export type KeyValueList = Array<{key: string, value: string}>
 
 /**
  * This class is responsible for decoding parameters that has been encoded with:
@@ -88,10 +86,10 @@ export class Rfc2231Decoder {
         input = input.replace(normalizeFirstRegexp, (match, first, second) => `${first}; ${second}`)
         // Split by semicolon, but only if not inside quotes
         const parts = splitAtUnquoted(input.trim(), ";").map(part => part.trim())
-        const collection = []
+        const collection: KeyValueList = []
         for (let part of parts) {
             // Empty strings should not be processed
-            if (part.length === 0) return
+            if (part.length === 0) continue
             const eqIdx = part.indexOf("=")
             if (eqIdx === -1)
                 collection.push({
@@ -116,7 +114,7 @@ export class Rfc2231Decoder {
      */
     static decodePairs(pairs: KeyValueList): KeyValueList {
         if (pairs == null) throw new Error("pairs must not be null!")
-        const resultPairs = []
+        const resultPairs: KeyValueList = []
         const pairsCount = pairs.length
 
         for (let i = 0; i < pairsCount; i++) {
@@ -128,7 +126,7 @@ export class Rfc2231Decoder {
             if (key.endsWith("*0") || key.endsWith("*0*")) {
                 // This encoding will not be used if we get into the if which tells us
                 // that the whole continuation is not encoded
-                let encoding = "notEncoded - Value here is never used"
+                let encoding
 
                 // Now lets find out if it is encoded too.
                 if (key.endsWith("*0*")) {
@@ -150,7 +148,7 @@ export class Rfc2231Decoder {
                 }
 
                 // The StringBuilder will hold the full decoded value from all continuation parts
-                const builder = []
+                const builder: string[] = []
                 // Append the decoded value
                 builder.push(value)
 
@@ -212,7 +210,7 @@ export class Rfc2231Decoder {
         return resultPairs
     }
 
-    static detectEncoding(input: string): string | null | undefined {
+    static detectEncoding(input: string): string | null {
         if (input == null) throw new Error("input must not be null!")
         const quoteIdx = input.indexOf("'")
         if (quoteIdx === -1) return null
@@ -237,7 +235,7 @@ export class Rfc2231Decoder {
      * @param encoding {string} the encoding used to decode with
      * @returns {string} decoded value corresponding to input
      */
-    static decodeSingleValue(input: string, encoding: string | null | undefined): string {
+    static decodeSingleValue(input: string, encoding: string | null): string {
         if (input == null) throw new Error("input must not be null!")
         if (encoding == null) return input
         // The encoding used is the same as QuotedPrintable, we only

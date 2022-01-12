@@ -1,8 +1,8 @@
-import type {PropertyTag} from "../property_tags"
-import {PropertyTagLiterals} from "../property_tags"
-import type {Property} from "../property"
+import type {PropertyTag} from "../property_tags.js"
+import {PropertyTagLiterals} from "../property_tags.js"
+import type {Property} from "../property.js"
 import ByteBuffer from "bytebuffer"
-import {Locale} from "./lcid";
+import {Locale} from "./lcid.js"
 
 function Xp(n: number, p: number): string {
     return n.toString(16).padStart(p, "0").toUpperCase()
@@ -42,9 +42,11 @@ export function X4(n: number): string {
 export function X8(n: number): string {
     return Xp(n, 8)
 }
+
 export function name(tag: PropertyTag | Property): string {
     return PropertyTagLiterals.SubStorageStreamPrefix + X4(tag.id) + X4(tag.type)
 }
+
 export function shortName(tag: PropertyTag | Property): string {
     return X4(tag.id)
 }
@@ -162,22 +164,30 @@ export function byteBufferAsUint8Array(buf: ByteBuffer): Uint8Array {
  */
 export function makeByteBuffer(initCap?: number, otherBuffer?: ByteBuffer | ArrayBuffer | Uint8Array): ByteBuffer {
     if (initCap != null && initCap < 0) throw new Error("initCap must be non-negative!")
-    return otherBuffer == null ? new ByteBuffer(initCap || 1, ByteBuffer.LITTLE_ENDIAN) : ByteBuffer.wrap(otherBuffer, null, ByteBuffer.LITTLE_ENDIAN)
+    return otherBuffer == null ? new ByteBuffer(initCap || 1, ByteBuffer.LITTLE_ENDIAN) : ByteBuffer.wrap(otherBuffer, undefined, ByteBuffer.LITTLE_ENDIAN)
 }
+
 export function getPathExtension(p: string): string {
     if (!p.includes(".")) return ""
     const parts = p.split(".")
     return "." + parts[parts.length - 1]
 }
+
 export function isNullOrEmpty(str: string | null | undefined): boolean {
     return !str || str === ""
 }
+
 export function isNullOrWhiteSpace(str: string | null | undefined): boolean {
     return str == null || str.trim() === ""
 }
+
+export function isNotNullOrWhitespace(str: string | null | undefined): str is string {
+    return !isNullOrWhiteSpace(str)
+}
+
 export function splitAtUnquoted(input: string, sep: string): Array<string> {
     if (sep.length !== 1) throw new Error("sep needs to be a char!")
-    const elements = []
+    const elements: string[] = []
     let lastSplitLocation = 0
     let insideQuote = false
     const characters = input.split("")
@@ -199,22 +209,23 @@ export function splitAtUnquoted(input: string, sep: string): Array<string> {
     elements.push(input.substring(lastSplitLocation))
     return elements
 }
+
 export function unquote(input: string): string {
     if (input == null) throw new Error("text needs to be a string")
     return input.length > 1 && input[0] === '"' && input[input.length - 1] === '"' ? input.substring(1, input.length - 1) : input
 }
+
 export function localeId(): Locale {
     return Locale[getLang()]
 }
 
-function getLang(): string {
+function getLang(): keyof typeof Locale {
     return "en_US"
 }
 
 /**
  * get the upper and lower 32 bits from a 64bit int in a bignum
  */
-// @ts-ignore[bigint-unsupported]
 export function bigInt64ToParts(
     num: bigint,
 ): {
@@ -222,9 +233,7 @@ export function bigInt64ToParts(
     upper: number
 } {
     const u64 = BigInt.asUintN(64, num)
-    // $FlowIgnore[bigint-unsupported]
     const lower = Number(u64 & (2n ** 32n - 1n))
-    // $FlowIgnore[bigint-unsupported]
     const upper = Number((u64 / 2n ** 32n) & (2n ** 32n - 1n))
     return {
         lower,
@@ -237,8 +246,6 @@ export function bigInt64ToParts(
  * @param lower
  * @param upper
  */
-// @ts-ignore[bigint-unsupported]
 export function bigInt64FromParts(lower: number, upper: number): bigint {
-    // $FlowIgnore[bigint-unsupported]
     return BigInt.asUintN(64, BigInt(lower) + BigInt(upper) * 2n ** 32n)
 }

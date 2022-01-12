@@ -1,17 +1,18 @@
-import {PropertyTags} from "./property_tags"
-import {generateInstanceKey, generateRecordKey} from "./utils/mapi"
-import {fileNameToDosFileName, getPathExtension, isNullOrEmpty} from "./utils/utils"
-import {getMimeType} from "./utils/mime"
-import {Properties} from "./properties"
-import {AttachmentFlags, AttachmentType, MapiObjectType, PropertyFlag, StoreSupportMaskConst} from "./enums";
+import {PropertyTags} from "./property_tags.js"
+import {generateInstanceKey, generateRecordKey} from "./utils/mapi.js"
+import {fileNameToDosFileName, getPathExtension, isNullOrEmpty} from "./utils/utils.js"
+import {getMimeType} from "./utils/mime.js"
+import {Properties} from "./properties.js"
+import {AttachmentFlags, AttachmentType, MapiObjectType, PropertyFlag, StoreSupportMaskConst} from "./enums.js"
+import {CFBStorage} from "./cfb_storage";
 
 export class Attachment {
-    data: Uint8Array
-    fileName: string
-    type: AttachmentType
-    contentId: string
-    renderingPosition: number
-    isContactPhoto: boolean
+    readonly data: Uint8Array
+    readonly fileName: string
+    readonly type: AttachmentType
+    readonly contentId: string
+    readonly renderingPosition: number
+    readonly isContactPhoto: boolean
 
     constructor(
         data: Uint8Array, // was: Stream
@@ -29,7 +30,7 @@ export class Attachment {
         this.isContactPhoto = isContactPhoto
     }
 
-    writeProperties(storage: any, index: number): number {
+    writeProperties(storage: CFBStorage, index: number): number {
         const attachmentProperties = new Properties()
         attachmentProperties.addProperty(PropertyTags.PR_ATTACH_NUM, index, PropertyFlag.PROPATTR_READABLE)
         attachmentProperties.addBinaryProperty(PropertyTags.PR_INSTANCE_KEY, generateInstanceKey(), PropertyFlag.PROPATTR_READABLE)

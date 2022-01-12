@@ -1,5 +1,6 @@
-import {makeByteBuffer} from "../utils/utils"
-import {PropertyTagLiterals, PropertyTags} from "../property_tags"
+import {makeByteBuffer} from "../utils/utils.js"
+import {PropertyTagLiterals} from "../property_tags.js"
+import {CFBStorage} from "../cfb_storage";
 
 /**
  * The GUID stream MUST be named "__substg1.0_00020102". It MUST store the property set GUID
@@ -15,11 +16,11 @@ export class GuidStream extends Array<Uint8Array> {
      * create this object
      * @param storage the storage that contains the PropertyTags.GuidStream
      */
-    constructor(storage?: any) {
+    constructor(storage?: CFBStorage) {
         super()
         if (storage == null) return
         const stream = storage.getStream(PropertyTagLiterals.GuidStream)
-        const buf = makeByteBuffer(null, stream)
+        const buf = makeByteBuffer(undefined, stream)
 
         while (buf.offset < buf.limit) {
             const guid = buf.slice(buf.offset, buf.offset + 16).toArrayBuffer(true)

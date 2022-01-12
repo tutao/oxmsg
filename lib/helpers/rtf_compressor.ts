@@ -1,24 +1,26 @@
 import ByteBuffer from "bytebuffer"
-import {byteBufferAsUint8Array, makeByteBuffer, stringToUtf8Array} from "../utils/utils"
-import {Crc32} from "./crc32"
+import {byteBufferAsUint8Array, makeByteBuffer, stringToUtf8Array} from "../utils/utils.js"
+import {Crc32} from "./crc32.js"
+
 const INIT_DICT_SIZE: number = 207
 const MAX_DICT_SIZE: number = 4096
 const COMP_TYPE: string = "LZFu"
 const HEADER_SIZE: number = 16
+
 type MatchInfo = {
     dictionaryOffset: number
     length: number
 }
 
 function getInitialDict(): ByteBuffer {
-    const builder = []
+    const builder: string[] = []
     builder.push("{\\rtf1\\ansi\\mac\\deff0\\deftab720{\\fonttbl;}")
     builder.push("{\\f0\\fnil \\froman \\fswiss \\fmodern \\fscript ")
     builder.push("\\fdecor MS Sans SerifSymbolArialTimes New RomanCourier{\\colortbl\\red0\\green0\\blue0")
     builder.push("\r\n")
     builder.push("\\par \\pard\\plain\\f0\\fs20\\b\\i\\u\\tab\\tx")
     const res = builder.join("")
-    let initialDictionary = makeByteBuffer(null, stringToUtf8Array(res))
+    let initialDictionary = makeByteBuffer(undefined, stringToUtf8Array(res))
     initialDictionary.ensureCapacity(MAX_DICT_SIZE)
     initialDictionary.limit = MAX_DICT_SIZE
     initialDictionary.offset = INIT_DICT_SIZE
@@ -86,7 +88,7 @@ export function compress(input: Uint8Array): Uint8Array {
         length: 0,
         dictionaryOffset: 0,
     }
-    const inputBuffer = makeByteBuffer(null, input)
+    const inputBuffer = makeByteBuffer(undefined, input)
     const dictionary = getInitialDict()
     const tokenBuffer = makeByteBuffer(16)
     const resultBuffer = makeByteBuffer(17)

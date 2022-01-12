@@ -1,4 +1,4 @@
-import {generateEntryId, generateInstanceKey, generateRecordKey, generateSearchKey} from "./mapi"
+import {generateEntryId, generateInstanceKey, generateRecordKey, generateSearchKey} from "./mapi.js"
 import o from "ospec"
 
 function uint8ToBase16(u8Arr) {

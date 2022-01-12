@@ -20,9 +20,7 @@ type NamedPropertyTag = {
 }
 
 export class NamedProperties extends Array<NamedProperty> {
-    _topLevelProperties: TopLevelProperties
-    // The offset index for a named property
-    _namedPropertyIndex: number
+    private readonly _topLevelProperties: TopLevelProperties
 
     constructor(topLevelProperties: TopLevelProperties) {
         super()
@@ -79,7 +77,7 @@ export class NamedProperties extends Array<NamedProperty> {
      * generates the stream strings
      * @param nameIdentifier {number} was uint
      * @param guidTarget {number} was uint
-     * @param propertyKind {PropertyKindEnum} 1 byte
+     * @param propertyKind {PropertyKind} 1 byte
      */
     static _generateStreamString(nameIdentifier: number, guidTarget: number, propertyKind: PropertyKind): string {
         switch (propertyKind) {

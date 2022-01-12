@@ -1,18 +1,25 @@
 import o from "ospec"
-import {bigInt64FromParts, bigInt64ToParts, byteBufferAsUint8Array, fileNameToDosFileName, makeByteBuffer} from "./utils"
+import {
+    bigInt64FromParts,
+    bigInt64ToParts,
+    byteBufferAsUint8Array,
+    fileNameToDosFileName,
+    makeByteBuffer
+} from "./utils.js"
+
 o.spec("utils", function () {
     o("makeByteBuffer", function () {
         const anotherBuf = makeByteBuffer(16)
         anotherBuf.writeUint64(123)
         anotherBuf.writeString("hello")
         o(anotherBuf.littleEndian).equals(true)
-        o(makeByteBuffer(null).toDebug()).equals("<00>")
+        o(makeByteBuffer(undefined).toDebug()).equals("<00>")
         o(makeByteBuffer().toDebug()).equals("<00>")
-        o(makeByteBuffer(null, null).toDebug()).equals("<00>")
-        o(makeByteBuffer(0, null).toDebug()).equals("<00>")
+        o(makeByteBuffer(undefined).toDebug()).equals("<00>")
+        o(makeByteBuffer(0).toDebug()).equals("<00>")
         o(() => makeByteBuffer(-1)).throws(Error)
-        o(makeByteBuffer(null, anotherBuf).toDebug()).equals("7B 00 00 00 00 00 00 00 68 65 6C 6C 6F<00 00 00>")
-        o(makeByteBuffer(null, anotherBuf).littleEndian).equals(true)
+        o(makeByteBuffer(undefined, anotherBuf).toDebug()).equals("7B 00 00 00 00 00 00 00 68 65 6C 6C 6F<00 00 00>")
+        o(makeByteBuffer(undefined, anotherBuf).littleEndian).equals(true)
     })
     o("byteBufferToUint8Array", function () {
         const buf = makeByteBuffer(16)

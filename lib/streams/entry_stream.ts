@@ -1,7 +1,8 @@
-import {byteBufferAsUint8Array, makeByteBuffer} from "../utils/utils"
-import {PropertyTagLiterals} from "../property_tags"
+import {byteBufferAsUint8Array, makeByteBuffer} from "../utils/utils.js"
+import {PropertyTagLiterals} from "../property_tags.js"
 import type ByteBuffer from "bytebuffer"
-import {PropertyKind} from "../enums";
+import {PropertyKind} from "../enums.js"
+import {CFBStorage} from "../cfb_storage.js"
 
 /**
  * The entry stream MUST be named "__substg1.0_00030102" and consist of 8-byte entries, one for each
@@ -19,9 +20,8 @@ export class EntryStream extends Array<EntryStreamItem> {
     /**
      * creates this object and reads all the EntryStreamItems from
      * the given storage
-     * @param storage {any}
      */
-    constructor(storage?: any) {
+    constructor(storage?: CFBStorage) {
         super()
         if (storage == null) return
         const stream = storage.getStream(PropertyTagLiterals.EntryStream)
@@ -30,7 +30,7 @@ export class EntryStream extends Array<EntryStreamItem> {
             storage.addStream(PropertyTagLiterals.EntryStream, Uint8Array.of())
         }
 
-        const buf = makeByteBuffer(null, stream)
+        const buf = makeByteBuffer(undefined, stream)
 
         while (buf.offset < buf.limit) {
             const entryStreamItem = EntryStreamItem.fromBuffer(buf)
@@ -40,10 +40,8 @@ export class EntryStream extends Array<EntryStreamItem> {
 
     /**
      * writes all the EntryStreamItems as a stream to the storage
-     * @param storage {any}
-     * @param streamName {string?}
      */
-    write(storage: any, streamName: string | null | undefined = PropertyTagLiterals.EntryStream): void {
+    write(storage: CFBStorage, streamName: string = PropertyTagLiterals.EntryStream): void {
         const buf = makeByteBuffer()
         this.forEach(entry => entry.write(buf))
         storage.addStream(streamName, byteBufferAsUint8Array(buf))
@@ -61,15 +59,15 @@ export class EntryStreamItem {
      * the PropertyName structure is located.
      * was ushort
      * */
-    nameIdentifierOrStringOffset: number
-    nameIdentifierOrStringOffsetHex: string
+    readonly nameIdentifierOrStringOffset: number
+    readonly nameIdentifierOrStringOffsetHex: string
 
     /**
      * The following structure specifies the stream indexes and whether the property is a numerical
      * named property or a string named property
      * @type {IndexAndKindInformation}
      */
-    indexAndKindInformation: IndexAndKindInformation
+    readonly indexAndKindInformation: IndexAndKindInformation
 
     /**
      * creates this objcet and reads all the properties from the given buffer
@@ -106,10 +104,10 @@ export class EntryStreamItem {
 }
 export class IndexAndKindInformation {
     // System.Uint16
-    propertyIndex: number
-    guidIndex: number
+    readonly propertyIndex: number
+    readonly guidIndex: number
     // 1 byte
-    propertyKind: PropertyKind
+    readonly propertyKind: PropertyKind
 
     static fromBuffer(buf: ByteBuffer): IndexAndKindInformation {
         const propertyIndex = buf.readUint16()
@@ -117,7 +115,7 @@ export class IndexAndKindInformation {
         const guidIndex = (packedValue >>> 1) & 0xffff
         const propertyKind = packedValue & 0x07
         if (![0xff, 0x01, 0x00].includes(propertyKind)) throw new Error("invalid propertyKind:" + propertyKind)
-        return new IndexAndKindInformation(propertyIndex, guidIndex, propertyKind as any)
+        return new IndexAndKindInformation(propertyIndex, guidIndex, propertyKind)
     }
 
     constructor(propertyIndex: number, guidIndex: number, propertyKind: PropertyKind) {

@@ -1,12 +1,13 @@
 import {v4} from "uuid"
-import {stringToUtf16LeArray} from "./utils"
+import {stringToUtf16LeArray} from "./utils.js"
 
 /// contains MAPI related helper methods
 function makeUUIDBuffer(): Uint8Array {
     return v4({}, new Uint8Array(16), 0)
 }
 
-let instanceKey = null
+let instanceKey: Uint8Array | null = null
+
 // A search key is used to compare the data in two objects. An object's search key is stored in its
 // <see cref="PropertyTags.PR_SEARCH_KEY" /> (PidTagSearchKey) property. Because a search key
 // represents an object's data and not the object itself, two different objects with the same data can have the same
@@ -67,5 +68,5 @@ export function generateEntryId(): Uint8Array {
     // Encoding.Unicode.GetBytes(Guid.NewGuid().ToString());
     const val = v4()
     // v4 without args gives a string
-    return stringToUtf16LeArray(val as any)
+    return stringToUtf16LeArray(val)
 }

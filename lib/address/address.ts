@@ -1,9 +1,10 @@
 import type {AddressType} from "../enums"
 import {isNullOrWhiteSpace} from "../utils/utils"
+
 export class Address {
-    addressType: AddressType
-    email: string
-    displayName: string
+    readonly addressType: AddressType
+    readonly email: string
+    readonly displayName: string
 
     constructor(email: string, displayName: string, addressType: AddressType = "SMTP") {
         this.email = email

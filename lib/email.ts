@@ -1,5 +1,5 @@
-import {Message} from "./message"
-import {Recipients} from "./address/recipients"
+import {Message} from "./message.js"
+import {Recipients} from "./address/recipients.js"
 import {
     MessageImportance,
     MapiAccess,
@@ -12,57 +12,62 @@ import {
     PropertyFlag,
     RecipientType,
     StoreSupportMaskConst,
-} from "./enums"
-import {Receiving} from "./address/receiving"
-import {isNullOrEmpty, isNullOrWhiteSpace, localeId, stringToUtf8Array} from "./utils/utils"
-import {PropertyTags} from "./property_tags"
-import type {MessageHeader} from "./mime/header/message_header"
-import {Sender} from "./address/sender"
-import {Representing} from "./address/representing"
-import {Attachments} from "./attachments"
-import {ReceivingRepresenting} from "./address/receiving_representing"
-import {generateEntryId, generateInstanceKey} from "./utils/mapi"
-import {Strings} from "./helpers/strings"
-import {ReportTag} from "./structures/report_tag"
-import {compress} from "./helpers/rtf_compressor"
-import {Attachment} from "./attachment"
+} from "./enums.js"
+import {Receiving} from "./address/receiving.js"
+import {isNotNullOrWhitespace, isNullOrEmpty, isNullOrWhiteSpace, localeId, stringToUtf8Array} from "./utils/utils.js"
+import {PropertyTags} from "./property_tags.js"
+import type {MessageHeader} from "./mime/header/message_header.js"
+import {Sender} from "./address/sender.js"
+import {Representing} from "./address/representing.js"
+import {Attachments} from "./attachments.js"
+import {ReceivingRepresenting} from "./address/receiving_representing.js"
+import {generateEntryId, generateInstanceKey} from "./utils/mapi.js"
+import {Strings} from "./helpers/strings.js"
+import {ReportTag} from "./structures/report_tag.js"
+import {compress} from "./helpers/rtf_compressor.js"
+import {Attachment} from "./attachment.js"
+
 // \D => not digit
 const subjectPrefixRegex = /^(\D{1,3}:\s)(.*)$/
 export type Recipient = {
     address: string
     name?: string
 }
-export class Email extends Message {
-    recipients: Recipients
-    replyToRecipients: Recipients
-    attachments: Attachments
-    _subject: string = ""
-    _sender: Sender
-    _representing: Representing
-    _receiving: Receiving
-    _receivingRepresenting: ReceivingRepresenting
-    subjectPrefix: string
-    _subjectNormalized: string
-    priority: MessagePriority
-    importance: MessageImportance
-    _bodyText: string
-    _bodyHtml: string
-    _bodyRtf: string
-    bodyRtfCompressed: boolean
-    _sentOn: Date | null | undefined
-    _receivedOn: Date | null | undefined // was: DateTime
 
-    // Corresponds to the message ID field as specified in [RFC2822].
-    // If set then this value will be used, when not set the value will be read from the
-    // TransportMessageHeaders when this property is set
-    internetMessageId: string
-    internetReferences: string
-    inReplyToId: string
-    transportMessageHeadersText: string | null | undefined
-    transportMessageHeaders: MessageHeader | null | undefined
-    draft: boolean
-    readReceipt: boolean
-    messageEditorFormat: MessageEditorFormat
+export class Email extends Message {
+    readonly recipients: Recipients
+    readonly replyToRecipients: Recipients
+    readonly attachments: Attachments
+    private _subject: string = ""
+    _sender: Sender | null = null
+    private _representing: Representing | null = null
+    private _receiving: Receiving | null = null
+    private _receivingRepresenting: ReceivingRepresenting | null = null
+    subjectPrefix: string | null = null
+    private _subjectNormalized: string | null = null
+    readonly priority: MessagePriority
+    importance: MessageImportance
+    private _bodyText: string
+    private _bodyHtml: string
+    private _bodyRtf: string | null = null
+    bodyRtfCompressed: boolean | null = null
+    private _sentOn: Date | null = null
+    private _receivedOn: Date | null = null // was: DateTime
+
+
+    /**
+     * Corresponds to the message ID field as specified in [RFC2822].
+     * If set then this value will be used, when not set the value will be read from the
+     * TransportMessageHeaders when this property is set
+     */
+    internetMessageId: string | null = null
+    internetReferences: string | null = null
+    inReplyToId: string | null = null
+    transportMessageHeadersText: string | null = null
+    transportMessageHeaders: MessageHeader | null = null
+    readonly draft: boolean
+    readonly readReceipt: boolean
+    messageEditorFormat: MessageEditorFormat | null = null
 
     constructor(draft: boolean = false, readReceipt: boolean = false) {
         super()
@@ -148,12 +153,12 @@ export class Email extends Message {
         return this
     }
 
-    sentOn(when: Date | null | undefined): Email {
+    sentOn(when: Date | null): Email {
         this._sentOn = when
         return this
     }
 
-    receivedOn(when: Date | null | undefined): Email {
+    receivedOn(when: Date | null): Email {
         this._receivedOn = when
         return this
     }
@@ -182,8 +187,9 @@ export class Email extends Message {
 
     _setSubject() {
         if (!isNullOrEmpty(this.subjectPrefix)) {
-            if (this._subject.startsWith(this.subjectPrefix)) {
-                this._subjectNormalized = this._subject.slice(this.subjectPrefix.length)
+            const subjectPrefix = this.subjectPrefix as string;
+            if (this._subject.startsWith(subjectPrefix)) {
+                this._subjectNormalized = this._subject.slice(subjectPrefix.length)
             } else {
                 const match = this._subject.match(subjectPrefixRegex)
 
@@ -242,7 +248,7 @@ export class Email extends Message {
         const transportHeaders = this.transportMessageHeaders
 
         if (transportHeaders) {
-            if (!isNullOrWhiteSpace(transportHeaders.messageId)) {
+            if (isNotNullOrWhitespace(transportHeaders.messageId)) {
                 this._topLevelProperties.addProperty(PropertyTags.PR_INTERNET_MESSAGE_ID_W, transportHeaders.messageId)
             }
 
@@ -259,15 +265,15 @@ export class Email extends Message {
             }
         }
 
-        if (!isNullOrWhiteSpace(this.internetMessageId)) {
+        if (isNotNullOrWhitespace(this.internetMessageId)) {
             this._topLevelProperties.addOrReplaceProperty(PropertyTags.PR_INTERNET_MESSAGE_ID_W, this.internetMessageId)
         }
 
-        if (!isNullOrWhiteSpace(this.internetReferences)) {
+        if (isNotNullOrWhitespace(this.internetReferences)) {
             this._topLevelProperties.addOrReplaceProperty(PropertyTags.PR_INTERNET_REFERENCES_W, this.internetReferences)
         }
 
-        if (!isNullOrWhiteSpace(this.inReplyToId)) {
+        if (isNotNullOrWhitespace(this.inReplyToId)) {
             this._topLevelProperties.addOrReplaceProperty(PropertyTags.PR_IN_REPLY_TO_ID_W, this.inReplyToId)
         }
 
@@ -283,12 +289,12 @@ export class Email extends Message {
             this._topLevelProperties.addProperty(PropertyTags.PR_HTML, this._bodyHtml)
 
             this._topLevelProperties.addProperty(PropertyTags.PR_RTF_IN_SYNC, false)
-        } else if (isNullOrWhiteSpace(this._bodyRtf) && !isNullOrWhiteSpace(this._bodyHtml)) {
+        } else if (isNullOrWhiteSpace(this._bodyRtf) && isNotNullOrWhitespace(this._bodyHtml)) {
             this._bodyRtf = Strings.escapeRtf(this._bodyHtml)
             this.bodyRtfCompressed = true
         }
 
-        if (!isNullOrWhiteSpace(this._bodyRtf)) {
+        if (isNotNullOrWhitespace(this._bodyRtf)) {
             this._topLevelProperties.addProperty(PropertyTags.PR_RTF_COMPRESSED, compress(stringToUtf8Array(this._bodyRtf)))
 
             this._topLevelProperties.addProperty(PropertyTags.PR_RTF_IN_SYNC, this.bodyRtfCompressed)
@@ -366,34 +372,34 @@ export class Email extends Message {
         if (!!this._representing) this._representing.writeProperties(this._topLevelProperties)
 
         if (recipientCount > 0) {
-            const displayTo = []
-            const displayCc = []
-            const displayBcc = []
+            const displayTo: string[] = []
+            const displayCc: string[] = []
+            const displayBcc: string[] = []
 
             for (const recipient of this.recipients) {
                 switch (recipient.recipientType) {
                     case RecipientType.To:
-                        if (!isNullOrWhiteSpace(recipient.displayName)) {
+                        if (isNotNullOrWhitespace(recipient.displayName)) {
                             displayTo.push(recipient.displayName)
-                        } else if (!isNullOrWhiteSpace(recipient.email)) {
+                        } else if (isNotNullOrWhitespace(recipient.email)) {
                             displayTo.push(recipient.email)
                         }
 
                         break
 
                     case RecipientType.Cc:
-                        if (!isNullOrWhiteSpace(recipient.displayName)) {
+                        if (isNotNullOrWhitespace(recipient.displayName)) {
                             displayCc.push(recipient.displayName)
-                        } else if (!isNullOrWhiteSpace(recipient.email)) {
+                        } else if (isNotNullOrWhitespace(recipient.email)) {
                             displayCc.push(recipient.email)
                         }
 
                         break
 
                     case RecipientType.Bcc:
-                        if (!isNullOrWhiteSpace(recipient.displayName)) {
+                        if (isNotNullOrWhitespace(recipient.displayName)) {
                             displayBcc.push(recipient.displayName)
-                        } else if (!isNullOrWhiteSpace(recipient.email)) {
+                        } else if (isNotNullOrWhitespace(recipient.email)) {
                             displayBcc.push(recipient.email)
                         }
 
@@ -404,7 +410,7 @@ export class Email extends Message {
                 }
             }
 
-            const replyToRecipients = []
+            const replyToRecipients: string[] = []
 
             for (const recipient of this.replyToRecipients) {
                 replyToRecipients.push(recipient.email)

@@ -4,9 +4,11 @@
     "outDir": "../build/test",
     "declaration": false,
     "declarationDir": null,
+    "noImplicitAny": false
   },
   "include": [
     ".",
+    "../types"
   ],
   "exclude": [
     "../node_modules"

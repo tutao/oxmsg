@@ -1,13 +1,12 @@
 import o from "ospec"
 
-import "../lib/mime/header/rfc2047.spec"
-import "../lib/helpers/crc32.spec"
-import "../lib/utils/mapi.spec"
-import "../lib/address/one_off_entry_id.spec"
-import "../lib/helpers/rtf_compressor.spec"
-import "../lib/utils/time.spec"
-import "../lib/utils/utils.spec"
-import "../lib/email.spec"
-import "../lib/attachments.spec"
+import "../lib/mime/header/rfc2047.spec.js"
+import "../lib/helpers/crc32.spec.js"
+import "../lib/utils/mapi.spec.js"
+import "../lib/address/one_off_entry_id.spec.js"
+import "../lib/helpers/rtf_compressor.spec.js"
+import "../lib/utils/time.spec.js"
+import "../lib/utils/utils.spec.js"
+import "../lib/attachments.spec.js"
 
 o.run()

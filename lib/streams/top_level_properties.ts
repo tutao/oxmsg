@@ -1,15 +1,15 @@
-import {Properties} from "../properties"
+import {Properties} from "../properties.js"
 import type ByteBuffer from "bytebuffer"
-import type {CFBStorage} from "../cfb_storage"
+import type {CFBStorage} from "../cfb_storage.js"
 
 /**
  * The properties stream contained inside the top level of the .msg file, which represents the Message object itself.
  */
 export class TopLevelProperties extends Properties {
-    nextRecipientId: number
-    nextAttachmentId: number
-    recipientCount: number
-    attachmentCount: number
+    nextRecipientId!: number
+    nextAttachmentId!: number
+    recipientCount!: number
+    attachmentCount!: number
 
     // TODO: add constructor to read in existing CFB stream
 
@@ -19,9 +19,9 @@ export class TopLevelProperties extends Properties {
      * @param prefix
      * @param messageSize
      */
-    writeProperties(storage: CFBStorage, prefix: (arg0: ByteBuffer) => void, messageSize?: number): number {
+    override writeProperties(storage: CFBStorage, prefix: (arg0: ByteBuffer) => void, messageSize?: number): number {
         // prefix required by the standard: 32 bytes
-        const topLevelPropPrefix = buf => {
+        const topLevelPropPrefix = (buf: ByteBuffer) => {
             prefix(buf)
             // Reserved(8 bytes): This field MUST be set to zero when writing a .msg file and MUST be ignored
             // when reading a.msg file.

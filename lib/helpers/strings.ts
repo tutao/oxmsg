@@ -1,11 +1,12 @@
-import {x2} from "../utils/utils"
+import {x2} from "../utils/utils.js"
+
 export class Strings {
     /**
      * returns the str as an escaped RTF string
      * @param str {string} string to escape
      */
     static escapeRtf(str: string): string {
-        const rtfEscaped = []
+        const rtfEscaped: string[] = []
         const escapedChars = ["{", "}", "\\"]
 
         for (const glyph of str) {
@@ -26,6 +27,7 @@ export class Strings {
                     // RTF control words generally accept signed 16-bit numbers as arguments.
                     // For this reason, Unicode values greater than 32767 must be expressed as negative numbers.
                     rtfEscaped.push("\\u")
+                    // @ts-ignore: something weird is happening here
                     rtfEscaped.push(codepoint.charCodeAt(0))
                     rtfEscaped.push("?")
                 }

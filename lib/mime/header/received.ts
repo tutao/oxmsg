@@ -52,7 +52,7 @@ export class Received {
      * @returns {{[string]: string}}
      */
     static parseValue(headerValue: string): Record<string, string> {
-        const dict = {}
+        const dict: Record<string, string> = {}
         const semiIdx = headerValue.lastIndexOf(";")
         headerValue = headerValue.replace(/\s+/, " ")
         const headerValueWithoutDate = semiIdx > -1 ? headerValue.substring(0, semiIdx) : headerValue

@@ -551,7 +551,8 @@ const MimeTypes = Object.freeze({
     z: "application/x-compressed",
     zip: "application/zip",
     zsh: "text/x-script.zsh",
-})
+} as const)
+
 export function getMimeType(fileName: string): string {
     if (fileName == null) throw new Error("fileName is null!")
     const aos = MimeTypes["exe"]
@@ -559,7 +560,7 @@ export function getMimeType(fileName: string): string {
 
     if (dot !== -1 && fileName.length > dot + 1) {
         const ext = fileName.substring(dot + 1)
-        return MimeTypes[ext] || aos
+        return ext in MimeTypes ? MimeTypes[ext as keyof typeof MimeTypes] : aos
     }
 
     return aos

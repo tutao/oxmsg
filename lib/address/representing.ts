@@ -2,6 +2,7 @@ import {Address} from "./address"
 import type {AddressType} from "../enums"
 import {TopLevelProperties} from "../streams/top_level_properties"
 import {PropertyTags} from "../property_tags"
+
 export class Representing extends Address {
     constructor(email: string, displayName: string, addressType: AddressType = "SMTP") {
         super(email, displayName, addressType)

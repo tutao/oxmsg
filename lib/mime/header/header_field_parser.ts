@@ -3,6 +3,7 @@ import {isNullOrEmpty, unquote} from "../../utils/utils"
 import {decode as decodeRfc2047} from "./rfc2047"
 import {SizeParser} from "../decode/size_parser"
 import {Rfc2231Decoder} from "../decode/rfc2231decoder"
+
 export type ContentType = {
     mediaType: string
     boundary: string
@@ -10,6 +11,7 @@ export type ContentType = {
     name: string
     parameters: Record<string, string>
 }
+
 export type ContentDisposition = {
     dispositionType: string
     fileName: string
@@ -19,6 +21,7 @@ export type ContentDisposition = {
     size: number
     parameters: Record<string, string>
 }
+
 export class HeaderFieldParser {
     /**
      * Parses the Content-Transfer-Encoding header.
@@ -27,8 +30,8 @@ export class HeaderFieldParser {
      */
     static parseContentTransferEncoding(value: string): ContentTransferEncoding {
         if (value == null) throw new Error("value must not be null!")
-        const enc = ContentTransferEncoding[value.trim().toLowerCase()]
-        return enc == null ? ContentTransferEncoding.SevenBit : enc
+        const normalized = value.trim().toLowerCase();
+        return normalized in ContentTransferEncoding ? ContentTransferEncoding[normalized as keyof typeof ContentTransferEncoding] : ContentTransferEncoding.SevenBit
     }
 
     /**
@@ -65,7 +68,7 @@ export class HeaderFieldParser {
     static parseContentType(value: string): ContentType {
         if (value == null) throw new Error("value must not be null!")
         // We create an empty Content-Type which we will fill in when we see the value
-        const contentType = {
+        const contentType: ContentType = {
             mediaType: "",
             boundary: "",
             charset: "",
@@ -124,7 +127,7 @@ export class HeaderFieldParser {
         if (value == null) throw new Error("value must not be null!")
         // See http://www.ietf.org/rfc/rfc2183.txt for RFC definition
         // Create empty ContentDisposition - we will fill in details as we read them
-        const contentDisposition = {
+        const contentDisposition: ContentDisposition = {
             dispositionType: "",
             fileName: "",
             creationDate: 0,

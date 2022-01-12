@@ -69,10 +69,10 @@ export class Recipients extends Array<Recipient> {
     }
 }
 export class Recipient extends Address {
-    _rowId: number
-    recipientType: RecipientType
-    _displayType: RecipientRowDisplayType
-    _objectType: MapiObjectType
+    private readonly _rowId: number
+    readonly recipientType: RecipientType
+    private readonly _displayType: RecipientRowDisplayType
+    private readonly _objectType: MapiObjectType
 
     constructor(
         rowId: number,
@@ -90,7 +90,7 @@ export class Recipient extends Address {
         this._objectType = objectType
     }
 
-    writeProperties(storage: any): number {
+    writeProperties(storage: CFBStorage): number {
         const propertiesStream = new RecipientProperties()
         propertiesStream.addProperty(PropertyTags.PR_ROWID, this._rowId)
         propertiesStream.addProperty(PropertyTags.PR_ENTRYID, generateEntryId())

@@ -1,6 +1,6 @@
-import {PropertyTagLiterals, PropertyTags, PropertyTagsEnum} from "./property_tags"
-import {PropertyFlag, PropertyType} from "./enums"
-import {Property} from "./property"
+import {PropertyTagLiterals, PropertyTags, PropertyTagsEnum} from "./property_tags.js"
+import {PropertyFlag, PropertyType} from "./enums.js"
+import {Property} from "./property.js"
 import ByteBuffer from "bytebuffer"
 import {
     bigInt64ToParts,
@@ -9,9 +9,9 @@ import {
     stringToAnsiArray,
     stringToUtf16LeArray,
     stringToUtf8Array
-} from "./utils/utils"
-import type {CFBStorage} from "./cfb_storage"
-import {dateToFileTime} from "./utils/time"
+} from "./utils/utils.js"
+import type {CFBStorage} from "./cfb_storage.js"
+import {dateToFileTime} from "./utils/time.js"
 
 const DEFAULT_FLAGS = PropertyFlag.PROPATTR_READABLE | PropertyFlag.PROPATTR_WRITABLE
 
@@ -188,7 +188,7 @@ export class Properties extends Array<Property> {
      * @param messageSize
      * @returns {number}
      */
-    writeProperties(storage: CFBStorage, prefix: (arg0: ByteBuffer) => void, messageSize?: number): number {
+    writeProperties(storage: CFBStorage, prefix: (buffer: ByteBuffer) => void, messageSize?: number): number {
         const buf = makeByteBuffer()
         prefix(buf)
         let size = 0

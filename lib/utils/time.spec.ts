@@ -1,6 +1,7 @@
 import o from "ospec/ospec.js"
-import * as time from "./time"
-import {dateToFileTime, fileTimeToDate} from "./time"
+import * as time from "./time.js"
+import {dateToFileTime, fileTimeToDate} from "./time.js"
+
 o.spec("time", function () {
     const dateAndLabel = dateStr => [new Date(Date.parse(dateStr)), dateStr]
 

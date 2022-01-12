@@ -1,7 +1,8 @@
 import * as rfc2822Parser from "address-rfc2822"
-import type {MailAddress} from "address-rfc2822"
-import {splitAtUnquoted} from "../../utils/utils"
-import {decode as decodeRfc2047} from "./rfc2047"
+import type {Address} from "address-rfc2822"
+import {splitAtUnquoted} from "../../utils/utils.js"
+import {decode as decodeRfc2047} from "./rfc2047.js"
+
 // This class is used for RFC compliant email addresses.
 // The class cannot be instantiated from outside the library.
 // The MailAddress does not cover all the possible formats
@@ -23,7 +24,7 @@ export class RfcMailAddress {
     ///     Example header without email address:<br />
     ///     To: <c>Test</c><br />
     ///     Address will be <see cref="string.Empty" />.
-    address: string
+    readonly address: string
     ///     The display name of this <see cref="RfcMailAddress" /><br />
     ///     It is possibly <see cref="string.Empty" /> since RFC mail addresses does not require a display name to be
     ///     specified.
@@ -35,14 +36,14 @@ export class RfcMailAddress {
     ///     Example header without display name:
     ///     To: <c>test@test.com</c>
     ///     DisplayName will be ""
-    displayName: string
+    readonly displayName: string
     // This is the Raw string used to describe the RfcMailAddress
-    raw: string
+    readonly raw: string
     ///     The mailAddress associated with the rfcMailAddress
     ///     The value of this property can be null in instances where the mailAddress
     ///     represent the address properly.
     ///     Use hasValidMailAddress property to see if this property is valid.
-    mailAddress: MailAddress | null | undefined
+    readonly mailAddress: Address | null
 
     /// <summary>
     ///     Specifies if the object contains a valid <see cref="MailAddress" /> reference.
@@ -61,7 +62,7 @@ export class RfcMailAddress {
     ///     If <paramref name="mailAddress" /> or <paramref name="raw" /> is
     ///     <see langword="null" />
     /// </exception>
-    constructor(mailAddress: MailAddress | null | undefined, raw: string) {
+    constructor(mailAddress: Address | null, raw: string) {
         if (!raw) throw new Error("raw is null!")
         this.mailAddress = mailAddress
         this.raw = raw

@@ -29,19 +29,15 @@ export function dateToOADate(date: Date): number {
 
     return days + partDay //.substr(1)
 }
-// @ts-ignore[bigint-unsupported]
 export const FT_TICKS_PER_MS = 10000n
 const FILE_TIME_ZERO = new Date(Date.parse("01 Jan 1601 00:00:00 UTC"))
 // Date: milliseconds since 1. January 1970 (UTC)
 // FileTime: unsigned 64 Bit, 100ns units since 1. January 1601 (UTC)
 // ms between 01.01.1970 and 01.01.1601: 11644473600
-// @ts-ignore[bigint-unsupported]
 export function fileTimeToDate(fileTime: bigint): Date {
     return new Date(FILE_TIME_ZERO.getTime() + Number(fileTime / FT_TICKS_PER_MS))
 }
-// @ts-ignore[bigint-unsupported]
 export function dateToFileTime(date: Date): bigint {
     const msSinceFileTimeEpoch = BigInt(date.getTime()) - BigInt(FILE_TIME_ZERO.getTime())
-    const result = msSinceFileTimeEpoch * FT_TICKS_PER_MS
-    return result
+    return msSinceFileTimeEpoch * FT_TICKS_PER_MS
 }

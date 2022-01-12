@@ -1,16 +1,13 @@
-import {RfcMailAddress} from "./rfc_mail_address"
-import {Received} from "./received"
-import {ContentTransferEncoding, MailPriority} from "../../enums"
-import {unquote} from "../../utils/utils"
-import {decode as decodeRfc2047} from "./rfc2047"
-import type {ContentDisposition, ContentType} from "./header_field_parser"
-import {HeaderFieldParser} from "./header_field_parser"
+import {RfcMailAddress} from "./rfc_mail_address.js"
+import {Received} from "./received.js"
+import {ContentTransferEncoding, MailPriority} from "../../enums.js"
+import {unquote} from "../../utils/utils.js"
+import {decode as decodeRfc2047} from "./rfc2047.js"
+import type {ContentDisposition, ContentType} from "./header_field_parser.js"
+import {HeaderFieldParser} from "./header_field_parser.js"
 
 type HeaderDict = Record<string, Array<string>>
-// TODO
-export function parseMessageHeaders(rawHeaders: string): HeaderDict {
-    throw new Error("Message header parsing unsupported")
-}
+
 export class MessageHeader {
     /**    Contains all the headers as a map */
     raw: HeaderDict
@@ -20,26 +17,26 @@ export class MessageHeader {
     ///     <br />
     ///     This list will be empty if all headers were recognized and parsed.
     /// </summary>
-    custom: HeaderDict
+    custom: HeaderDict = {}
     /// <summary>
     ///     A human readable description of the body<br />
     ///     <br />
     ///     <see langword="null" /> if no Content-Description header was present in the message.
     /// </summary>
-    contentDescription: string | null | undefined
+    contentDescription: string | null = null
     /// <summary>
     ///     ID of the content part (like an attached image). Used with MultiPart messages.<br />
     ///     <br />
     ///     <see langword="null" /> if no Content-ID header field was present in the message.
     /// </summary>
     /// <see cref="MessageId">For an ID of the message</see>
-    contentId: string | null | undefined
+    contentId: string | null = null
     /// <summary>
     ///     Message keywords<br />
     ///     <br />
     ///     The list will be empty if no Keywords header was present in the message
     /// </summary>
-    keywords: Array<string>
+    keywords: Array<string> = []
     /// <summary>
     ///     A List of emails to people who wishes to be notified when some event happens.<br />
     ///     These events could be email:
@@ -52,20 +49,20 @@ export class MessageHeader {
     ///     The list will be empty if no Disposition-Notification-To header was present in the message
     /// </summary>
     /// <remarks>See <a href="http://tools.ietf.org/html/rfc3798">RFC 3798</a> for details</remarks>
-    dispositionNotificationTo: Array<RfcMailAddress>
+    dispositionNotificationTo: Array<RfcMailAddress> = []
     /// <summary>
     ///     This is the Received headers. This tells the path that the email went.<br />
     ///     <br />
     ///     The list will be empty if no Received header was present in the message
     /// </summary>
-    received: Array<Received>
+    received: Array<Received> = []
     /// <summary>
     ///     Importance of this email.<br />
     ///     <br />
     ///     The importance level is set to normal, if no Importance header field was mentioned or it contained
     ///     unknown information. This is the expected behavior according to the RFC.
     /// </summary>
-    importance: MailPriority
+    importance: MailPriority = MailPriority.Normal
     /// <summary>
     ///     This header describes the Content encoding during transfer.<br />
     ///     <br />
@@ -73,52 +70,52 @@ export class MessageHeader {
     ///     to the default of <see cref="Header.ContentTransferEncoding.SevenBit">SevenBit</see> in accordance to the RFC.
     /// </summary>
     /// <remarks>See <a href="http://tools.ietf.org/html/rfc2045#section-6">RFC 2045 section 6</a> for details</remarks>
-    contentTransferEncoding: ContentTransferEncoding
+    contentTransferEncoding: ContentTransferEncoding = ContentTransferEncoding.SevenBit
     /// <summary>
     ///     Specifies who this mail was for<br />
     ///     <br />
     ///     The list will be empty if no To header was present in the message
     /// </summary>
-    to: Array<RfcMailAddress>
+    to: Array<RfcMailAddress> = []
     /// <summary>
     ///     Carbon Copy. This specifies who got a copy of the message.<br />
     ///     <br />
     ///     The list will be empty if no Cc header was present in the message
     /// </summary>
-    cc: Array<RfcMailAddress>
+    cc: Array<RfcMailAddress> = []
     /// <summary>
     ///     Blind Carbon Copy. This specifies who got a copy of the message, but others
     ///     cannot see who these persons are.<br />
     ///     <br />
     ///     The list will be empty if no Received Bcc was present in the message
     /// </summary>
-    bcc: Array<RfcMailAddress>
+    bcc: Array<RfcMailAddress> = []
     /// <summary>
     ///     Specifies who sent the email<br />
     ///     <br />
     ///     <see langword="null" /> if no From header field was present in the message
     /// </summary>
-    from: RfcMailAddress
+    from: RfcMailAddress | null = null
     /// <summary>
     ///     Specifies who a reply to the message should be sent to<br />
     ///     <br />
     ///     <see langword="null" /> if no Reply-To header field was present in the message
     /// </summary>
-    replyTo: RfcMailAddress
+    replyTo: RfcMailAddress | null = null
     /// <summary>
     ///     The message identifier(s) of the original message(s) to which the
     ///     current message is a reply.<br />
     ///     <br />
     ///     The list will be empty if no In-Reply-To header was present in the message
     /// </summary>
-    inReplyTo: Array<string>
+    inReplyTo: Array<string> = []
     /// <summary>
     ///     The message identifier(s) of other message(s) to which the current
     ///     message is related to.<br />
     ///     <br />
     ///     The list will be empty if no References header was present in the message
     /// </summary>
-    references: Array<string>
+    references: Array<string> = []
     /// <summary>
     ///     This is the sender of the email address.<br />
     ///     <br />
@@ -132,7 +129,7 @@ export class MessageHeader {
     ///     RFC states that if the Sender is the same as the From field,
     ///     sender should not be included in the message.
     /// </remarks>
-    sender: RfcMailAddress
+    sender: RfcMailAddress | null = null
     /// <summary>
     ///     The Content-Type header field.<br />
     ///     <br />
@@ -140,14 +137,14 @@ export class MessageHeader {
     ///     defined in <a href="http://tools.ietf.org/html/rfc2045#section-5.2">RFC 2045 section 5.2</a>.<br />
     ///     If set, the default is overridden.
     /// </summary>
-    contentType: ContentType
+    contentType: ContentType | null = null
     /// <summary>
     ///     Used to describe if a message part is to be displayed or to be though of as an attachment.<br />
     ///     Also contains information about filename if such was sent.<br />
     ///     <br />
     ///     <see langword="null" /> if no Content-Disposition header field was present in the message
     /// </summary>
-    contentDisposition: ContentDisposition
+    contentDisposition: ContentDisposition | null = null
     /// <summary>
     ///     The Date when the email was sent.<br />
     ///     This is the raw value. <see cref="DateSent" /> for a parsed up <see cref="DateTime" /> value of this field.<br />
@@ -156,7 +153,7 @@ export class MessageHeader {
     ///     parsed.
     /// </summary>
     /// <remarks>See <a href="http://tools.ietf.org/html/rfc5322#section-3.6.1">RFC 5322 section 3.6.1</a> for more details</remarks>
-    date: string
+    date: string | null = null
     /// <summary>
     ///     The Date when the email was sent.<br />
     ///     This is the parsed equivalent of <see cref="Date" />.<br />
@@ -164,21 +161,21 @@ export class MessageHeader {
     ///     to local <see cref="TimeZone" />.
     /// </summary>
     /// <remarks>See <a href="http://tools.ietf.org/html/rfc5322#section-3.6.1">RFC 5322 section 3.6.1</a> for more details</remarks>
-    dateSent: number
+    dateSent: number | null = null
     /// <summary>
     ///     An ID of the message that is SUPPOSED to be in every message according to the RFC.<br />
     ///     The ID is unique.<br />
     ///     <br />
     ///     <see langword="null" /> if no Message-ID header field was present in the message
     /// </summary>
-    messageId: string
+    messageId: string | null = null
     /// <summary>
     ///     The Mime Version.<br />
     ///     This field will almost always show 1.0<br />
     ///     <br />
     ///     <see langword="null" /> if no Mime-Version header field was present in the message
     /// </summary>
-    mimeVersion: string
+    mimeVersion: string | null = null
     /// <summary>
     ///     A single <see cref="RfcMailAddress" /> with no username inside.<br />
     ///     This is a trace header field, that should be in all messages.<br />
@@ -186,16 +183,16 @@ export class MessageHeader {
     ///     <br />
     ///     <see langword="null" /> if no Return-Path header field was present in the message
     /// </summary>
-    returnPath: RfcMailAddress
+    returnPath: RfcMailAddress | null = null
     /// <summary>
     ///     The subject line of the message in decoded, one line state.<br />
     ///     This should be in all messages.<br />
     ///     <br />
     ///     <see langword="null" /> if no Subject header field was present in the message
     /// </summary>
-    subject: string
+    subject: string | null = null
 
-    _clear(): void {
+    private _clear(): void {
         this.raw = {}
         this.custom = {}
         this.keywords = []
@@ -220,7 +217,7 @@ export class MessageHeader {
         this._parseHeaders(rawHeaders)
     }
 
-    _parseHeaders(raw: HeaderDict): void {
+    private _parseHeaders(raw: HeaderDict): void {
         if (raw == null) throw new Error("raw must not be null!")
 
         for (let name of Object.keys(raw)) {
@@ -234,7 +231,7 @@ export class MessageHeader {
         }
     }
 
-    _parseHeader(name: string, value: string) {
+    private _parseHeader(name: string, value: string) {
         if (name == null) throw new Error("name must not be null!")
         if (value == null) throw new Error("value must not be null!")
 
@@ -280,7 +277,7 @@ export class MessageHeader {
             // The field are intended to have only human-readable content
             // with information about the message
             case "KEYWORDS":
-                this.keywords.concat(value.split(",").map(String.prototype.trim.apply).map(unquote))
+                this.keywords.concat(value.split(",").map((v) => v.trim()).map(unquote))
                 break
 
             // See http://tools.ietf.org/html/rfc5322#section-3.6.7

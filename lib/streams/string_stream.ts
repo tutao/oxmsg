@@ -1,7 +1,7 @@
-import {PropertyTagLiterals, PropertyTags} from "../property_tags"
-import {makeByteBuffer} from "../utils/utils"
+import {PropertyTagLiterals} from "../property_tags.js"
+import {makeByteBuffer} from "../utils/utils.js"
 import type ByteBuffer from "bytebuffer"
-import type {CFBStorage} from "../cfb_storage"
+import type {CFBStorage} from "../cfb_storage.js"
 
 /**
  * The string stream MUST be named "__substg1.0_00040102". It MUST consist of one entry for each
@@ -20,7 +20,7 @@ export class StringStream extends Array<StringStreamItem> {
         super()
         if (storage == null) return
         const stream = storage.getStream(PropertyTagLiterals.StringStream)
-        const buf = makeByteBuffer(null, stream)
+        const buf = makeByteBuffer(undefined, stream)
 
         while (buf.offset < buf.limit) {
             this.push(StringStreamItem.fromBuffer(buf))
@@ -47,7 +47,7 @@ export class StringStreamItem {
      * was uint
      * @type number
      */
-    length: number
+    readonly length: number
 
     /**
      * A Unicode string that is the name of the property. A new entry MUST always start
@@ -57,7 +57,7 @@ export class StringStreamItem {
      * the beginning of the next 4-byte boundary
      * @type {string}
      */
-    name: string
+    readonly name: string
 
     /**
      * create a StringStreamItem from a byte buffer

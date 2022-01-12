@@ -1,4 +1,5 @@
 import ByteBuffer from "bytebuffer"
+
 const CRC32_TABLE = [
     0x00000000,
     0x77073096,
@@ -256,7 +257,8 @@ const CRC32_TABLE = [
     0xc30c8ea1,
     0x5a05df1b,
     0x2d02ef8d,
-]
+] as const
+
 export class Crc32 {
     /**
      * calculates a checksum of a ByteBuffers contents

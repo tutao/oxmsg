@@ -1,10 +1,10 @@
 import o from "ospec"
-import {Attachments} from "./attachments"
+import {Attachments} from "./attachments.js"
 import CFB from "cfb"
-import {uint8ToBase16} from "../test/utils"
-import {Attachment} from "./attachment"
-import {Email} from "./email"
-import {CFBStorage} from "./cfb_storage"
+import {uint8ToBase16} from "../test/utils.js"
+import {Attachment} from "./attachment.js"
+import {Email} from "./email.js"
+import {CFBStorage} from "./cfb_storage.js"
 
 o.spec("Attachments", function () {
     o("attach an attachment", function () {

@@ -1,9 +1,9 @@
-import {PropertyType} from "./enums"
+import {PropertyType} from "./enums.js"
 
-export type PropertyTag = {
+export type PropertyTag = Readonly<{
     id: number
     type: PropertyType
-}
+}>
 
 export const enum PropertyTagLiterals {
     // The prefix for a Recipient {OpenMcdf.CFStorage

@@ -17,13 +17,13 @@ const OUTLOOK_CLSID = "0b0d020000000000c000000000000046"
  * base class for all MSG files
  */
 export class Message {
-    _saved: boolean = false
-    iconIndex: MessageIconIndex
-    _topLevelProperties: TopLevelProperties
-    _namedProperties: NamedProperties
-    _storage: CFBStorage
-    _messageClass: MessageClass = MessageClass.Unknown
-    _messageSize: number
+    private _saved: boolean = false
+    iconIndex: MessageIconIndex | null = null
+    protected readonly _topLevelProperties: TopLevelProperties
+    private readonly _namedProperties: NamedProperties
+    protected readonly _storage: CFBStorage
+    protected _messageClass: MessageClass = MessageClass.Unknown
+    protected _messageSize: number = 0
 
     constructor() {
         this._storage = new CFBStorage(

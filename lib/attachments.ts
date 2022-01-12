@@ -1,6 +1,7 @@
-import {Attachment} from "./attachment"
-import {X8} from "./utils/utils"
-import {PropertyTagLiterals} from "./property_tags"
+import {Attachment} from "./attachment.js"
+import {X8} from "./utils/utils.js"
+import {PropertyTagLiterals} from "./property_tags.js"
+
 export class Attachments extends Array<Attachment> {
     /**
      * Writes the Attachment objects to the given storage and sets all the needed properties

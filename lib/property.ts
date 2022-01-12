@@ -1,17 +1,17 @@
-import {fileTimeToDate, oADateToDate} from "./utils/time"
-import {bigInt64FromParts, name, utf8ArrayToString, X4} from "./utils/utils"
-import {PropertyFlag, PropertyType} from "./enums"
+import {fileTimeToDate, oADateToDate} from "./utils/time.js"
+import {bigInt64FromParts, name, stringToUtf8Array, utf8ArrayToString, X4} from "./utils/utils.js"
+import {PropertyFlag, PropertyType} from "./enums.js"
 import {v4} from "uuid"
 
 /**
  * A property inside the MSG file
  */
 export class Property {
-    id: number
-    type: PropertyType
-    _flags: number
-    _multiValue: boolean
-    _data: Uint8Array
+    readonly id: number
+    readonly type: PropertyType
+    readonly _flags: number
+    private readonly _multiValue: boolean
+    readonly _data: Uint8Array
 
     constructor(obj: { id: number; type: PropertyType; data: Uint8Array; multiValue?: boolean; flags?: number }) {
         this.id = obj.id
@@ -30,7 +30,7 @@ export class Property {
     }
 
     flagsCollection(): Array<number> {
-        const result = []
+        const result: number[] = []
         if ((this._flags & PropertyFlag.PROPATTR_MANDATORY) !== 0) result.push(PropertyFlag.PROPATTR_MANDATORY)
         if ((this._flags & PropertyFlag.PROPATTR_READABLE) !== 0) result.push(PropertyFlag.PROPATTR_READABLE)
         if ((this._flags & PropertyFlag.PROPATTR_WRITABLE) !== 0) result.push(PropertyFlag.PROPATTR_WRITABLE)
@@ -110,8 +110,6 @@ export class Property {
     }
 
     asBool(): boolean {
-        const view = new DataView(this._data.buffer, 0)
-
         switch (this.type) {
             case PropertyType.PT_BOOLEAN:
                 return Boolean(this._data[0])
@@ -151,11 +149,12 @@ export class Property {
     }
 
     asGuid(): Uint8Array {
-        switch (this.type) {
-            case PropertyType.PT_CLSID:
-                return v4({
+        switch (PropertyType.PT_CLSID) {
+            case this.type:
+                const stringGuid = v4({
                     random: this._data.slice(0, 16),
                 })
+                return stringToUtf8Array(stringGuid)
 
             default:
                 throw new Error("Type is not PT_CLSID")

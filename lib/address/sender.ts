@@ -4,10 +4,11 @@ import {Address} from "./address"
 import {PropertyTags} from "../property_tags"
 import type {TopLevelProperties} from "../streams/top_level_properties"
 import {OneOffEntryId} from "./one_off_entry_id"
+
 export class Sender extends Address {
-    _messageFormat: MessageFormat
-    _canLookupEmailAddress: boolean
-    _senderIsCreator: boolean
+    private readonly _messageFormat: MessageFormat
+    private readonly _canLookupEmailAddress: boolean
+    private readonly _senderIsCreator: boolean
 
     constructor(
         email: string,

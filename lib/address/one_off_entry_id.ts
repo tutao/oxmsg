@@ -2,9 +2,10 @@ import {Address} from "./address"
 import type {AddressType} from "../enums"
 import {MessageFormat} from "../enums"
 import {byteBufferAsUint8Array, makeByteBuffer, stringToUtf16LeArray} from "../utils/utils"
+
 export class OneOffEntryId extends Address {
-    _messageFormat: MessageFormat
-    _canLookupEmailAddress: boolean
+    private readonly _messageFormat: MessageFormat
+    private readonly _canLookupEmailAddress: boolean
 
     constructor(
         email: string,

@@ -3,6 +3,7 @@ import {stringToUtf8Array} from "../utils/utils"
 import {compress} from "./rtf_compressor"
 import fs from "fs"
 import {uint8ToBase16} from "../../test/utils"
+
 // big list of naughty strings converted to escaped rtf
 const inStrings = JSON.parse(fs.readFileSync("test/blns.out.json", {encoding: "utf8"}))
 // blns rtf compressed with MsgKit
@@ -12,6 +13,7 @@ const suite = inStrings.map((s, i) => ({
     pre: stringToUtf8Array(s),
     post: Uint8Array.from(Buffer.from(outStrings[i], "hex")),
 }))
+
 o.spec("RtfCompressor", function () {
     o("empty string", function () {
         const input = stringToUtf8Array("")

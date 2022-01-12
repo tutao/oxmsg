@@ -15,7 +15,7 @@ export class CFBStorage {
     _path: string
 
     constructor(cfb?: CFB$Container) {
-        this._cfb = cfb || CFB.utils.cfb_new()
+        this._cfb = cfb ?? CFB.utils.cfb_new()
         this._path = ""
     }
 

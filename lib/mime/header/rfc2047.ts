@@ -1,5 +1,6 @@
 // converted to ES6 from https://www.npmjs.com/package/rfc2047
 import * as iconvLite from "iconv-lite"
+
 // Initialize array used as lookup table (int (octet) => string)
 const qpTokenByOctet = new Array(256)
 
@@ -82,7 +83,7 @@ function decodeBuffer(encodedText: string, encoding: string): Buffer {
 }
 
 // Returns either a string (if successful) or undefined
-function decodeEncodedWord(encodedText: string, encoding: string, charset: string): string | null | undefined {
+function decodeEncodedWord(encodedText: string, encoding: string, charset: string): string | null {
     if (encoding === "q" && isLatin1RegExp.test(charset)) {
         return unescape(
             encodedText
@@ -103,22 +104,26 @@ function decodeEncodedWord(encodedText: string, encoding: string, charset: strin
             charset = "CP949"
         }
 
-        let decoded = null
-
         if (isUtf8RegExp.test(charset)) {
             const decoded = buffer.toString("utf-8")
 
             if (!/\ufffd/.test(decoded) || buffer.includes(replacementCharacterBuffer)) {
                 return decoded
+            } else {
+                return null
             }
         } else if (/^(?:us-)?ascii$/i.test(charset)) {
             return buffer.toString("ascii")
         } else if (iconvLite.encodingExists(charset)) {
-            decoded = iconvLite.decode(buffer, charset)
+            const decoded = iconvLite.decode(buffer, charset)
 
             if (!/\ufffd/.test(decoded) || buffer.includes(replacementCharacterBuffer)) {
                 return decoded
+            } else {
+                return null
             }
+        } else {
+            return null
         }
     }
 }

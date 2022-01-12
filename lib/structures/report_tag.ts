@@ -1,4 +1,4 @@
-import {byteBufferAsUint8Array, makeByteBuffer} from "../utils/utils"
+import {byteBufferAsUint8Array, makeByteBuffer} from "../utils/utils.js"
 
 /**
  * The PidTagReportTag property ([MS-OXPROPS] section 2.917) contains the data that is used to correlate the report
@@ -20,7 +20,8 @@ export class ReportTag {
     // the value of the
     // StoreEntryIdSize field is 0x00000000, this field is omitted. If the value is not zero, this field is filled with
     // the number of bytes specified by the StoreEntryIdSize field.
-    storeEntryId: Uint8Array
+    // storeEntryId: Uint8Array
+
     // (4 bytes): Size of the FolderEntryId field.
     folderEntryIdSize: number = 0x00000000
     // (Variable): This field specifies the entry ID of the folder that contains the original message. If the value of the
@@ -38,13 +39,15 @@ export class ReportTag {
     // (Variable): This field specifies the entry ID of an alternate folder that contains the original message. If the
     // value of the SearchFolderEntryIdSize field is 0x00000000, this field is omitted. If the value is not zero, the
     // field is filled with the number of bytes specified by the SearchFolderEntryIdSize field.
-    searchFolderEntryId: Uint8Array
+    // searchFolderEntryId: Uint8Array
+
     // (4 bytes): Size of the MessageSearchKey field.
     messageSearchKeySize: number = 0x00000000
     // (variable): This field specifies the search key of the original message. If the value of the MessageSearchKeySize
     // field is 0x00000000, this field is omitted. If the value is not zero, the MessageSearchKey field is filled with the
     // number of bytes specified by the MessageSearchKeySize field.
-    messageSearchKey: Uint8Array
+    // messageSearchKey: Uint8Array
+
     // (Variable): The subject of the original message. If the value of the ANSITextSize field is 0x00000000, this field
     // is omitted. If the value is not zero, the field is filled with the number of bytes specified by the ANSITextSize
     // field.
@@ -70,7 +73,9 @@ export class ReportTag {
         // (Variable length of bytes): This field specifies the entry ID of the mailbox that contains the original message. If
         // the value of the StoreEntryIdSize field is 0x00000000, this field is omitted. If the value is not zero, this field
         // is filled with the number of bytes specified by the StoreEntryIdSize field.
+
         //buf.append(this.storeEntryId);
+
         // (4 bytes): Size of the FolderEntryId field.
         buf.writeUint32(this.folderEntryIdSize)
         // (Variable): This field specifies the entry ID of the folder that contains the original message. If the value of the

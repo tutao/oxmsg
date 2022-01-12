@@ -16,16 +16,18 @@
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
 
-    "strict": false,
-    "noImplicitAny": false,
-    "noImplicitThis": true,
-    "strictNullChecks": false,
+    "strict": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "exactOptionalPropertyTypes": true,
+    "noFallthroughCasesInSwitch": true,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
-    "noEmit": true,
+    "noEmit": true
   },
   "include": [
-    "lib"
+    "lib",
+    "types"
   ],
   "exclude": [
     "node_modules",

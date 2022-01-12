@@ -1,6 +1,7 @@
 import o from "ospec"
 import {OneOffEntryId} from "./one_off_entry_id"
 import {uint8ToBase16} from "../../test/utils"
+
 o.spec("OneOffEntryId", function () {
     o("test value serialization", function () {
         const ooei = new OneOffEntryId("peterpan@neverland.com", "", "SMTP", 2, false)
@@ -14,8 +15,8 @@ o.spec("OneOffEntryId", function () {
             "70006500740065007200700061006e00" +
             "40006e0065007600650072006c006100" +
             "6e0064002e0063006f006d000000"
-        ).match(/.{1,2}/g)
-        const actual = uint8ToBase16(buf).match(/.{1,2}/g)
+        ).match(/.{1,2}/g)!
+        const actual = uint8ToBase16(buf).match(/.{1,2}/g)!
         o(actual.length).equals(expect.length)
         expect.map((b, i) => o(actual[i]).equals(b)("at byte " + i))
     })
