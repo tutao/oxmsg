@@ -1,6 +1,6 @@
 import fs from "fs";
 
-import {Attachment, Email} from "../dist/oxmsg.js";
+import {Attachment, Email} from "../dist/index.js";
 
 const email = new Email()
 const attachment = new Attachment(Uint8Array.from(fs.readFileSync('./test/canvas.png')), 'canvas.png')
