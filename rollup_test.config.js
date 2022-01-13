@@ -1,14 +1,14 @@
-import babel from '@rollup/plugin-babel'
 import nodeResolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import json from '@rollup/plugin-json'
 import alias from '@rollup/plugin-alias'
+import typescript from '@rollup/plugin-typescript'
 import path from 'path'
 
 export default {
-	input: 'test/index.js',
+	input: 'test/index.ts',
 	plugins: [
-		babel({babelHelpers: 'bundled'}),
+		typescript({tsconfig: "test/tsconfig.json"}),
 		alias({
 			entries: {
 				"uuid": path.resolve("./node_modules/uuid/dist/esm-node/index.js"),
@@ -23,7 +23,7 @@ export default {
 				'memcpy' // optional dep of bytebuffer
 			]
 		}),
-		json(),
+		json(), // for iconv-lite
 	],
 	output: [
 		{

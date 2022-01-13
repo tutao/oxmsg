@@ -1,0 +1,37 @@
+{
+  "compilerOptions": {
+    "lib": [
+      "es2020",
+      "dom"
+    ],
+    "target": "es2020",
+    "declaration": true,
+    "declarationDir": "./dist/types",
+    "outDir": "./dist",
+    "skipLibCheck": true,
+
+    "noEmitOnError": true,
+    "noErrorTruncation": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+
+    "strict": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "exactOptionalPropertyTypes": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noEmit": true
+  },
+  "include": [
+    "lib",
+    "types"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "lib/**/*.spec.ts"
+  ]
+}
