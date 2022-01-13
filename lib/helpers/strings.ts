@@ -26,9 +26,12 @@ export class Strings {
                     // TODO:
                     // RTF control words generally accept signed 16-bit numbers as arguments.
                     // For this reason, Unicode values greater than 32767 must be expressed as negative numbers.
+                    //
+                    // we want to escape unicode codepoints "🍆" -> "\\u55356?\\u57158?" as specced for rtf 1.5.
+                    // the ? is the "equivalent character(s) in ANSI representation" mentioned for the \uN control word,
+                    // so non-unicode readers will show a ?
                     rtfEscaped.push("\\u")
-                    // @ts-ignore: something weird is happening here
-                    rtfEscaped.push(codepoint.charCodeAt(0))
+                    rtfEscaped.push(codepoint.charCodeAt(0).toString())
                     rtfEscaped.push("?")
                 }
             }
